@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'ideas_screen/ideas_list_screen.dart';
 
 import '../../../generated/l10n.dart';
 import 'profile_screen.dart';
@@ -14,7 +15,7 @@ class MainScreenBase extends StatefulWidget {
 }
 
 class _MainScreenBaseState extends State<MainScreenBase> {
-  int _selectedPage = 2;
+  int _selectedPage = 1;
 
   void onSelectTab(int index) {
     if(_selectedPage == index) return;
@@ -42,7 +43,7 @@ class _MainScreenBaseState extends State<MainScreenBase> {
             index: _selectedPage,
             children: [
               Center(child: Text('data1')),
-              Center(child: Text('data2')),
+              IdeasListScreen(),
               ProfileScreen(),
             ],
           ),

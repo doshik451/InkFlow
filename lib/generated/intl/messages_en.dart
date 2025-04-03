@@ -34,6 +34,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "app_name": MessageLookupByLibrary.simpleMessage("InkFlow"),
     "books": MessageLookupByLibrary.simpleMessage("Books"),
+    "canceled": MessageLookupByLibrary.simpleMessage("Canceled"),
     "change_lang": MessageLookupByLibrary.simpleMessage("Change language"),
     "change_mode": MessageLookupByLibrary.simpleMessage("Change mode"),
     "confirm_password": MessageLookupByLibrary.simpleMessage(
@@ -43,15 +44,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "don_t_have_access": MessageLookupByLibrary.simpleMessage(
       "We don\'t have access",
     ),
+    "done": MessageLookupByLibrary.simpleMessage("Done"),
     "email": MessageLookupByLibrary.simpleMessage("Email"),
     "enter_correct_email": MessageLookupByLibrary.simpleMessage(
       "Enter the correct email",
     ),
     "forget_password": MessageLookupByLibrary.simpleMessage("Forget password?"),
+    "general": MessageLookupByLibrary.simpleMessage("General"),
     "ideas": MessageLookupByLibrary.simpleMessage("Ideas"),
+    "inMind": MessageLookupByLibrary.simpleMessage("In mind"),
+    "inProgress": MessageLookupByLibrary.simpleMessage("In progress"),
+    "loading": MessageLookupByLibrary.simpleMessage("Loading..."),
     "login": MessageLookupByLibrary.simpleMessage("Login"),
     "login_failed": MessageLookupByLibrary.simpleMessage("Login failed"),
     "logout": MessageLookupByLibrary.simpleMessage("Logout"),
+    "no_ideas": MessageLookupByLibrary.simpleMessage("No ideas:("),
     "password": MessageLookupByLibrary.simpleMessage("Password"),
     "password_invalid": MessageLookupByLibrary.simpleMessage(
       "Must be 8 or more characters, plus letters and numbers",
@@ -71,6 +78,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "registration_failed": MessageLookupByLibrary.simpleMessage(
       "Registration failed",
     ),
+    "relatedTo": MessageLookupByLibrary.simpleMessage("Related to: "),
     "reset_password": MessageLookupByLibrary.simpleMessage("Reset password"),
     "search": MessageLookupByLibrary.simpleMessage("Search"),
     "send_email_to_reset": MessageLookupByLibrary.simpleMessage(

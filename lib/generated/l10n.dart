@@ -334,6 +334,46 @@ class S {
       args: [],
     );
   }
+
+  /// `No ideas:(`
+  String get no_ideas {
+    return Intl.message('No ideas:(', name: 'no_ideas', desc: '', args: []);
+  }
+
+  /// `Done`
+  String get done {
+    return Intl.message('Done', name: 'done', desc: '', args: []);
+  }
+
+  /// `In mind`
+  String get inMind {
+    return Intl.message('In mind', name: 'inMind', desc: '', args: []);
+  }
+
+  /// `In progress`
+  String get inProgress {
+    return Intl.message('In progress', name: 'inProgress', desc: '', args: []);
+  }
+
+  /// `Canceled`
+  String get canceled {
+    return Intl.message('Canceled', name: 'canceled', desc: '', args: []);
+  }
+
+  /// `Loading...`
+  String get loading {
+    return Intl.message('Loading...', name: 'loading', desc: '', args: []);
+  }
+
+  /// `Related to: `
+  String get relatedTo {
+    return Intl.message('Related to: ', name: 'relatedTo', desc: '', args: []);
+  }
+
+  /// `General`
+  String get general {
+    return Intl.message('General', name: 'general', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -34,6 +34,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "app_name": MessageLookupByLibrary.simpleMessage("InkFlow"),
     "books": MessageLookupByLibrary.simpleMessage("Книги"),
+    "canceled": MessageLookupByLibrary.simpleMessage("Отмена"),
     "change_lang": MessageLookupByLibrary.simpleMessage("Сменить язык"),
     "change_mode": MessageLookupByLibrary.simpleMessage("Сменить режим"),
     "confirm_password": MessageLookupByLibrary.simpleMessage(
@@ -41,15 +42,21 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "dark_theme": MessageLookupByLibrary.simpleMessage("Темная тема"),
     "don_t_have_access": MessageLookupByLibrary.simpleMessage("Нет доступа"),
+    "done": MessageLookupByLibrary.simpleMessage("Сделано"),
     "email": MessageLookupByLibrary.simpleMessage("Почта"),
     "enter_correct_email": MessageLookupByLibrary.simpleMessage(
       "Введите корректный email",
     ),
     "forget_password": MessageLookupByLibrary.simpleMessage("Забыли пароль?"),
+    "general": MessageLookupByLibrary.simpleMessage("Общеe"),
     "ideas": MessageLookupByLibrary.simpleMessage("Идеи"),
+    "inMind": MessageLookupByLibrary.simpleMessage("Задумка"),
+    "inProgress": MessageLookupByLibrary.simpleMessage("В процессе"),
+    "loading": MessageLookupByLibrary.simpleMessage("Загрузка..."),
     "login": MessageLookupByLibrary.simpleMessage("Войти"),
     "login_failed": MessageLookupByLibrary.simpleMessage("Ошибка входа"),
     "logout": MessageLookupByLibrary.simpleMessage("Выйти"),
+    "no_ideas": MessageLookupByLibrary.simpleMessage("Идей еще нет:("),
     "password": MessageLookupByLibrary.simpleMessage("Пароль"),
     "password_invalid": MessageLookupByLibrary.simpleMessage(
       "Должно быть 8 символов и больше, а также буквы и цифры",
@@ -69,6 +76,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "registration_failed": MessageLookupByLibrary.simpleMessage(
       "Регистрация провалена",
     ),
+    "relatedTo": MessageLookupByLibrary.simpleMessage("Связана с: "),
     "reset_password": MessageLookupByLibrary.simpleMessage("Сброс пароля"),
     "search": MessageLookupByLibrary.simpleMessage("Поиск"),
     "send_email_to_reset": MessageLookupByLibrary.simpleMessage(

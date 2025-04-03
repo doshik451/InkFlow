@@ -35,5 +35,13 @@
   "reader_mode_title": "Reader Mode",
   "reader_mode_description": "This mode helps you manage your reading experience. You can:\n- Save quotes from books you’ve read.\n- Rate books based on different criteria.\n- Maintain a to-read list.",
   "about_app_conclusion": "InkFlow is your digital companion in the world of literature.",
-  "support_the_project": "Support the project"
+  "support_the_project": "Support the project",
+  "no_ideas": "No ideas:(",
+  "done": "Done",
+  "inMind": "In mind",
+  "inProgress": "In progress",
+  "canceled": "Canceled",
+  "loading": "Loading...",
+  "relatedTo": "Related to: ",
+  "general": "General"
 }

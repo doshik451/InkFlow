@@ -36,12 +36,16 @@ class ButtonBase extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(text),
+          Flexible(child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: Text(text, softWrap: true,),
+          )),
           if (icon != null) Icon(icon, size: 20, color: Theme.of(context).colorScheme.secondary),
           if (value != null)
             Switch(
               value: value!,
               onChanged: (newValue) => onPressed(),
+              padding: EdgeInsets.zero,
               inactiveThumbColor: Theme.of(context).colorScheme.secondary,
               thumbColor: MaterialStateProperty.all(Theme.of(context).colorScheme.secondary),
               inactiveTrackColor: Theme.of(context).scaffoldBackgroundColor,
