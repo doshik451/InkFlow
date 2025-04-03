@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "193834014425",
+    "firebase_url": "https://writer-s-assistant-5285f-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "writer-s-assistant-5285f",
+    "storage_bucket": "writer-s-assistant-5285f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:193834014425:android:6b000b0aef9b9ed94810c8",
+        "android_client_info": {
+          "package_name": "com.example.inkflow_flutter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9jvV9Y5uiPn17K7Q-l5VkdKhCx6osIDY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:193834014425:android:962d60ad59f6b8a94810c8",
+        "android_client_info": {
+          "package_name": "com.example.writersassistant"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9jvV9Y5uiPn17K7Q-l5VkdKhCx6osIDY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
