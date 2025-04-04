@@ -43,5 +43,15 @@
   "canceled": "Canceled",
   "loading": "Loading...",
   "relatedTo": "Related to: ",
-  "general": "General"
+  "general": "General",
+  "delete": "Delete",
+  "record_is_deleted": "Record is deleted",
+  "are_you_sure": "Are you sure?",
+  "cancel": "Cancel",
+  "creating": "Creating",
+  "requiredField": "Required field is empty",
+  "title": "Title",
+  "description": "Description",
+  "status": "Status",
+  "save": "Save"
 }

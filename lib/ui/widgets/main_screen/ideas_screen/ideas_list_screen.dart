@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:inkflow/ui/widgets/main_screen/ideas_screen/idea_info_screen.dart';
 import 'animated_idea_list.dart';
 
 import '../../../../generated/l10n.dart';
@@ -16,6 +17,13 @@ class _IdeasListScreenState extends State<IdeasListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(S.current.ideas), centerTitle: true,automaticallyImplyLeading: false,),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Theme.of(context).colorScheme.tertiary,
+        onPressed: () { Navigator.push(context, MaterialPageRoute(builder: (context) => const IdeaInfoScreen())); },
+        child: const Icon(Icons.add, color: Colors.white,),
+        shape: CircleBorder(),
+      ),
       body: Center(
         child: Stack(
           children: [
@@ -38,10 +46,11 @@ class _IdeasListScreenState extends State<IdeasListScreen> {
                   focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(width: 1.5, color: Theme.of(context).colorScheme.secondary),),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
+
     );
   }
 }

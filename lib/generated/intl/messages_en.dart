@@ -33,14 +33,19 @@ class MessageLookup extends MessageLookupByLibrary {
       "An error occurred",
     ),
     "app_name": MessageLookupByLibrary.simpleMessage("InkFlow"),
+    "are_you_sure": MessageLookupByLibrary.simpleMessage("Are you sure?"),
     "books": MessageLookupByLibrary.simpleMessage("Books"),
+    "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
     "canceled": MessageLookupByLibrary.simpleMessage("Canceled"),
     "change_lang": MessageLookupByLibrary.simpleMessage("Change language"),
     "change_mode": MessageLookupByLibrary.simpleMessage("Change mode"),
     "confirm_password": MessageLookupByLibrary.simpleMessage(
       "Confirm password",
     ),
+    "creating": MessageLookupByLibrary.simpleMessage("Creating"),
     "dark_theme": MessageLookupByLibrary.simpleMessage("Dark theme"),
+    "delete": MessageLookupByLibrary.simpleMessage("Delete"),
+    "description": MessageLookupByLibrary.simpleMessage("Description"),
     "don_t_have_access": MessageLookupByLibrary.simpleMessage(
       "We don\'t have access",
     ),
@@ -74,19 +79,28 @@ class MessageLookup extends MessageLookupByLibrary {
       "This mode helps you manage your reading experience. You can:\n- Save quotes from books you’ve read.\n- Rate books based on different criteria.\n- Maintain a to-read list.",
     ),
     "reader_mode_title": MessageLookupByLibrary.simpleMessage("Reader Mode"),
+    "record_is_deleted": MessageLookupByLibrary.simpleMessage(
+      "Record is deleted",
+    ),
     "registration": MessageLookupByLibrary.simpleMessage("Registration"),
     "registration_failed": MessageLookupByLibrary.simpleMessage(
       "Registration failed",
     ),
     "relatedTo": MessageLookupByLibrary.simpleMessage("Related to: "),
+    "requiredField": MessageLookupByLibrary.simpleMessage(
+      "Required field is empty",
+    ),
     "reset_password": MessageLookupByLibrary.simpleMessage("Reset password"),
+    "save": MessageLookupByLibrary.simpleMessage("Save"),
     "search": MessageLookupByLibrary.simpleMessage("Search"),
     "send_email_to_reset": MessageLookupByLibrary.simpleMessage(
       "Send reset letter",
     ),
+    "status": MessageLookupByLibrary.simpleMessage("Status"),
     "support_the_project": MessageLookupByLibrary.simpleMessage(
       "Support the project",
     ),
+    "title": MessageLookupByLibrary.simpleMessage("Title"),
     "unknown": MessageLookupByLibrary.simpleMessage("Unknown"),
     "username": MessageLookupByLibrary.simpleMessage("Username"),
     "writer_mode_description": MessageLookupByLibrary.simpleMessage(

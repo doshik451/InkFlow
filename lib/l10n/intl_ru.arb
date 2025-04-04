@@ -43,5 +43,15 @@
   "canceled": "Отмена",
   "loading": "Загрузка...",
   "relatedTo": "Связана с: ",
-  "general": "Общеe"
+  "general": "Общеe",
+  "delete": "Удалить",
+  "record_is_deleted": "Запись удалена",
+  "are_you_sure": "Вы уверены?",
+  "cancel": "Отмена",
+  "creating": "Создание",
+  "requiredField": "Обязательное поле пустое",
+  "title": "Заголовок",
+  "description": "Описание",
+  "status": "Статус",
+  "save": "Сохранить"
 }
