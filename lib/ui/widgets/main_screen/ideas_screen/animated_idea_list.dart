@@ -123,7 +123,6 @@ class _AnimatedIdeaListState extends State<AnimatedIdeaList> {
     );
   }
 
-
   Future<Map<String, String>> _loadBookTitles(List<Idea> ideas, BuildContext context) async {
     final bookTitles = <String, String>{};
     final bookIds = ideas.map((i) => i.linkedBookId).where((id) => id != null).toSet();
