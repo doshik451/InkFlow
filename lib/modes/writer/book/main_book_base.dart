@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:inkflow/modes/writer/book/book_notes/booknotes_list_base_screen.dart';
+import 'package:inkflow/modes/writer/book/characters/characters_list.dart';
 import 'package:inkflow/modes/writer/book/environment/environment_list_screen.dart';
 import 'package:inkflow/modes/writer/book/plot/plot_list_screen.dart';
 import '../../../models/book_writer_model.dart';
@@ -73,7 +74,7 @@ class _MainBookBaseState extends State<MainBookBase> with SingleTickerProviderSt
           children: [
             AboutBookPage(book: widget.book, authorId: widget.book.authorId),
             PlotListScreen(bookId: widget.book.id, authorId: widget.book.authorId,),
-            Center(child: Text('Персонажи')),
+            CharactersListScreen(bookId: widget.book.id, authorId: widget.book.authorId),
             EnvironmentListScreen(bookId: widget.book.id, authorId: widget.book.authorId),
             BookNotesListBaseScreen(bookId: widget.book.id, authorId: widget.book.authorId),
           ],

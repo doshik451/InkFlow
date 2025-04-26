@@ -35,13 +35,21 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "add_chapter": MessageLookupByLibrary.simpleMessage("Добавить главу"),
     "add_image": MessageLookupByLibrary.simpleMessage("Добавить изображение"),
+    "add_image_after_character": MessageLookupByLibrary.simpleMessage(
+      "После добавления персонажа вы сможете добавить картинку",
+    ),
     "add_key_moment": MessageLookupByLibrary.simpleMessage(
       "Добавить ключевой момент",
     ),
+    "age": MessageLookupByLibrary.simpleMessage("Возраст"),
+    "allies": MessageLookupByLibrary.simpleMessage("Союзнки"),
     "an_error_occurred": MessageLookupByLibrary.simpleMessage(
       "Возникла ошибка",
     ),
     "app_name": MessageLookupByLibrary.simpleMessage("InkFlow"),
+    "appearanceDescription": MessageLookupByLibrary.simpleMessage(
+      "Описание внешности",
+    ),
     "arcs_chapters": MessageLookupByLibrary.simpleMessage("Главы арки"),
     "are_you_sure": MessageLookupByLibrary.simpleMessage("Вы уверены?"),
     "author": MessageLookupByLibrary.simpleMessage("Автор"),
@@ -67,6 +75,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "draft": MessageLookupByLibrary.simpleMessage("Черновик"),
     "editing": MessageLookupByLibrary.simpleMessage("Редактирование"),
     "email": MessageLookupByLibrary.simpleMessage("Почта"),
+    "enemies": MessageLookupByLibrary.simpleMessage("Враги"),
     "enter_correct_email": MessageLookupByLibrary.simpleMessage(
       "Введите корректный email",
     ),
@@ -80,8 +89,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Папка загрузок не найдена",
     ),
     "forget_password": MessageLookupByLibrary.simpleMessage("Забыли пароль?"),
+    "friends": MessageLookupByLibrary.simpleMessage("Друзья"),
     "frozen": MessageLookupByLibrary.simpleMessage("Заморожено"),
     "general": MessageLookupByLibrary.simpleMessage("Общеe"),
+    "genre": MessageLookupByLibrary.simpleMessage("Жанр"),
     "ideas": MessageLookupByLibrary.simpleMessage("Идеи"),
     "inMind": MessageLookupByLibrary.simpleMessage("Задумка"),
     "inProgress": MessageLookupByLibrary.simpleMessage("В процессе"),
@@ -101,9 +112,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "mode_changed_to_writer": MessageLookupByLibrary.simpleMessage(
       "Вы в режиме писателя",
     ),
+    "name": MessageLookupByLibrary.simpleMessage("Имя"),
+    "neutral": MessageLookupByLibrary.simpleMessage("Нейтральные"),
     "no": MessageLookupByLibrary.simpleMessage("Нет"),
     "no_books": MessageLookupByLibrary.simpleMessage("Книг еще нет:("),
     "no_chapters": MessageLookupByLibrary.simpleMessage("Глав еще нет:("),
+    "no_characters": MessageLookupByLibrary.simpleMessage(
+      "Персонажей еще нет:(",
+    ),
     "no_environment_items": MessageLookupByLibrary.simpleMessage(
       "Окружения еще нет:(",
     ),
@@ -113,6 +129,8 @@ class MessageLookup extends MessageLookupByLibrary {
       "Сюжетных арок еще нет:(",
     ),
     "notes": MessageLookupByLibrary.simpleMessage("Заметки"),
+    "occupation": MessageLookupByLibrary.simpleMessage("Род занятий"),
+    "other": MessageLookupByLibrary.simpleMessage("Другие"),
     "password": MessageLookupByLibrary.simpleMessage("Пароль"),
     "password_invalid": MessageLookupByLibrary.simpleMessage(
       "Должно быть 8 символов и больше, а также буквы и цифры",
@@ -128,11 +146,14 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "plot": MessageLookupByLibrary.simpleMessage("Сюжет"),
     "profile": MessageLookupByLibrary.simpleMessage("Профиль"),
+    "questionnaire": MessageLookupByLibrary.simpleMessage("Анкета"),
+    "race": MessageLookupByLibrary.simpleMessage("Раса"),
     "reader_mode_description": MessageLookupByLibrary.simpleMessage(
       "Этот режим поможет организовать ваше чтение. Вы можете:\n- Сохранять цитаты из прочитанных книг.\n- Оценивать произведения по разным критериям.\n- Вести список книг для чтения.",
     ),
     "reader_mode_title": MessageLookupByLibrary.simpleMessage("Режим читателя"),
     "record_is_deleted": MessageLookupByLibrary.simpleMessage("Запись удалена"),
+    "references": MessageLookupByLibrary.simpleMessage("Референсы"),
     "registration": MessageLookupByLibrary.simpleMessage("Регистрация"),
     "registration_failed": MessageLookupByLibrary.simpleMessage(
       "Регистрация провалена",
@@ -142,6 +163,8 @@ class MessageLookup extends MessageLookupByLibrary {
       "Обязательное поле пустое",
     ),
     "reset_password": MessageLookupByLibrary.simpleMessage("Сброс пароля"),
+    "rivals": MessageLookupByLibrary.simpleMessage("Соперники"),
+    "role": MessageLookupByLibrary.simpleMessage("Роль"),
     "save": MessageLookupByLibrary.simpleMessage("Сохранить"),
     "search": MessageLookupByLibrary.simpleMessage("Поиск"),
     "send_email_to_reset": MessageLookupByLibrary.simpleMessage(

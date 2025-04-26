@@ -35,11 +35,19 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "add_chapter": MessageLookupByLibrary.simpleMessage("Add chapter"),
     "add_image": MessageLookupByLibrary.simpleMessage("Add image"),
+    "add_image_after_character": MessageLookupByLibrary.simpleMessage(
+      "After adding a character you will be able to add a picture",
+    ),
     "add_key_moment": MessageLookupByLibrary.simpleMessage("Add key moment"),
+    "age": MessageLookupByLibrary.simpleMessage("Age"),
+    "allies": MessageLookupByLibrary.simpleMessage("Allies"),
     "an_error_occurred": MessageLookupByLibrary.simpleMessage(
       "An error occurred",
     ),
     "app_name": MessageLookupByLibrary.simpleMessage("InkFlow"),
+    "appearanceDescription": MessageLookupByLibrary.simpleMessage(
+      "Appearance description",
+    ),
     "arcs_chapters": MessageLookupByLibrary.simpleMessage("Arc\'s chapters"),
     "are_you_sure": MessageLookupByLibrary.simpleMessage("Are you sure?"),
     "author": MessageLookupByLibrary.simpleMessage("Author"),
@@ -67,6 +75,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "draft": MessageLookupByLibrary.simpleMessage("Draft"),
     "editing": MessageLookupByLibrary.simpleMessage("Editing"),
     "email": MessageLookupByLibrary.simpleMessage("Email"),
+    "enemies": MessageLookupByLibrary.simpleMessage("Enemies"),
     "enter_correct_email": MessageLookupByLibrary.simpleMessage(
       "Enter the correct email",
     ),
@@ -80,8 +89,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Downloads folder not found",
     ),
     "forget_password": MessageLookupByLibrary.simpleMessage("Forget password?"),
+    "friends": MessageLookupByLibrary.simpleMessage("Friends"),
     "frozen": MessageLookupByLibrary.simpleMessage("Frozen"),
     "general": MessageLookupByLibrary.simpleMessage("General"),
+    "genre": MessageLookupByLibrary.simpleMessage("Genre"),
     "ideas": MessageLookupByLibrary.simpleMessage("Ideas"),
     "inMind": MessageLookupByLibrary.simpleMessage("In mind"),
     "inProgress": MessageLookupByLibrary.simpleMessage("In progress"),
@@ -101,9 +112,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "mode_changed_to_writer": MessageLookupByLibrary.simpleMessage(
       "You are in writer mode",
     ),
+    "name": MessageLookupByLibrary.simpleMessage("Name"),
+    "neutral": MessageLookupByLibrary.simpleMessage("Neutral"),
     "no": MessageLookupByLibrary.simpleMessage("No"),
     "no_books": MessageLookupByLibrary.simpleMessage("No books:("),
     "no_chapters": MessageLookupByLibrary.simpleMessage("No chapters:("),
+    "no_characters": MessageLookupByLibrary.simpleMessage("No characters:("),
     "no_environment_items": MessageLookupByLibrary.simpleMessage(
       "No environment items:(",
     ),
@@ -111,6 +125,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "no_notes": MessageLookupByLibrary.simpleMessage("No notes:("),
     "no_story_arc": MessageLookupByLibrary.simpleMessage("No story arcs:("),
     "notes": MessageLookupByLibrary.simpleMessage("Notes"),
+    "occupation": MessageLookupByLibrary.simpleMessage("Occupation"),
+    "other": MessageLookupByLibrary.simpleMessage("Other"),
     "password": MessageLookupByLibrary.simpleMessage("Password"),
     "password_invalid": MessageLookupByLibrary.simpleMessage(
       "Must be 8 or more characters, plus letters and numbers",
@@ -126,6 +142,8 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "plot": MessageLookupByLibrary.simpleMessage("Plot"),
     "profile": MessageLookupByLibrary.simpleMessage("Profile"),
+    "questionnaire": MessageLookupByLibrary.simpleMessage("Questionnaire"),
+    "race": MessageLookupByLibrary.simpleMessage("Race"),
     "reader_mode_description": MessageLookupByLibrary.simpleMessage(
       "This mode helps you manage your reading experience. You can:\n- Save quotes from books you’ve read.\n- Rate books based on different criteria.\n- Maintain a to-read list.",
     ),
@@ -133,6 +151,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "record_is_deleted": MessageLookupByLibrary.simpleMessage(
       "Record is deleted",
     ),
+    "references": MessageLookupByLibrary.simpleMessage("References"),
     "registration": MessageLookupByLibrary.simpleMessage("Registration"),
     "registration_failed": MessageLookupByLibrary.simpleMessage(
       "Registration failed",
@@ -142,6 +161,8 @@ class MessageLookup extends MessageLookupByLibrary {
       "Required field is empty",
     ),
     "reset_password": MessageLookupByLibrary.simpleMessage("Reset password"),
+    "rivals": MessageLookupByLibrary.simpleMessage("Rivals"),
+    "role": MessageLookupByLibrary.simpleMessage("Role"),
     "save": MessageLookupByLibrary.simpleMessage("Save"),
     "search": MessageLookupByLibrary.simpleMessage("Search"),
     "send_email_to_reset": MessageLookupByLibrary.simpleMessage(

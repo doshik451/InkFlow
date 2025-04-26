@@ -40,6 +40,7 @@ class Book {
   final String authorName;
   final String title;
   final String setting;
+  final String genre;
   final String description;
   final String lastUpdate;
   final Status status;
@@ -50,7 +51,8 @@ class Book {
 
   Book({required this.id, required this.authorId, required this.authorName, required this.title,
     required this.description, required this.status, required this.lastUpdate, required this.setting,
-    required this.theme, required this.message, required this.coverUrl, required this.files});
+    required this.genre, required this.theme, required this.message, required this.coverUrl,
+    required this.files});
 
   factory Book.fromMap(String id, Map<dynamic, dynamic> map) {
     return Book(
@@ -59,6 +61,7 @@ class Book {
       authorName: map['authorName'] ?? '',
       title: map['title'] ?? '',
       setting: map['setting'] ?? '',
+      genre: map['genre'] ?? '',
       description: map['description'] ?? '',
       message: map['message'] ?? '',
       theme: map['theme'] ?? '',

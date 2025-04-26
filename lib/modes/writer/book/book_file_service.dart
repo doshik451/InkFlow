@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:app_settings/app_settings.dart';
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:file_selector/file_selector.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -27,31 +27,32 @@ class BookFileService {
 
   Future<String?> uploadFile() async {
     try {
-      final result = await FilePicker.platform.pickFiles(
-        allowMultiple: false,
-        type: FileType.custom,
-        allowedExtensions: ['pdf', 'doc', 'docx', 'txt', 'epub', 'fb2'],
-      );
-      if(result == null || result.files.isEmpty) return null;
-      final file = File(result.files.single.path!);
-      final fileName = result.files.single.name;
-      final fileExtension = fileName.split('.').last.toLowerCase();
-      const allowedExtensions = {'pdf', 'doc', 'docx', 'txt', 'epub', 'fb2'};
-      if (!allowedExtensions.contains(fileExtension)) {
-        throw Exception(S.of(context).invalid_file_format);
+      final typeGroups = [
+        XTypeGroup(
+          label: S.of(context).add_book_file,
+          extensions: ['pdf', 'doc', 'docx', 'txt', 'epub', 'fb2'],
+        ),
+      ];
+
+      final XFile? file = await openFile(acceptedTypeGroups: typeGroups);
+
+      if (file == null) {
+        return null;
       }
+
+      final fileName = file.name;
+      final path = file.path;
       final ref = storage.ref('$storagePath/$fileName');
 
-      await ref.putFile(file);
+      await ref.putFile(File(path));
       return await ref.getDownloadURL();
-    }
-    catch(e){
+    } catch (e) {
       debugPrint('error - $e');
       rethrow;
     }
   }
 
-  Future<void> openFile(String fileName) async {
+  Future<void> openSavedFile(String fileName) async {
     try {
       final ref = storage.ref('$storagePath/$fileName');
       final url = await ref.getDownloadURL();
@@ -117,7 +118,7 @@ class BookFileService {
       if (!await file.exists()) {
         throw Exception(S.of(context).file_was_not_saved);
       }
-
+      await OpenFile.open(file.path);
       return file;
     } catch (e) {
       throw Exception('${S.of(context).an_error_occurred}: ${e.toString()}');

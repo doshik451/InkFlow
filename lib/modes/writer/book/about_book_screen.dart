@@ -31,6 +31,7 @@ class _AboutBookPageState extends State<AboutBookPage> {
   late final TextEditingController _titleController;
   late final TextEditingController _authorNameController;
   late final TextEditingController _settingController;
+  late final TextEditingController _genreController;
   late final TextEditingController _themeController;
   late final TextEditingController _messageController;
   late final TextEditingController _descriptionController;
@@ -52,6 +53,7 @@ class _AboutBookPageState extends State<AboutBookPage> {
   late Status _initialStatus;
   late String? _initialCoverUrl;
   late String _initialSetting;
+  late String _initialGenre;
   late String _initialTheme;
   late String _initialMessage;
   late String _initialAuthorName;
@@ -72,6 +74,7 @@ class _AboutBookPageState extends State<AboutBookPage> {
     _initialStatus = _status;
     _initialCoverUrl = _coverUrl;
     _initialSetting = _settingController.text;
+    _initialGenre = _genreController.text;
     _initialTheme = _themeController.text;
     _initialMessage = _messageController.text;
 
@@ -91,6 +94,7 @@ class _AboutBookPageState extends State<AboutBookPage> {
     _settingController =
         TextEditingController(text: widget.book?.setting ?? '');
     _themeController = TextEditingController(text: widget.book?.theme ?? '');
+    _genreController = TextEditingController(text: widget.book?.genre ?? '');
     _messageController =
         TextEditingController(text: widget.book?.message ?? '');
     _descriptionController = TextEditingController(
@@ -109,6 +113,7 @@ class _AboutBookPageState extends State<AboutBookPage> {
     _authorNameController.dispose();
     _settingController.dispose();
     _themeController.dispose();
+    _genreController.dispose();
     _messageController.dispose();
     _descriptionController.dispose();
   }
@@ -123,6 +128,7 @@ class _AboutBookPageState extends State<AboutBookPage> {
     final hasCoverUrlChanged = _coverUrl != _initialCoverUrl;
     final hasSettingChanged = _settingController.text != _initialSetting;
     final hasThemeChanged = _themeController.text != _initialTheme;
+    final hasGenreChanged = _genreController.text != _initialGenre;
     final hasMessageChanged = _messageController.text != _initialMessage;
 
     setState(() {
@@ -133,7 +139,8 @@ class _AboutBookPageState extends State<AboutBookPage> {
           hasCoverUrlChanged ||
           hasSettingChanged ||
           hasThemeChanged ||
-          hasMessageChanged;
+          hasMessageChanged ||
+          hasGenreChanged;
     });
   }
 
@@ -240,6 +247,7 @@ class _AboutBookPageState extends State<AboutBookPage> {
         _initialSetting = _settingController.text;
         _initialTheme = _themeController.text;
         _initialMessage = _messageController.text;
+        _initialGenre = _genreController.text;
         _checkForChanges();
         _showSuccessSnackbar(_isEditing ? s.update_success : s.create_success);
 
@@ -271,6 +279,7 @@ class _AboutBookPageState extends State<AboutBookPage> {
       'description': _descriptionController.text.trim(),
       'status': _status.name,
       'lastUpdate': lastUpdate,
+      'genre': _genreController.text.trim(),
       'coverUrl': _coverUrl,
       'files': _files,
       'authorId': widget.authorId,
@@ -299,6 +308,7 @@ class _AboutBookPageState extends State<AboutBookPage> {
       authorName: bookData['authorName'],
       title: bookData['title'],
       setting: bookData['setting'],
+      genre: bookData['genre'],
       description: bookData['description'],
       status: _status,
       lastUpdate: bookData['lastUpdate'],
@@ -447,6 +457,8 @@ class _AboutBookPageState extends State<AboutBookPage> {
                   const SizedBox(height: 16),
                   _buildTextField(s.setting, _settingController),
                   const SizedBox(height: 16),
+                  _buildTextField(s.genre, _genreController),
+                  const SizedBox(height: 16),
                   _buildTextField(s.theme, _themeController),
                   const SizedBox(height: 16),
                   _buildTextField(s.message, _messageController, maxLines: 3),
@@ -518,29 +530,6 @@ class _AboutBookPageState extends State<AboutBookPage> {
     } finally {
       if (mounted) setState(() => _isDownloading = false);
     }
-  }
-
-  void _showSettingsDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(S.of(context).permissionRequiredTitle),
-        content: Text(S.of(context).storagePermissionMessage),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(S.of(context).cancel),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              openAppSettings();
-            },
-            child: Text(S.of(context).settings),
-          ),
-        ],
-      ),
-    );
   }
 
   Widget _buildCoverSection() {
@@ -680,10 +669,18 @@ class _AboutBookPageState extends State<AboutBookPage> {
             const SizedBox(width: 8,),
             IconButton(
               onPressed: () async {
+                setState(() {
+                  _isDownloading = true;
+                });
                 final downloadUrl = await _bookFileService.uploadFile();
                 if (downloadUrl != null) await _loadBookFiles();
+                if(mounted) {
+                  setState(() {
+                    _isDownloading = false;
+                  });
+                }
               },
-              icon: const Icon(Icons.add),
+              icon: _isDownloading ? const CircularProgressIndicator(color: Color(0xFF89B0D9),) : const Icon(Icons.add),
               style: IconButton.styleFrom(
                 backgroundColor: _status.color,
                 foregroundColor: Colors.white,
@@ -705,13 +702,13 @@ class _AboutBookPageState extends State<AboutBookPage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     IconButton(
-                      onPressed: () => _bookFileService.openFile(file),
+                      onPressed: () => _bookFileService.openSavedFile(file),
                       icon: const Icon(Icons.remove_red_eye),
                     ),
                     IconButton(
                       icon: const Icon(Icons.download),
                       onPressed:
-                          _isDownloading ? null : () => _downloadFile(file),
+                          _isDownloading ? () => const CircularProgressIndicator(color: Color(0xFF89B0D9),) : () => _downloadFile(file),
                     ),
                     IconButton(
                       icon: const Icon(Icons.delete),
@@ -723,26 +720,6 @@ class _AboutBookPageState extends State<AboutBookPage> {
                   ],
                 ),
               )),
-        // ElevatedButton(
-        //   onPressed: () async {
-        //     final downloadUrl = await _bookFileService.uploadFile();
-        //     if (downloadUrl != null) await _loadBookFiles();
-        //   },
-        //   style: ButtonStyle(
-        //     backgroundColor: MaterialStateProperty.all<Color>(_status.color),
-        //     padding: MaterialStateProperty.all<EdgeInsets>(
-        //       const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
-        //     ),
-        //   ),
-        //   child: const Text(
-        //     'Добавить файл',
-        //     style: const TextStyle(
-        //       color: Colors.black,
-        //       fontSize: 16,
-        //       fontWeight: FontWeight.w600,
-        //     ),
-        //   ),
-        // )
       ],
     );
   }

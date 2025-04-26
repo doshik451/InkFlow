@@ -131,7 +131,7 @@ class _EnvironmentsListState extends State<EnvironmentsList> {
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
-            child: CircularProgressIndicator(),
+            child: CircularProgressIndicator(color: Color(0xFF89B0D9),),
           );
         }
 

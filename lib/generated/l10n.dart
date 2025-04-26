@@ -380,6 +380,16 @@ class S {
     );
   }
 
+  /// `No characters:(`
+  String get no_characters {
+    return Intl.message(
+      'No characters:(',
+      name: 'no_characters',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Done`
   String get done {
     return Intl.message('Done', name: 'done', desc: '', args: []);
@@ -498,6 +508,11 @@ class S {
   /// `Setting`
   String get setting {
     return Intl.message('Setting', name: 'setting', desc: '', args: []);
+  }
+
+  /// `Genre`
+  String get genre {
+    return Intl.message('Genre', name: 'genre', desc: '', args: []);
   }
 
   /// `Status`
@@ -728,6 +743,96 @@ class S {
       desc: '',
       args: [],
     );
+  }
+
+  /// `Allies`
+  String get allies {
+    return Intl.message('Allies', name: 'allies', desc: '', args: []);
+  }
+
+  /// `Friends`
+  String get friends {
+    return Intl.message('Friends', name: 'friends', desc: '', args: []);
+  }
+
+  /// `Neutral`
+  String get neutral {
+    return Intl.message('Neutral', name: 'neutral', desc: '', args: []);
+  }
+
+  /// `Rivals`
+  String get rivals {
+    return Intl.message('Rivals', name: 'rivals', desc: '', args: []);
+  }
+
+  /// `Enemies`
+  String get enemies {
+    return Intl.message('Enemies', name: 'enemies', desc: '', args: []);
+  }
+
+  /// `Other`
+  String get other {
+    return Intl.message('Other', name: 'other', desc: '', args: []);
+  }
+
+  /// `Name`
+  String get name {
+    return Intl.message('Name', name: 'name', desc: '', args: []);
+  }
+
+  /// `Age`
+  String get age {
+    return Intl.message('Age', name: 'age', desc: '', args: []);
+  }
+
+  /// `Role`
+  String get role {
+    return Intl.message('Role', name: 'role', desc: '', args: []);
+  }
+
+  /// `Race`
+  String get race {
+    return Intl.message('Race', name: 'race', desc: '', args: []);
+  }
+
+  /// `Occupation`
+  String get occupation {
+    return Intl.message('Occupation', name: 'occupation', desc: '', args: []);
+  }
+
+  /// `Appearance description`
+  String get appearanceDescription {
+    return Intl.message(
+      'Appearance description',
+      name: 'appearanceDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `After adding a character you will be able to add a picture`
+  String get add_image_after_character {
+    return Intl.message(
+      'After adding a character you will be able to add a picture',
+      name: 'add_image_after_character',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Questionnaire`
+  String get questionnaire {
+    return Intl.message(
+      'Questionnaire',
+      name: 'questionnaire',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `References`
+  String get references {
+    return Intl.message('References', name: 'references', desc: '', args: []);
   }
 }
 
