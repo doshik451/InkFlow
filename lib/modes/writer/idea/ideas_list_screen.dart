@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:inkflow/ui/widgets/main_screen/ideas_screen/idea_info_screen.dart';
 import 'animated_idea_list.dart';
 
 import '../../../../generated/l10n.dart';
+import 'idea_info_screen.dart';
 
 class IdeasListScreen extends StatefulWidget {
   const IdeasListScreen({super.key});
@@ -16,13 +16,14 @@ class _IdeasListScreenState extends State<IdeasListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(S.current.ideas), centerTitle: true,automaticallyImplyLeading: false,),
+      appBar: AppBar(title: Text(S.current.ideas), centerTitle: true, automaticallyImplyLeading: false,),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton(
+        heroTag: 'add_idea_tag',
         backgroundColor: Theme.of(context).colorScheme.tertiary,
         onPressed: () { Navigator.push(context, MaterialPageRoute(builder: (context) => const IdeaInfoScreen())); },
+        shape: const CircleBorder(),
         child: const Icon(Icons.add, color: Colors.white,),
-        shape: CircleBorder(),
       ),
       body: Center(
         child: Stack(
@@ -39,10 +40,10 @@ class _IdeasListScreenState extends State<IdeasListScreen> {
                 cursorColor: Theme.of(context).colorScheme.surface,
                 style: TextStyle(color: Theme.of(context).colorScheme.secondary),
                 decoration: InputDecoration(
-                  isDense: true, contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8), filled: true, fillColor: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.7),
+                  isDense: true, contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8), filled: true, fillColor: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.7),
                   hintText: S.current.search, hintStyle: TextStyle(color: Theme.of(context).colorScheme.secondary),
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(width: 3, color: Theme.of(context).colorScheme.secondary),),
-                  prefixIcon: Icon(Icons.search),
+                  prefixIcon: const Icon(Icons.search),
                   focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(width: 1.5, color: Theme.of(context).colorScheme.secondary),),
                 ),
               ),
@@ -50,7 +51,6 @@ class _IdeasListScreenState extends State<IdeasListScreen> {
           ],
         ),
       ),
-
     );
   }
 }

@@ -43,8 +43,9 @@ class Idea {
   final String description;
   final IdeaStatus status;
   final String? linkedBookId;
+  final String lastUpdate;
 
-  Idea({required this.id, required this.authorId, required this.title, required this.description, required this.status, required this.linkedBookId});
+  Idea({required this.id, required this.authorId, required this.title, required this.description, required this.status, required this.linkedBookId, required this.lastUpdate});
 
   factory Idea.fromMap(String id, Map<dynamic, dynamic> map){
     return Idea(
@@ -54,6 +55,7 @@ class Idea {
       description: map['description'] ?? '',
       status: IdeaStatus.fromString(map['status']?.toString()),
       linkedBookId: map['linkedBookId']?.toString(),
+      lastUpdate: map['lastUpdate'].toString(),
     );
   }
 }

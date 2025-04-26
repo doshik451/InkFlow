@@ -2,20 +2,19 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'ideas_screen/ideas_list_screen.dart';
 
 import '../../../generated/l10n.dart';
-import 'profile_screen.dart';
+import '../../general/profile_screen.dart';
 
-class MainScreenBase extends StatefulWidget {
-  const MainScreenBase({super.key});
+class MainScreenBaseReader extends StatefulWidget {
+  const MainScreenBaseReader({super.key});
 
   @override
-  State<MainScreenBase> createState() => _MainScreenBaseState();
+  State<MainScreenBaseReader> createState() => _MainScreenBaseReaderState();
 }
 
-class _MainScreenBaseState extends State<MainScreenBase> {
-  int _selectedPage = 1;
+class _MainScreenBaseReaderState extends State<MainScreenBaseReader> {
+  int _selectedPage = 2;
 
   void onSelectTab(int index) {
     if(_selectedPage == index) return;
@@ -42,9 +41,9 @@ class _MainScreenBaseState extends State<MainScreenBase> {
           body: IndexedStack(
             index: _selectedPage,
             children: [
-              Center(child: Text('data1')),
-              IdeasListScreen(),
-              ProfileScreen(),
+              const Center(child: Text('коллекции прочитанного')),
+              const Center(child: Text('планы чтения')),
+              const ProfileScreen(),
             ],
           ),
           bottomNavigationBar: ClipRRect(
@@ -54,8 +53,8 @@ class _MainScreenBaseState extends State<MainScreenBase> {
               currentIndex: _selectedPage,
               showUnselectedLabels: false,
               items: [
-                BottomNavigationBarItem(icon: const Icon(Icons.book), label: S.of(context).books),
-                BottomNavigationBarItem(icon: const Icon(Icons.lightbulb), label: S.of(context).ideas),
+                BottomNavigationBarItem(icon: const Icon(Icons.collections_bookmark), label: 'Прочитано'),
+                BottomNavigationBarItem(icon: const Icon(Icons.timer), label: 'Планы'),
                 BottomNavigationBarItem(icon: const Icon(Icons.account_circle), label: S.of(context).profile),
               ],
               onTap: onSelectTab,

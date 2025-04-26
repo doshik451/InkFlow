@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -7,16 +6,17 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:inkflow/utils/routes.dart';
+import '../../utils/routes.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
-import '../../../bloc/language/locale_cubit.dart';
-import '../../../bloc/theme/theme_cubit.dart';
-import '../../../generated/l10n.dart';
-import '../auth_screen/login_screen.dart';
-import '../widget_base/button_base.dart';
-import '../widget_base/short_data_field_base.dart';
+import '../../bloc/language/locale_cubit.dart';
+import '../../bloc/mode/app_mode_cubit.dart';
+import '../../bloc/theme/theme_cubit.dart';
+import '../../generated/l10n.dart';
+import '../app_mode.dart';
+import '../writer/widget_base/button_base.dart';
+import '../writer/widget_base/short_data_field_base.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -33,20 +33,63 @@ class ProfileScreen extends StatelessWidget {
             children: [
               const _UserDataWidget(),
               const SizedBox(height: 120,),
-              ButtonBase(text: S.current.dark_theme, value: isDark,
+              ButtonBase(text: S.of(context).dark_theme, value: isDark,
                 onPressed: () => context.read<ThemeCubit>().setTheme(isDark ? Brightness.light : Brightness.dark),),
               const SizedBox(height: 16,),
-              ButtonBase(text: S.current.change_lang, onPressed: () {
+              ButtonBase(text: S.of(context).change_lang, onPressed: () {
                 context.read<LocaleCubit>().toggleLocale();
               },),
               const SizedBox(height: 16,),
-              ButtonBase(text: S.current.change_mode, onPressed: () {},),
+              ButtonBase(
+                text: S.of(context).change_mode,
+                icon: Icons.swap_horiz,
+                onPressed: () async {
+                  final cubit = context.read<AppModeCubit>();
+                  final currentMode = cubit.state;
+                  final newMode = currentMode == AppMode.writerMode
+                      ? AppMode.readerMode
+                      : AppMode.writerMode;
+
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (context) => const Center(child: CircularProgressIndicator()),
+                  );
+
+                  try {
+                    await cubit.switchMode(newMode);
+
+                    Navigator.of(context).pop();
+                    Navigator.pushReplacementNamed(
+                      context,
+                      Routes.getMainRoute(context),
+                    );
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(newMode == AppMode.writerMode
+                            ? S.of(context).mode_changed_to_writer
+                            : S.of(context).mode_changed_to_reader),
+                        duration: const Duration(seconds: 1),
+                      ),
+                    );
+                  } catch (e) {
+                    Navigator.of(context).pop();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(S.of(context).an_error_occurred),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  }
+                },
+              ),
               const SizedBox(height: 16,),
-              ButtonBase(text: S.current.about_app, onPressed: () {
+              ButtonBase(text: S.of(context).about_app, onPressed: () {
                 Navigator.pushNamed(context, Routes.aboutApp);
               },),
               const SizedBox(height: 16,),
-              ButtonBase(text: S.current.logout, onPressed: () async {
+              ButtonBase(text: S.of(context).logout, onPressed: () async {
                 await FirebaseAuth.instance.signOut();
                 Navigator.pushNamedAndRemoveUntil(
                   context,
@@ -103,7 +146,7 @@ class _UserDataWidgetState extends State<_UserDataWidget> {
     final status = await Permission.photos.request();
     if (!status.isGranted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.current.don_t_have_access)),
+        SnackBar(content: Text(S.of(context).don_t_have_access)),
       );
       return;
     }
@@ -134,7 +177,7 @@ class _UserDataWidgetState extends State<_UserDataWidget> {
       _loadUserImage();
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.current.an_error_occurred)),
+        SnackBar(content: Text(S.of(context).an_error_occurred)),
       );
     }
   }
@@ -166,9 +209,9 @@ class _UserDataWidgetState extends State<_UserDataWidget> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ShortDataField(label: S.current.username, value: user?.displayName ?? S.current.unknown, readOnly: true,),
+              ShortDataField(label: S.of(context).username, value: user?.displayName ?? S.of(context).unknown, readOnly: true,),
               const SizedBox(height: 10,),
-              ShortDataField(label: S.current.email, value: user?.email ?? S.current.unknown, readOnly: true,),
+              ShortDataField(label: S.of(context).email, value: user?.email ?? S.of(context).unknown, readOnly: true,),
             ],
           ),
         ),

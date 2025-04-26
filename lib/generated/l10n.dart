@@ -340,6 +340,46 @@ class S {
     return Intl.message('No ideas:(', name: 'no_ideas', desc: '', args: []);
   }
 
+  /// `No books:(`
+  String get no_books {
+    return Intl.message('No books:(', name: 'no_books', desc: '', args: []);
+  }
+
+  /// `No notes:(`
+  String get no_notes {
+    return Intl.message('No notes:(', name: 'no_notes', desc: '', args: []);
+  }
+
+  /// `No story arcs:(`
+  String get no_story_arc {
+    return Intl.message(
+      'No story arcs:(',
+      name: 'no_story_arc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No environment items:(`
+  String get no_environment_items {
+    return Intl.message(
+      'No environment items:(',
+      name: 'no_environment_items',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No chapters:(`
+  String get no_chapters {
+    return Intl.message(
+      'No chapters:(',
+      name: 'no_chapters',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Done`
   String get done {
     return Intl.message('Done', name: 'done', desc: '', args: []);
@@ -358,6 +398,16 @@ class S {
   /// `Canceled`
   String get canceled {
     return Intl.message('Canceled', name: 'canceled', desc: '', args: []);
+  }
+
+  /// `Frozen`
+  String get frozen {
+    return Intl.message('Frozen', name: 'frozen', desc: '', args: []);
+  }
+
+  /// `Draft`
+  String get draft {
+    return Intl.message('Draft', name: 'draft', desc: '', args: []);
   }
 
   /// `Loading...`
@@ -430,6 +480,26 @@ class S {
     return Intl.message('Description', name: 'description', desc: '', args: []);
   }
 
+  /// `Author`
+  String get author {
+    return Intl.message('Author', name: 'author', desc: '', args: []);
+  }
+
+  /// `Theme`
+  String get theme {
+    return Intl.message('Theme', name: 'theme', desc: '', args: []);
+  }
+
+  /// `Message`
+  String get message {
+    return Intl.message('Message', name: 'message', desc: '', args: []);
+  }
+
+  /// `Setting`
+  String get setting {
+    return Intl.message('Setting', name: 'setting', desc: '', args: []);
+  }
+
   /// `Status`
   String get status {
     return Intl.message('Status', name: 'status', desc: '', args: []);
@@ -438,6 +508,226 @@ class S {
   /// `Save`
   String get save {
     return Intl.message('Save', name: 'save', desc: '', args: []);
+  }
+
+  /// `Editing`
+  String get editing {
+    return Intl.message('Editing', name: 'editing', desc: '', args: []);
+  }
+
+  /// `Last update: `
+  String get lastUpdate {
+    return Intl.message(
+      'Last update: ',
+      name: 'lastUpdate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No`
+  String get no {
+    return Intl.message('No', name: 'no', desc: '', args: []);
+  }
+
+  /// `Unsaved data`
+  String get unsaved_data {
+    return Intl.message(
+      'Unsaved data',
+      name: 'unsaved_data',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You have unsaved data. Save?`
+  String get want_to_save {
+    return Intl.message(
+      'You have unsaved data. Save?',
+      name: 'want_to_save',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose mode`
+  String get choose_mode {
+    return Intl.message('Choose mode', name: 'choose_mode', desc: '', args: []);
+  }
+
+  /// `You are in writer mode`
+  String get mode_changed_to_writer {
+    return Intl.message(
+      'You are in writer mode',
+      name: 'mode_changed_to_writer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You are in reader mode`
+  String get mode_changed_to_reader {
+    return Intl.message(
+      'You are in reader mode',
+      name: 'mode_changed_to_reader',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `About book`
+  String get aboutBook {
+    return Intl.message('About book', name: 'aboutBook', desc: '', args: []);
+  }
+
+  /// `Plot`
+  String get plot {
+    return Intl.message('Plot', name: 'plot', desc: '', args: []);
+  }
+
+  /// `Characters`
+  String get characters {
+    return Intl.message('Characters', name: 'characters', desc: '', args: []);
+  }
+
+  /// `Environment`
+  String get environment {
+    return Intl.message('Environment', name: 'environment', desc: '', args: []);
+  }
+
+  /// `Notes`
+  String get notes {
+    return Intl.message('Notes', name: 'notes', desc: '', args: []);
+  }
+
+  /// `Data successfully updated`
+  String get update_success {
+    return Intl.message(
+      'Data successfully updated',
+      name: 'update_success',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Record successfully created`
+  String get create_success {
+    return Intl.message(
+      'Record successfully created',
+      name: 'create_success',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add image`
+  String get add_image {
+    return Intl.message('Add image', name: 'add_image', desc: '', args: []);
+  }
+
+  /// `Features`
+  String get features {
+    return Intl.message('Features', name: 'features', desc: '', args: []);
+  }
+
+  /// `Arc's chapters`
+  String get arcs_chapters {
+    return Intl.message(
+      'Arc\'s chapters',
+      name: 'arcs_chapters',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add chapter`
+  String get add_chapter {
+    return Intl.message('Add chapter', name: 'add_chapter', desc: '', args: []);
+  }
+
+  /// `Add key moment`
+  String get add_key_moment {
+    return Intl.message(
+      'Add key moment',
+      name: 'add_key_moment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Key moments`
+  String get key_moments {
+    return Intl.message('Key moments', name: 'key_moments', desc: '', args: []);
+  }
+
+  /// `Add file (pdf, doc, docx, txt, epub, fb2)`
+  String get add_book_file {
+    return Intl.message(
+      'Add file (pdf, doc, docx, txt, epub, fb2)',
+      name: 'add_book_file',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Settings`
+  String get settings {
+    return Intl.message('Settings', name: 'settings', desc: '', args: []);
+  }
+
+  /// `Permission required`
+  String get permissionRequiredTitle {
+    return Intl.message(
+      'Permission required',
+      name: 'permissionRequiredTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `To save files, storage access permission is required`
+  String get storagePermissionMessage {
+    return Intl.message(
+      'To save files, storage access permission is required',
+      name: 'storagePermissionMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `File saved`
+  String get file_saved {
+    return Intl.message('File saved', name: 'file_saved', desc: '', args: []);
+  }
+
+  /// `Invalid file format`
+  String get invalid_file_format {
+    return Intl.message(
+      'Invalid file format',
+      name: 'invalid_file_format',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Downloads folder not found`
+  String get folder_not_found {
+    return Intl.message(
+      'Downloads folder not found',
+      name: 'folder_not_found',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The file wasn't saved`
+  String get file_was_not_saved {
+    return Intl.message(
+      'The file wasn\'t saved',
+      name: 'file_was_not_saved',
+      desc: '',
+      args: [],
+    );
   }
 }
 

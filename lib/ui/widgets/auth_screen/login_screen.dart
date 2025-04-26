@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../../../app_images.dart';
 import '../../../generated/l10n.dart';
 import '../../../utils/routes.dart';
-import '../main_screen/main_screen_base.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -38,11 +37,12 @@ class _LoginScreenState extends State<LoginScreen> {
         email: _emailController.text,
         password: _passwordController.text,
       );
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        Routes.main,
-        (route) => false,
-      );
+      Navigator.pushReplacementNamed(context, Routes.modeSelection);
+      // Navigator.pushNamedAndRemoveUntil(
+      //   context,
+      //   Routes.getMainRoute(context),
+      //   (route) => false,
+      // );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(S.of(context).login_failed)),

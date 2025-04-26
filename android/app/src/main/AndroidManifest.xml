@@ -12,6 +12,10 @@
             <action android:name="android.support.customtabs.action.CustomTabsService" />
         </intent>
     </queries>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+    <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
@@ -20,6 +24,7 @@
         android:required="false" />
     <uses-permission android:name="android.permission.INTERNET" />
     <application
+        android:requestLegacyExternalStorage="true"
         android:label="InkFlow"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">

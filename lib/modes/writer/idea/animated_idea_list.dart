@@ -3,9 +3,10 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import '../../../../generated/l10n.dart';
 import '../../../../models/idea_model.dart';
-import '../../widget_base/confirm_delete_base.dart';
-import '../../widget_base/delete_swipe_background_base.dart';
-import '../../widget_base/idea_card_base.dart';
+import '../widget_base/confirm_delete_base.dart';
+import '../widget_base/delete_swipe_background_base.dart';
+import '../widget_base/idea_card_base.dart';
+import 'idea_info_screen.dart';
 
 class AnimatedIdeaList extends StatefulWidget {
   final String searchQuery;
@@ -17,7 +18,7 @@ class AnimatedIdeaList extends StatefulWidget {
 }
 
 class _AnimatedIdeaListState extends State<AnimatedIdeaList> {
-  final DatabaseReference _databaseReference = FirebaseDatabase.instance.ref('ideas');
+  late DatabaseReference _databaseReference;
   final userId = FirebaseAuth.instance.currentUser!.uid;
   late Stream<DatabaseEvent> _ideaStream;
   final Map<String, String> _bookTitlesCache = {};
@@ -25,27 +26,8 @@ class _AnimatedIdeaListState extends State<AnimatedIdeaList> {
   @override
   void initState() {
     super.initState();
-    _ideaStream = _databaseReference.orderByChild('authorId').equalTo(userId).onValue;
-  }
-
-  Future<String> _getBookTitle(String? bookId, BuildContext context) async {
-    if (bookId == null) return S.of(context).general;
-
-    if (_bookTitlesCache.containsKey(bookId)) {
-      return _bookTitlesCache[bookId]!;
-    }
-
-    try {
-      final snapshot = await FirebaseDatabase.instance
-          .ref('books/$bookId/title')
-          .get();
-
-      final title = snapshot.value?.toString() ?? S.of(context).general;
-      _bookTitlesCache[bookId] = title;
-      return title;
-    } catch (_) {
-      return S.of(context).general;
-    }
+    _databaseReference = FirebaseDatabase.instance.ref('ideas/$userId');
+    _ideaStream = _databaseReference.onValue;
   }
 
   @override
@@ -54,10 +36,11 @@ class _AnimatedIdeaListState extends State<AnimatedIdeaList> {
       stream: _ideaStream,
       builder: (context, snapshot) {
         if(snapshot.hasError) return Center(child: Text('${S.current.an_error_occurred} ${snapshot.error}'),);
-        if(snapshot.connectionState == ConnectionState.waiting) return Center(child: CircularProgressIndicator(),);
+        if(snapshot.connectionState == ConnectionState.waiting) return const Center(child: CircularProgressIndicator(),);
 
-        final ideasMap = snapshot.data?.snapshot.value as Map<dynamic,dynamic>;
-        if(ideasMap == null || ideasMap.isEmpty) {
+        final data = snapshot.data?.snapshot.value;
+
+        if (data == null || data is! Map) {
           return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -69,14 +52,16 @@ class _AnimatedIdeaListState extends State<AnimatedIdeaList> {
           );
         }
 
+        final ideasMap = data;
+
         List<Idea> ideas = ideasMap.entries.map((entry) => Idea.fromMap(entry.key, entry.value as Map<dynamic,dynamic>)).toList();
-        ideas.sort((a,b) => b.title.compareTo(a.title));
+        ideas.sort((a,b) => b.lastUpdate.compareTo(a.lastUpdate));
 
         return FutureBuilder<Map<String, String>>(
           future: _loadBookTitles(ideas, context),
           builder: (context, bookTitlesSnapshot) {
             if(bookTitlesSnapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             }
 
             final bookTitles = bookTitlesSnapshot.data ?? {};
@@ -118,7 +103,7 @@ class _AnimatedIdeaListState extends State<AnimatedIdeaList> {
                 itemBuilder: (context, index) {
                   final idea = filteredIdeas[index];
                   final bookTitle = bookTitles[idea.linkedBookId ?? ''] ?? S.of(context).general;
-                  return _animatedIdeaCard(idea, index, context, bookTitle);
+                  return _animatedIdeaCard(idea, index, userId, context, bookTitle);
                 }
             );
           },
@@ -138,7 +123,7 @@ class _AnimatedIdeaListState extends State<AnimatedIdeaList> {
       } else {
         try {
           final snapshot = await FirebaseDatabase.instance
-              .ref('books/$bookId/title')
+              .ref('books/$userId/$bookId/title')
               .get();
           final title = snapshot.value?.toString() ?? S.of(context).general;
           bookTitles[bookId] = title;
@@ -148,12 +133,11 @@ class _AnimatedIdeaListState extends State<AnimatedIdeaList> {
         }
       }
     }
-
     return bookTitles;
   }
 }
 
-Widget _animatedIdeaCard(Idea idea, int index, BuildContext context, String bookTitle) {
+Widget _animatedIdeaCard(Idea idea, int index, String userId, BuildContext context, String bookTitle) {
   const duration = Duration(milliseconds: 500);
 
   return TweenAnimationBuilder(
@@ -166,12 +150,15 @@ Widget _animatedIdeaCard(Idea idea, int index, BuildContext context, String book
         direction: DismissDirection.endToStart,
         background: buildSwipeBackground(context),
         confirmDismiss: (direction) => confirmDelete(context),
-        onDismissed: (direction) => _deleteIdea(idea.id, context),
-        child: Opacity(
-          opacity: value,
-          child: Transform.translate(
-            offset: Offset(0, (1 - value) * 20),
-            child: ideaCardContent(idea, context, bookTitle),
+        onDismissed: (direction) => _deleteIdea(idea.id, userId, context),
+        child: GestureDetector(
+          onTap: () => _openEditScreen(context, idea),
+          child: Opacity(
+            opacity: value,
+            child: Transform.translate(
+              offset: Offset(0, (1 - value) * 20),
+              child: ideaCardContent(idea, context, bookTitle),
+            ),
           ),
         ),
       );
@@ -179,9 +166,17 @@ Widget _animatedIdeaCard(Idea idea, int index, BuildContext context, String book
   );
 }
 
-Future<void> _deleteIdea(String ideaId, BuildContext context) async {
+void _openEditScreen(BuildContext context, Idea idea) {
+  Navigator.of(context).push(
+    MaterialPageRoute(
+      builder: (context) => IdeaInfoScreen(idea: idea),
+    ),
+  );
+}
+
+Future<void> _deleteIdea(String ideaId, String userId, BuildContext context) async {
   try {
-    await FirebaseDatabase.instance.ref('ideas/$ideaId').remove();
+    await FirebaseDatabase.instance.ref('ideas/$userId/$ideaId').remove();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(S.current.record_is_deleted)),
     );

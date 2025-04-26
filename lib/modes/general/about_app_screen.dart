@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../widget_base/button_base.dart';
+import '../writer/widget_base/button_base.dart';
 
-import '../../../generated/l10n.dart';
+import '../../generated/l10n.dart';
 
 class AboutAppScreen extends StatelessWidget {
   const AboutAppScreen({super.key});

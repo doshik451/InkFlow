@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import '../../../app_images.dart';
 import '../../../generated/l10n.dart';
 import '../../../utils/routes.dart';
-import '../main_screen/main_screen_base.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -266,7 +265,7 @@ class _RegisterButton extends StatelessWidget {
       await userCredential.user?.reload();
       Navigator.pushNamedAndRemoveUntil(
         context,
-        Routes.main,
+        Routes.getMainRoute(context),
         (route) => false,
       );
     } catch (e) {
