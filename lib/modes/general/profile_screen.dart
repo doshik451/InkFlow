@@ -36,9 +36,40 @@ class ProfileScreen extends StatelessWidget {
               ButtonBase(text: S.of(context).dark_theme, value: isDark,
                 onPressed: () => context.read<ThemeCubit>().setTheme(isDark ? Brightness.light : Brightness.dark),),
               const SizedBox(height: 16,),
-              ButtonBase(text: S.of(context).change_lang, onPressed: () {
-                context.read<LocaleCubit>().toggleLocale();
-              },),
+              ButtonBase(
+                text: S.of(context).change_lang,
+                onPressed: () async {
+                  final currentLocale = context.read<LocaleCubit>().state.locale.languageCode;
+
+                  final selected = await showModalBottomSheet<String>(
+                    context: context,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                    ),
+                    builder: (context) {
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          _LanguageOption(
+                            languageCode: 'ru',
+                            title: 'Русский',
+                            isSelected: currentLocale == 'ru',
+                          ),
+                          _LanguageOption(
+                            languageCode: 'en',
+                            title: 'English',
+                            isSelected: currentLocale == 'en',
+                          ),
+                        ],
+                      );
+                    },
+                  );
+
+                  if (selected != null && selected != currentLocale) {
+                    context.read<LocaleCubit>().setLocale(Locale(selected));
+                  }
+                },
+              ),
               const SizedBox(height: 16,),
               ButtonBase(
                 text: S.of(context).change_mode,
@@ -101,6 +132,38 @@ class ProfileScreen extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _LanguageOption extends StatelessWidget {
+  final String languageCode;
+  final String title;
+  final bool isSelected;
+
+  const _LanguageOption({
+    required this.languageCode,
+    required this.title,
+    required this.isSelected,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(
+        title,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+          color: isSelected
+              ? Theme.of(context).colorScheme.secondary
+              : Theme.of(context).textTheme.bodyMedium!.color,
+        ),
+      ),
+      trailing: isSelected
+          ? Icon(Icons.check, color: Theme.of(context).colorScheme.secondary)
+          : null,
+      onTap: () => Navigator.pop(context, languageCode),
     );
   }
 }

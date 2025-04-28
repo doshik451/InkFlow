@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../generated/l10n.dart';
 
@@ -108,103 +109,6 @@ class CharacterProfile {
   }
 }
 
-class SocialConnections {
-  final String attachments;
-  final List<Relationship> relationships;
-  final String attitudeToSociety;
-
-  SocialConnections({
-    required this.attachments,
-    required this.relationships,
-    required this.attitudeToSociety,
-  });
-
-  factory SocialConnections.fromMap(Map<dynamic, dynamic> map) {
-    return SocialConnections(
-      attachments: map['attachments'] ?? '',
-      relationships: (map['relationships'] as List? ?? [])
-          .map((e) => Relationship.fromMap(Map<dynamic, dynamic>.from(e)))
-          .toList(),
-      attitudeToSociety: map['attitudeToSociety'] ?? '',
-    );
-  }
-}
-
-class Relationship {
-  final String targetCharacterId;
-  final String relationType;
-  final String groupDescription;
-  final RelationshipStatus currentStatus;
-  final List<RelationshipEvent> history;
-  final String characterPerspective;
-  final String targetPerspective;
-
-  Relationship({
-    required this.targetCharacterId,
-    required this.relationType,
-    required this.groupDescription,
-    required this.currentStatus,
-    required this.history,
-    required this.characterPerspective,
-    required this.targetPerspective,
-  });
-
-  factory Relationship.fromMap(Map<dynamic, dynamic> map) {
-    return Relationship(
-      targetCharacterId: map['targetCharacterId'] ?? '',
-      relationType: map['relationType'] ?? '',
-      groupDescription: map['groupDescription'] ?? '',
-      currentStatus: RelationshipStatus.fromString(map['currentStatus']?.toString()),
-      history: (map['history'] as List? ?? [])
-          .map((e) => RelationshipEvent.fromMap(Map<dynamic, dynamic>.from(e)))
-          .toList(),
-      characterPerspective: map['characterPerspective'] ?? '',
-      targetPerspective: map['targetPerspective'] ?? '',
-    );
-  }
-}
-
-class RelationshipEvent {
-  final String eventId;
-  final String title;
-  final String description;
-  final DateTime date;
-  final String previousStatus;
-  final String newStatus;
-  final bool isSecret;
-  final String? chapterId;
-  final RelationshipStatus mood;
-  final List<String> involvedCharacters;
-
-  RelationshipEvent({
-    required this.eventId,
-    required this.title,
-    required this.description,
-    required this.date,
-    required this.previousStatus,
-    required this.newStatus,
-    required this.mood,
-    this.isSecret = false,
-    this.chapterId,
-    this.involvedCharacters = const [],
-  });
-
-  factory RelationshipEvent.fromMap(Map<dynamic, dynamic> map) {
-    return RelationshipEvent(
-      eventId: map['eventId'] ?? '',
-      title: map['title'] ?? '',
-      description: map['description'] ?? '',
-      date: DateTime.parse(map['date'].toString()),
-      previousStatus: map['previousStatus'] ?? '',
-      newStatus: map['newStatus'] ?? '',
-      isSecret: map['isSecret'] ?? false,
-      chapterId: map['chapterId'],
-      mood: RelationshipStatus.fromString(map['mood']?.toString()),
-      involvedCharacters: List<String>.from(map['involvedCharacters'] ?? []),
-    );
-  }
-}
-
 class Biography {
   final String pastEvents;
   final String secrets;
@@ -266,40 +170,74 @@ class AdditionalInfo {
   }
 }
 
-enum RelationshipStatus {
-  allies(Color(0xFF8AC086)),
-  friends(Color(0xFF89B0D9)),
-  neutral(Color(0xFFD3D3D3)),
-  rivals(Color(0xFFFFB347)),
-  enemies(Color(0xFFE6A8A8)),
-  other(Color(0xFFC9A6D4));
+class SocialConnections {
+  final String attachments;
+  final Map<String, List<Relationship>> relationships;
+  final String attitudeToSociety;
 
-  final Color color;
+  SocialConnections({
+    required this.attachments,
+    required this.relationships,
+    required this.attitudeToSociety,
+  });
 
-  const RelationshipStatus(this.color);
+  factory SocialConnections.fromMap(Map<dynamic, dynamic> map) {
+    final relations = map['relationships'] as Map<dynamic, dynamic>? ?? {};
 
-  String title(BuildContext context) {
-    switch (this) {
-      case RelationshipStatus.allies:
-        return S.of(context).allies;
-      case RelationshipStatus.friends:
-        return S.of(context).friends;
-      case RelationshipStatus.neutral:
-        return S.of(context).neutral;
-      case RelationshipStatus.rivals:
-        return S.of(context).rivals;
-      case RelationshipStatus.enemies:
-        return S.of(context).enemies;
-      case RelationshipStatus.other:
-        return S.of(context).other;
-    }
+    return SocialConnections(
+      attachments: map['attachments']?.toString() ?? '',
+      relationships: {
+        'family': _parseRelationships(relations['family']),
+        'friends': _parseRelationships(relations['friends']),
+        'enemies': _parseRelationships(relations['enemies']),
+      },
+      attitudeToSociety: map['attitudeToSociety']?.toString() ?? '',
+    );
   }
 
-  static RelationshipStatus fromString(String? value) {
-    return values.firstWhere(
-          (e) => e.name == value,
-      orElse: () => RelationshipStatus.neutral,
+  static List<Relationship> _parseRelationships(dynamic data) {
+    if (data == null) return [];
+    if (data is List) {
+      return data.map((e) => Relationship.fromMap(Map<dynamic, dynamic>.from(e))).toList();
+    }
+    if (data is Map) {
+      return data.values
+          .map((e) => Relationship.fromMap(Map<dynamic, dynamic>.from(e)))
+          .toList();
+    }
+    return [];
+  }
+}
+
+class Relationship {
+  final String characterId;
+  final String characterName;
+  final String characterRelation;
+  final String selectedCharacterRelation;
+
+  Relationship({
+    required this.characterId,
+    required this.characterName,
+    required this.characterRelation,
+    required this.selectedCharacterRelation,
+  });
+
+  factory Relationship.fromMap(Map<dynamic, dynamic> map) {
+    return Relationship(
+      characterId: map['characterId']?.toString() ?? '',
+      characterName: map['characterName']?.toString() ?? '',
+      characterRelation: map['characterRelation']?.toString() ?? '',
+      selectedCharacterRelation: map['selectedCharacterRelation']?.toString() ?? '',
     );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'characterId': characterId,
+      'characterName': characterName,
+      'characterRelation': characterRelation,
+      'selectedCharacterRelation': selectedCharacterRelation,
+    };
   }
 }
 
@@ -339,17 +277,28 @@ class CharacterImages {
       return [];
     }
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      if (mainImage != null) 'mainImage': mainImage!.toMap(),
+      'appearance': appearance.map((e) => e.toMap()).toList(),
+      'clothing': clothing.map((e) => e.toMap()).toList(),
+      'moodboard': moodboard.map((e) => e.toMap()).toList(),
+    };
+  }
 }
 
 class ImageReference {
   final String url;
   final String caption;
   final DateTime? addedAt;
+  final bool isLink;
 
   ImageReference({
     this.url = '',
     this.caption = '',
     this.addedAt,
+    this.isLink = false,
   });
 
   factory ImageReference.fromMap(Map<dynamic, dynamic> map) {
@@ -360,9 +309,20 @@ class ImageReference {
         addedAt: map['addedAt'] != null
             ? DateTime.parse(map['addedAt'].toString())
             : null,
+        isLink: map['isLink'] as bool? ?? false,
       );
     } catch (e) {
+      debugPrint('Error parsing ImageReference: $e');
       return ImageReference();
     }
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'url': url,
+      'caption': caption,
+      if (addedAt != null) 'addedAt': addedAt!.toIso8601String(),
+      'isLink': isLink,
+    };
   }
 }

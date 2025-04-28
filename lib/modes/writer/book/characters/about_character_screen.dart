@@ -189,6 +189,8 @@ class _AboutCharacterScreenState extends State<AboutCharacterScreen> {
       await bookRef.set(characterData);
     }
 
+    await _updateBook();
+
     return Character(
       id: characterId,
       name: characterData['name'],
@@ -199,6 +201,19 @@ class _AboutCharacterScreenState extends State<AboutCharacterScreen> {
       appearanceDescription: characterData['appearanceDescription'],
       lastUpdate: characterData['lastUpdate'],
     );
+  }
+
+  Future<void> _updateBook() async {
+    final updateDate = DateTime.now();
+    final formatter = DateFormat('yyyy-MM-dd HH:mm');
+    final updates = {
+      'lastUpdate': formatter.format(updateDate),
+    };
+
+    await FirebaseDatabase.instance
+        .ref(
+        'books/${widget.userId}/${widget.bookId}')
+        .update(updates);
   }
 
   void _showSuccessSnackbar(String message) {

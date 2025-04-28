@@ -834,6 +834,511 @@ class S {
   String get references {
     return Intl.message('References', name: 'references', desc: '', args: []);
   }
+
+  /// `Appearance`
+  String get appearance {
+    return Intl.message('Appearance', name: 'appearance', desc: '', args: []);
+  }
+
+  /// `Clothing`
+  String get clothing {
+    return Intl.message('Clothing', name: 'clothing', desc: '', args: []);
+  }
+
+  /// `Moodboard`
+  String get moodboard {
+    return Intl.message('Moodboard', name: 'moodboard', desc: '', args: []);
+  }
+
+  /// `Wait for the images to finish uploading`
+  String get waitForImageUpload {
+    return Intl.message(
+      'Wait for the images to finish uploading',
+      name: 'waitForImageUpload',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `All references saved!`
+  String get allReferencesSaved {
+    return Intl.message(
+      'All references saved!',
+      name: 'allReferencesSaved',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Caption saved`
+  String get captionSaved {
+    return Intl.message(
+      'Caption saved',
+      name: 'captionSaved',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tap to open link`
+  String get tapToOpenLink {
+    return Intl.message(
+      'Tap to open link',
+      name: 'tapToOpenLink',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Image link`
+  String get imageLink {
+    return Intl.message('Image link', name: 'imageLink', desc: '', args: []);
+  }
+
+  /// `Please enter a valid URL`
+  String get enterValidUrl {
+    return Intl.message(
+      'Please enter a valid URL',
+      name: 'enterValidUrl',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Link caption (optional)`
+  String get linkCaptionOptional {
+    return Intl.message(
+      'Link caption (optional)',
+      name: 'linkCaptionOptional',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add link`
+  String get addLink {
+    return Intl.message('Add link', name: 'addLink', desc: '', args: []);
+  }
+
+  /// `Character Relationships`
+  String get characterRelationshipsTitle {
+    return Intl.message(
+      'Character Relationships',
+      name: 'characterRelationshipsTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `General Information`
+  String get generalInformationTitle {
+    return Intl.message(
+      'General Information',
+      name: 'generalInformationTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Attitude to Society`
+  String get attitudeToSocietyLabel {
+    return Intl.message(
+      'Attitude to Society',
+      name: 'attitudeToSocietyLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Attachments`
+  String get attachmentsLabel {
+    return Intl.message(
+      'Attachments',
+      name: 'attachmentsLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save`
+  String get saveButton {
+    return Intl.message('Save', name: 'saveButton', desc: '', args: []);
+  }
+
+  /// `Family/Origin`
+  String get familyRelationsTitle {
+    return Intl.message(
+      'Family/Origin',
+      name: 'familyRelationsTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Friends/Allies`
+  String get friendsRelationsTitle {
+    return Intl.message(
+      'Friends/Allies',
+      name: 'friendsRelationsTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enemies/Competitors`
+  String get enemiesRelationsTitle {
+    return Intl.message(
+      'Enemies/Competitors',
+      name: 'enemiesRelationsTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Other Relationships`
+  String get otherRelationsTitle {
+    return Intl.message(
+      'Other Relationships',
+      name: 'otherRelationsTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select a Character`
+  String get selectCharacterLabel {
+    return Intl.message(
+      'Select a Character',
+      name: 'selectCharacterLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `First to Second Relation`
+  String get firstToSecondRelationLabel {
+    return Intl.message(
+      'First to Second Relation',
+      name: 'firstToSecondRelationLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Second to First Relation`
+  String get secondToFirstRelationLabel {
+    return Intl.message(
+      'Second to First Relation',
+      name: 'secondToFirstRelationLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel`
+  String get cancelButton {
+    return Intl.message('Cancel', name: 'cancelButton', desc: '', args: []);
+  }
+
+  /// `Add`
+  String get addButton {
+    return Intl.message('Add', name: 'addButton', desc: '', args: []);
+  }
+
+  /// `Current Relationships:`
+  String get currentRelationsLabel {
+    return Intl.message(
+      'Current Relationships:',
+      name: 'currentRelationsLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Biography`
+  String get biographyTitle {
+    return Intl.message(
+      'Biography',
+      name: 'biographyTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Past Events`
+  String get pastEventsLabel {
+    return Intl.message(
+      'Past Events',
+      name: 'pastEventsLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Secrets`
+  String get secretsLabel {
+    return Intl.message('Secrets', name: 'secretsLabel', desc: '', args: []);
+  }
+
+  /// `Character Development`
+  String get characterDevelopmentLabel {
+    return Intl.message(
+      'Character Development',
+      name: 'characterDevelopmentLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Losses and Gains`
+  String get lossesAndGainsLabel {
+    return Intl.message(
+      'Losses and Gains',
+      name: 'lossesAndGainsLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Inner Conflicts`
+  String get innerConflictsLabel {
+    return Intl.message(
+      'Inner Conflicts',
+      name: 'innerConflictsLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Worst Memory`
+  String get worstMemoryLabel {
+    return Intl.message(
+      'Worst Memory',
+      name: 'worstMemoryLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Happiest Memory`
+  String get happiestMemoryLabel {
+    return Intl.message(
+      'Happiest Memory',
+      name: 'happiestMemoryLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Turning Point`
+  String get turningPointLabel {
+    return Intl.message(
+      'Turning Point',
+      name: 'turningPointLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Hidden Aspects`
+  String get hiddenAspectsLabel {
+    return Intl.message(
+      'Hidden Aspects',
+      name: 'hiddenAspectsLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save Biography`
+  String get saveBiographyButton {
+    return Intl.message(
+      'Save Biography',
+      name: 'saveBiographyButton',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Additional Info`
+  String get additionalInfoTitle {
+    return Intl.message(
+      'Additional Info',
+      name: 'additionalInfoTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Quote`
+  String get quoteLabel {
+    return Intl.message('Quote', name: 'quoteLabel', desc: '', args: []);
+  }
+
+  /// `First Impression`
+  String get firstImpressionLabel {
+    return Intl.message(
+      'First Impression',
+      name: 'firstImpressionLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Talents (comma separated)`
+  String get talentsLabel {
+    return Intl.message(
+      'Talents (comma separated)',
+      name: 'talentsLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Artifacts (comma separated)`
+  String get artifactsLabel {
+    return Intl.message(
+      'Artifacts (comma separated)',
+      name: 'artifactsLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Character Profile`
+  String get characterProfileTitle {
+    return Intl.message(
+      'Character Profile',
+      name: 'characterProfileTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Personality`
+  String get personalityLabel {
+    return Intl.message(
+      'Personality',
+      name: 'personalityLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Social Status`
+  String get socialStatusLabel {
+    return Intl.message(
+      'Social Status',
+      name: 'socialStatusLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Habits`
+  String get habitsLabel {
+    return Intl.message('Habits', name: 'habitsLabel', desc: '', args: []);
+  }
+
+  /// `Strengths`
+  String get strengthsLabel {
+    return Intl.message(
+      'Strengths',
+      name: 'strengthsLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Weaknesses`
+  String get weaknessesLabel {
+    return Intl.message(
+      'Weaknesses',
+      name: 'weaknessesLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Beliefs`
+  String get beliefsLabel {
+    return Intl.message('Beliefs', name: 'beliefsLabel', desc: '', args: []);
+  }
+
+  /// `Goal`
+  String get goalLabel {
+    return Intl.message('Goal', name: 'goalLabel', desc: '', args: []);
+  }
+
+  /// `Motivation`
+  String get motivationLabel {
+    return Intl.message(
+      'Motivation',
+      name: 'motivationLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Admires`
+  String get admiresLabel {
+    return Intl.message('Admires', name: 'admiresLabel', desc: '', args: []);
+  }
+
+  /// `Irritates or Fears`
+  String get irritatesOrFearsLabel {
+    return Intl.message(
+      'Irritates or Fears',
+      name: 'irritatesOrFearsLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Inspires`
+  String get inspiresLabel {
+    return Intl.message('Inspires', name: 'inspiresLabel', desc: '', args: []);
+  }
+
+  /// `Temperament`
+  String get temperamentLabel {
+    return Intl.message(
+      'Temperament',
+      name: 'temperamentLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Stress Behavior`
+  String get stressBehaviorLabel {
+    return Intl.message(
+      'Stress Behavior',
+      name: 'stressBehaviorLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Attitude to Life`
+  String get attitudeToLifeLabel {
+    return Intl.message(
+      'Attitude to Life',
+      name: 'attitudeToLifeLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Inner Contradictions`
+  String get innerContradictionsLabel {
+    return Intl.message(
+      'Inner Contradictions',
+      name: 'innerContradictionsLabel',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

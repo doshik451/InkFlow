@@ -157,6 +157,19 @@ class _AboutStoryArcScreenState extends State<AboutStoryArcScreen> {
     };
   }
 
+  Future<void> _updateBook() async {
+    final updateDate = DateTime.now();
+    final formatter = DateFormat('yyyy-MM-dd HH:mm');
+    final updates = {
+      'lastUpdate': formatter.format(updateDate),
+    };
+
+    await FirebaseDatabase.instance
+        .ref(
+        'books/${widget.userId}/${widget.bookId}')
+        .update(updates);
+  }
+
   Future<StoryArc> _saveStoryArcToDatabase(Map<String, dynamic> storyArcData) async {
     DatabaseReference storyArcRef;
     String storyArcId;
@@ -174,6 +187,8 @@ class _AboutStoryArcScreenState extends State<AboutStoryArcScreen> {
       storyArcId = storyArcRef.key!;
       await storyArcRef.set(storyArcData);
     }
+
+    await _updateBook();
 
     return StoryArc(
       id: storyArcId,

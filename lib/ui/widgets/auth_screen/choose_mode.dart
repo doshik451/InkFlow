@@ -76,7 +76,7 @@ class _ModeSelectionCard extends StatelessWidget {
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-              Icon(icon, size: 50, color: Theme.of(context).primaryColor),
+              Icon(icon, size: 50, color: Theme.of(context).colorScheme.tertiary),
               const SizedBox(height: 10),
               Text(
                 title,

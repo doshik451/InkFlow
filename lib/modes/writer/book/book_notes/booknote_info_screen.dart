@@ -55,6 +55,19 @@ class _BooknoteInfoScreenState extends State<BooknoteInfoScreen> {
     super.dispose();
   }
 
+  Future<void> _updateBook() async {
+    final updateDate = DateTime.now();
+    final formatter = DateFormat('yyyy-MM-dd HH:mm');
+    final updates = {
+      'lastUpdate': formatter.format(updateDate),
+    };
+
+    await FirebaseDatabase.instance
+        .ref(
+        'books/${widget.userId}/${widget.bookId}')
+        .update(updates);
+  }
+
   void _saveNote() async {
     final title = _titleController.text.trim();
     final description = _descriptionController.text.trim();
@@ -82,6 +95,8 @@ class _BooknoteInfoScreenState extends State<BooknoteInfoScreen> {
           'lastUpdate': formatter.format(updateDate).toString(),
         });
       }
+
+      await _updateBook();
 
       if (mounted) {
         setState(() {

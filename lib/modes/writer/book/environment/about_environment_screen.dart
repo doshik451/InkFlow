@@ -70,6 +70,19 @@ class _AboutEnvironmentScreenState extends State<AboutEnvironmentScreen> {
     super.dispose();
   }
 
+  Future<void> _updateBook() async {
+    final updateDate = DateTime.now();
+    final formatter = DateFormat('yyyy-MM-dd HH:mm');
+    final updates = {
+      'lastUpdate': formatter.format(updateDate),
+    };
+
+    await FirebaseDatabase.instance
+        .ref(
+        'books/${widget.userId}/${widget.bookId}')
+        .update(updates);
+  }
+
   Future<void> _saveEnvironment() async {
     final title = _titleController.text.trim();
     final description = _descriptionController.text.trim();
@@ -110,6 +123,7 @@ class _AboutEnvironmentScreenState extends State<AboutEnvironmentScreen> {
       };
 
       await envRef.set(environmentData);
+      await _updateBook();
 
       if (mounted) {
         setState(() {

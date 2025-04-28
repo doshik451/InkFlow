@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 class ButtonBase extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
-  final bool? value; // Для кнопки-переключателя
-  final IconData? icon; // Иконка перед текстом
-  final Color? color; // Цвет кнопки
+  final bool? value;
+  final IconData? icon;
+  final Color? color;
 
   const ButtonBase({
     super.key,

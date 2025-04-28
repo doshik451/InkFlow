@@ -1,5 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../generated/l10n.dart';
 import '../../../../models/book_character_model.dart';
@@ -257,9 +258,61 @@ class _CharacterItemCard extends StatelessWidget {
     );
   }
 
-  static Future<void> _deleteCharacter(String characterId, String bookId, String userId, BuildContext context) async {
+  Future<void> _updateBook() async {
+    final updateDate = DateTime.now();
+    final formatter = DateFormat('yyyy-MM-dd HH:mm');
+    final updates = {
+      'lastUpdate': formatter.format(updateDate),
+    };
+
+    await FirebaseDatabase.instance
+        .ref(
+        'books/$userId/$bookId')
+        .update(updates);
+  }
+
+  Future<void> _deleteCharacter(String characterId, String bookId, String userId, BuildContext context) async {
+    final db = FirebaseDatabase.instance.ref('books/$userId/$bookId/characters');
+
     try {
-      await FirebaseDatabase.instance.ref('books/$userId/$bookId/characters/$characterId').remove();
+      final snapshot = await db.get();
+
+      if (snapshot.exists) {
+        final charactersData = snapshot.value as Map<dynamic, dynamic>;
+
+        for (final entry in charactersData.entries) {
+          final otherCharacterId = entry.key.toString();
+
+          if (otherCharacterId == characterId) continue;
+
+          final questionnaire = entry.value['questionnaire'];
+          if (questionnaire != null && questionnaire['relationships'] != null) {
+            final relationships = questionnaire['relationships'] as Map<dynamic, dynamic>;
+
+            for (final relationType in ['family', 'friends', 'enemies', 'others']) {
+              final relationTypeData = relationships[relationType];
+
+              if (relationTypeData != null) {
+                final relationEntries = relationTypeData as Map<dynamic, dynamic>;
+
+                for (final relEntry in relationEntries.entries) {
+                  final relationId = relEntry.key.toString();
+                  final relationData = relEntry.value as Map<dynamic, dynamic>;
+
+                  if (relationData['characterId'] == characterId) {
+                    await db.child('$otherCharacterId/questionnaire/relationships/$relationType/$relationId').remove();
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      await db.child(characterId).remove();
+
+      await _updateBook();
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(S.current.record_is_deleted)),
       );
@@ -269,6 +322,7 @@ class _CharacterItemCard extends StatelessWidget {
       );
     }
   }
+
 }
 
 Widget characterCardContent(Character character, BuildContext context) {

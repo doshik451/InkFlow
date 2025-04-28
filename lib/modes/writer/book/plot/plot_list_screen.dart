@@ -1,6 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:inkflow/models/plot_models.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../generated/l10n.dart';
 import '../../widget_base/confirm_delete_base.dart';
@@ -265,9 +266,23 @@ class _StoryArcCard extends StatelessWidget {
     );
   }
 
-  static Future<void> _deleteStoryArc(String storyArcId, String bookId, String userId, BuildContext context) async {
+  Future<void> _updateBook() async {
+    final updateDate = DateTime.now();
+    final formatter = DateFormat('yyyy-MM-dd HH:mm');
+    final updates = {
+      'lastUpdate': formatter.format(updateDate),
+    };
+
+    await FirebaseDatabase.instance
+        .ref(
+        'books/$userId/$bookId')
+        .update(updates);
+  }
+
+  Future<void> _deleteStoryArc(String storyArcId, String bookId, String userId, BuildContext context) async {
     try {
       await FirebaseDatabase.instance.ref('books/$userId/$bookId/plot/$storyArcId').remove();
+      await _updateBook();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(S.current.record_is_deleted)),
       );

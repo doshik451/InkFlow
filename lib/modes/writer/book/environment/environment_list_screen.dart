@@ -2,6 +2,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:inkflow/models/book_environment_model.dart';
 import 'package:inkflow/modes/writer/book/environment/about_environment_screen.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../generated/l10n.dart';
 import '../../widget_base/confirm_delete_base.dart';
@@ -258,9 +259,23 @@ class _EnvironmentItemCard extends StatelessWidget {
     );
   }
 
-  static Future<void> _deleteEnItem(String environmentId, String bookId, String userId, BuildContext context) async {
+  Future<void> _updateBook() async {
+    final updateDate = DateTime.now();
+    final formatter = DateFormat('yyyy-MM-dd HH:mm');
+    final updates = {
+      'lastUpdate': formatter.format(updateDate),
+    };
+
+    await FirebaseDatabase.instance
+        .ref(
+        'books/$userId/$bookId')
+        .update(updates);
+  }
+
+  Future<void> _deleteEnItem(String environmentId, String bookId, String userId, BuildContext context) async {
     try {
       await FirebaseDatabase.instance.ref('books/$userId/$bookId/environment/$environmentId').remove();
+      await _updateBook();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(S.current.record_is_deleted)),
       );
