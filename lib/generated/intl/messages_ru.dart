@@ -43,6 +43,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "add_key_moment": MessageLookupByLibrary.simpleMessage(
       "Добавить ключевой момент",
     ),
+    "add_link": MessageLookupByLibrary.simpleMessage("Добавить ссылку"),
     "additionalInfoTitle": MessageLookupByLibrary.simpleMessage(
       "Дополнительная информация",
     ),
@@ -80,6 +81,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "cancelButton": MessageLookupByLibrary.simpleMessage("Отмена"),
     "canceled": MessageLookupByLibrary.simpleMessage("Отмена"),
     "captionSaved": MessageLookupByLibrary.simpleMessage("Подпись сохранена"),
+    "categories": MessageLookupByLibrary.simpleMessage("Категории"),
+    "category_abandoned": MessageLookupByLibrary.simpleMessage("Заброшено"),
+    "category_disliked": MessageLookupByLibrary.simpleMessage("Не понравилось"),
+    "category_favorite": MessageLookupByLibrary.simpleMessage("Любимое"),
+    "category_reRead": MessageLookupByLibrary.simpleMessage("Хочу перечитать"),
+    "category_read": MessageLookupByLibrary.simpleMessage("Прочитано"),
     "change_lang": MessageLookupByLibrary.simpleMessage("Сменить язык"),
     "change_mode": MessageLookupByLibrary.simpleMessage("Сменить режим"),
     "characterDevelopmentLabel": MessageLookupByLibrary.simpleMessage(
@@ -94,6 +101,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "characters": MessageLookupByLibrary.simpleMessage("Персонажи"),
     "choose_mode": MessageLookupByLibrary.simpleMessage("Выберите режим"),
     "clothing": MessageLookupByLibrary.simpleMessage("Одежда"),
+    "collection": MessageLookupByLibrary.simpleMessage("Коллекции"),
+    "color": MessageLookupByLibrary.simpleMessage("Цвет"),
     "confirm_password": MessageLookupByLibrary.simpleMessage(
       "Подтвердите пароль",
     ),
@@ -101,6 +110,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "Запись успешно создана",
     ),
     "creating": MessageLookupByLibrary.simpleMessage("Создание"),
+    "criterion_characters": MessageLookupByLibrary.simpleMessage("Персонажи"),
+    "criterion_emotion": MessageLookupByLibrary.simpleMessage(
+      "Эмоциональность",
+    ),
+    "criterion_plot": MessageLookupByLibrary.simpleMessage("Сюжет"),
+    "criterion_worldbuilding": MessageLookupByLibrary.simpleMessage("Мир"),
+    "criterion_writingStyle": MessageLookupByLibrary.simpleMessage(
+      "Стиль написания",
+    ),
     "currentRelationsLabel": MessageLookupByLibrary.simpleMessage(
       "Текущие отношения:",
     ),
@@ -151,6 +169,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Общая информация",
     ),
     "genre": MessageLookupByLibrary.simpleMessage("Жанр"),
+    "genreNTags": MessageLookupByLibrary.simpleMessage("Жанры/теги"),
     "goalLabel": MessageLookupByLibrary.simpleMessage("Цель"),
     "habitsLabel": MessageLookupByLibrary.simpleMessage("Привычки"),
     "happiestMemoryLabel": MessageLookupByLibrary.simpleMessage(
@@ -159,6 +178,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "hiddenAspectsLabel": MessageLookupByLibrary.simpleMessage(
       "Скрытые аспекты",
     ),
+    "high": MessageLookupByLibrary.simpleMessage("Высокий"),
     "ideas": MessageLookupByLibrary.simpleMessage("Идеи"),
     "imageLink": MessageLookupByLibrary.simpleMessage("Ссылка на изображение"),
     "inMind": MessageLookupByLibrary.simpleMessage("Задумка"),
@@ -181,6 +201,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "linkCaptionOptional": MessageLookupByLibrary.simpleMessage(
       "Подпись к ссылке (необязательно)",
     ),
+    "links": MessageLookupByLibrary.simpleMessage("Ссылки"),
     "loading": MessageLookupByLibrary.simpleMessage("Загрузка..."),
     "login": MessageLookupByLibrary.simpleMessage("Войти"),
     "login_failed": MessageLookupByLibrary.simpleMessage("Ошибка входа"),
@@ -188,6 +209,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "lossesAndGainsLabel": MessageLookupByLibrary.simpleMessage(
       "Потери и приобретения",
     ),
+    "low": MessageLookupByLibrary.simpleMessage("Низкий"),
+    "medium": MessageLookupByLibrary.simpleMessage("Средний"),
     "message": MessageLookupByLibrary.simpleMessage("Посыл"),
     "mode_changed_to_reader": MessageLookupByLibrary.simpleMessage(
       "Вы в режиме читателя",
@@ -201,6 +224,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "neutral": MessageLookupByLibrary.simpleMessage("Нейтральные"),
     "no": MessageLookupByLibrary.simpleMessage("Нет"),
     "no_books": MessageLookupByLibrary.simpleMessage("Книг еще нет:("),
+    "no_books_in_plan": MessageLookupByLibrary.simpleMessage(
+      "Произведений в планах еще нет:(",
+    ),
+    "no_categories": MessageLookupByLibrary.simpleMessage(
+      "Категории еще нет:(",
+    ),
     "no_chapters": MessageLookupByLibrary.simpleMessage("Глав еще нет:("),
     "no_characters": MessageLookupByLibrary.simpleMessage(
       "Персонажей еще нет:(",
@@ -213,8 +242,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "no_story_arc": MessageLookupByLibrary.simpleMessage(
       "Сюжетных арок еще нет:(",
     ),
+    "notDefined": MessageLookupByLibrary.simpleMessage("Не определен"),
+    "notFoundPageText": MessageLookupByLibrary.simpleMessage(
+      "404 - Страница не найдена",
+    ),
     "notes": MessageLookupByLibrary.simpleMessage("Заметки"),
     "occupation": MessageLookupByLibrary.simpleMessage("Род занятий"),
+    "ok": MessageLookupByLibrary.simpleMessage("OK"),
     "other": MessageLookupByLibrary.simpleMessage("Другие"),
     "otherRelationsTitle": MessageLookupByLibrary.simpleMessage(
       "Другие отношения",
@@ -234,7 +268,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Требуется разрешение",
     ),
     "personalityLabel": MessageLookupByLibrary.simpleMessage("Личность"),
+    "plan": MessageLookupByLibrary.simpleMessage("В планах"),
     "plot": MessageLookupByLibrary.simpleMessage("Сюжет"),
+    "priority": MessageLookupByLibrary.simpleMessage("Приоритет"),
     "profile": MessageLookupByLibrary.simpleMessage("Профиль"),
     "questionnaire": MessageLookupByLibrary.simpleMessage("Анкета"),
     "quoteLabel": MessageLookupByLibrary.simpleMessage("Цитата"),
@@ -269,6 +305,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "selectCharacterLabel": MessageLookupByLibrary.simpleMessage(
       "Выберите персонажа",
     ),
+    "selectColor": MessageLookupByLibrary.simpleMessage("Выберите цвет"),
     "send_email_to_reset": MessageLookupByLibrary.simpleMessage(
       "Отправить письмо для сброса",
     ),
@@ -315,6 +352,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "У вас есть несохраненные данные. Сохранить?",
     ),
     "weaknessesLabel": MessageLookupByLibrary.simpleMessage("Слабые стороны"),
+    "workName": MessageLookupByLibrary.simpleMessage("Название произведения"),
     "worstMemoryLabel": MessageLookupByLibrary.simpleMessage(
       "Худшее воспоминание",
     ),

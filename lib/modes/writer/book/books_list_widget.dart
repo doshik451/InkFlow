@@ -1,14 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../../general/base/confirm_delete_base.dart';
+import '../../general/base/delete_swipe_background_base.dart';
 import 'main_book_base.dart';
 import '../../../models/book_writer_model.dart';
-import '../widget_base/confirm_delete_base.dart';
-import '../widget_base/delete_swipe_background_base.dart';
 
 import '../../../generated/l10n.dart';
-import '../widget_base/book_card_base.dart';
+import '../../general/base/book_card_base.dart';
 
 class BooksListWidget extends StatefulWidget {
   final String searchQuery;

@@ -2,11 +2,11 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../../models/booknote_model.dart';
+import '../../../general/base/confirm_delete_base.dart';
+import '../../../general/base/delete_swipe_background_base.dart';
 import 'booknote_info_screen.dart';
 
 import '../../../../generated/l10n.dart';
-import '../../widget_base/confirm_delete_base.dart';
-import '../../widget_base/delete_swipe_background_base.dart';
 import 'note_card_base.dart';
 
 class BooknotesListScreen extends StatefulWidget {

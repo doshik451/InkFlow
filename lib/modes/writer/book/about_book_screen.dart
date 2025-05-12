@@ -5,13 +5,15 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:inkflow/modes/writer/book/book_file_service.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../generated/l10n.dart';
 import '../../../models/book_writer_model.dart';
+import '../../general/base/confirm_delete_base.dart';
+import 'book_file_service.dart';
 import 'main_book_base.dart';
+import 'package:collection/collection.dart';
 
 class AboutBookPage extends StatefulWidget {
   final Book? book;
@@ -35,9 +37,11 @@ class _AboutBookPageState extends State<AboutBookPage> {
   late final TextEditingController _themeController;
   late final TextEditingController _messageController;
   late final TextEditingController _descriptionController;
+  late final TextEditingController _linkController;
   late Status _status;
   late List<Status> _statuses;
   List<String> _files = [];
+  List<String> _links = [];
   late BookFileService _bookFileService;
   bool _isLoadingFiles = false;
   bool _isUploading = false;
@@ -57,6 +61,7 @@ class _AboutBookPageState extends State<AboutBookPage> {
   late String _initialTheme;
   late String _initialMessage;
   late String _initialAuthorName;
+  late List<String> _initialLinks;
 
   bool get _isEditing => widget.book != null;
 
@@ -67,6 +72,7 @@ class _AboutBookPageState extends State<AboutBookPage> {
     _coverUrl = widget.book?.coverUrl;
     _status = widget.book?.status ?? Status.draft;
     _statuses = Status.values;
+    _links = widget.book?.links ?? [];
 
     _initialTitle = _titleController.text;
     _initialAuthorName = _authorNameController.text;
@@ -77,10 +83,11 @@ class _AboutBookPageState extends State<AboutBookPage> {
     _initialGenre = _genreController.text;
     _initialTheme = _themeController.text;
     _initialMessage = _messageController.text;
+    _initialLinks = List.from(_links);
 
     if (_isEditing) {
       _bookFileService =
-          BookFileService(userId: widget.authorId, bookId: widget.book!.id, context: context);
+          BookFileService(userId: widget.authorId, bookId: widget.book!.id, context: context, pathPart: 'bookFiles');
       _loadBookFiles();
     }
   }
@@ -100,6 +107,7 @@ class _AboutBookPageState extends State<AboutBookPage> {
     _descriptionController = TextEditingController(
       text: widget.book?.description ?? '',
     );
+    _linkController = TextEditingController();
   }
 
   @override
@@ -116,6 +124,7 @@ class _AboutBookPageState extends State<AboutBookPage> {
     _genreController.dispose();
     _messageController.dispose();
     _descriptionController.dispose();
+    _linkController.dispose();
   }
 
   void _checkForChanges() {
@@ -130,6 +139,7 @@ class _AboutBookPageState extends State<AboutBookPage> {
     final hasThemeChanged = _themeController.text != _initialTheme;
     final hasGenreChanged = _genreController.text != _initialGenre;
     final hasMessageChanged = _messageController.text != _initialMessage;
+    final hasLinksChanged = !const DeepCollectionEquality().equals(_links, _initialLinks);
 
     setState(() {
       _hasUnsavedData = hasTitleChanged ||
@@ -140,7 +150,8 @@ class _AboutBookPageState extends State<AboutBookPage> {
           hasSettingChanged ||
           hasThemeChanged ||
           hasMessageChanged ||
-          hasGenreChanged;
+          hasGenreChanged ||
+          hasLinksChanged;
     });
   }
 
@@ -248,6 +259,7 @@ class _AboutBookPageState extends State<AboutBookPage> {
         _initialTheme = _themeController.text;
         _initialMessage = _messageController.text;
         _initialGenre = _genreController.text;
+        _initialLinks = List.from(_links);
         _checkForChanges();
         _showSuccessSnackbar(_isEditing ? s.update_success : s.create_success);
 
@@ -282,8 +294,46 @@ class _AboutBookPageState extends State<AboutBookPage> {
       'genre': _genreController.text.trim(),
       'coverUrl': _coverUrl,
       'files': _files,
+      'links': _links,
       'authorId': widget.authorId,
     };
+  }
+
+  void _addLink() {
+    final link = _linkController.text.trim();
+    if (link.isEmpty) return;
+
+    if (!link.startsWith('http://') && !link.startsWith('https://')) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(S.of(context).an_error_occurred)),
+      );
+      return;
+    }
+
+    setState(() {
+      _links.add(link);
+      _linkController.clear();
+      _checkForChanges();
+    });
+
+    FocusScope.of(context).unfocus();
+  }
+
+  void _removeLink(int index) {
+    setState(() {
+      _links.removeAt(index);
+      _checkForChanges();
+    });
+  }
+
+  Future<void> _openLink(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(S.of(context).an_error_occurred)),
+      );
+    }
   }
 
   Future<Book> _saveBookToDatabase(Map<String, dynamic> bookData) async {
@@ -316,6 +366,7 @@ class _AboutBookPageState extends State<AboutBookPage> {
       theme: bookData['theme'],
       coverUrl: _coverUrl,
       files: _files,
+      links: _links
     );
   }
 
@@ -432,7 +483,7 @@ class _AboutBookPageState extends State<AboutBookPage> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(_isEditing ? s.editing : s.creating),
+          title: Text(_isEditing ? widget.book!.title : s.creating),
           centerTitle: true,
         ),
         body: SingleChildScrollView(
@@ -451,7 +502,7 @@ class _AboutBookPageState extends State<AboutBookPage> {
                 children: [
                   _buildCoverSection(),
                   const SizedBox(height: 24),
-                  _buildTextField(s.title, _titleController),
+                  _buildTextField(s.workName, _titleController),
                   const SizedBox(height: 16),
                   _buildTextField(s.author, _authorNameController),
                   const SizedBox(height: 16),
@@ -467,6 +518,8 @@ class _AboutBookPageState extends State<AboutBookPage> {
                   const SizedBox(height: 16),
                   _buildTextField(s.description, _descriptionController,
                       maxLines: 5),
+                  const SizedBox(height: 16,),
+                  _buildLinksSection(),
                   const SizedBox(
                     height: 16,
                   ),
@@ -510,6 +563,7 @@ class _AboutBookPageState extends State<AboutBookPage> {
         userId: userId,
         bookId: bookId,
         fileName: fileName,
+        pathPart: 'bookFiles'
       );
 
       if (!mounted) return;
@@ -579,6 +633,75 @@ class _AboutBookPageState extends State<AboutBookPage> {
   bool _shouldShowPlaceholder() {
     return (widget.book?.coverUrl == null || widget.book!.coverUrl!.isEmpty) &&
         _localCoverImage == null;
+  }
+
+  Widget _buildLinksSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          S.of(context).links,
+          style: const TextStyle(
+            fontSize: 16,
+            color: Colors.black,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Row(
+          children: [
+            Expanded(
+              child: TextField(
+                controller: _linkController,
+                cursorColor: _status.color,
+                style: const TextStyle(color: Colors.black),
+                decoration: InputDecoration(
+                  labelText: S.of(context).add_link,
+                  labelStyle: const TextStyle(color: Colors.black),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(width: 0.5, color: _status.color),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(width: 1.5, color: _status.color),
+                  ),
+                ),
+                onSubmitted: (_) => _addLink(),
+              ),
+            ),
+            IconButton(
+              onPressed: _addLink,
+              icon: const Icon(Icons.add),
+              style: IconButton.styleFrom(
+                backgroundColor: _status.color,
+                foregroundColor: Colors.white,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        ..._links.asMap().entries.map((entry) => ListTile(
+          title: Text(
+            entry.value,
+            style: const TextStyle(color: Colors.blue),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          trailing: IconButton(
+            icon: const Icon(Icons.delete, color: Colors.black),
+            onPressed: () async {
+              final shouldDelete = await confirmDelete(context);
+              if (shouldDelete ?? false) {
+                _removeLink(entry.key);
+              }
+            },
+          ),
+          onTap: () => _openLink(entry.value),
+        )),
+      ],
+    );
   }
 
   Widget _buildTextField(String label, TextEditingController controller,
@@ -697,24 +820,27 @@ class _AboutBookPageState extends State<AboutBookPage> {
           )
         else
           ..._files.map((file) => ListTile(
-                title: Text(file),
+                title: Text(file, style: const TextStyle(color: Colors.black),),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     IconButton(
                       onPressed: () => _bookFileService.openSavedFile(file),
-                      icon: const Icon(Icons.remove_red_eye),
+                      icon: const Icon(Icons.remove_red_eye, color: Colors.black),
                     ),
                     IconButton(
-                      icon: const Icon(Icons.download),
+                      icon: const Icon(Icons.download, color: Colors.black),
                       onPressed:
                           _isDownloading ? () => const CircularProgressIndicator(color: Color(0xFF89B0D9),) : () => _downloadFile(file),
                     ),
                     IconButton(
-                      icon: const Icon(Icons.delete),
+                      icon: const Icon(Icons.delete, color: Colors.black),
                       onPressed: () async {
-                        await _bookFileService.deleteFile(file);
-                        await _loadBookFiles();
+                        final shouldDelete = await confirmDelete(context);
+                        if (shouldDelete ?? false) {
+                          await _bookFileService.deleteFile(file);
+                          await _loadBookFiles();
+                        }
                       },
                     ),
                   ],

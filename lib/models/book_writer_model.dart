@@ -48,11 +48,12 @@ class Book {
   final String theme;
   final String? coverUrl;
   final List<String>? files;
+  final List<String>? links;
 
   Book({required this.id, required this.authorId, required this.authorName, required this.title,
     required this.description, required this.status, required this.lastUpdate, required this.setting,
     required this.genre, required this.theme, required this.message, required this.coverUrl,
-    required this.files});
+    required this.files, required this.links});
 
   factory Book.fromMap(String id, Map<dynamic, dynamic> map) {
     return Book(
@@ -67,6 +68,7 @@ class Book {
       theme: map['theme'] ?? '',
       coverUrl: map['coverUrl'] ?? '',
       files: List<String>.from(map['files'] ?? []),
+      links: List<String>.from(map['links'] ?? []),
       status: Status.fromString(map['status']?.toString()),
       lastUpdate: map['lastUpdate'].toString(),
     );

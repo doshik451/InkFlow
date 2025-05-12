@@ -3,9 +3,9 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import '../../../../generated/l10n.dart';
 import '../../../../models/idea_model.dart';
-import '../widget_base/confirm_delete_base.dart';
-import '../widget_base/delete_swipe_background_base.dart';
-import '../widget_base/idea_card_base.dart';
+import '../../general/base/confirm_delete_base.dart';
+import '../../general/base/delete_swipe_background_base.dart';
+import '../../general/base/idea_card_base.dart';
 import 'idea_info_screen.dart';
 
 class AnimatedIdeaList extends StatefulWidget {

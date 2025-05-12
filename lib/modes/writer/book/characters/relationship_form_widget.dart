@@ -547,13 +547,17 @@ class _RelationshipFormWidgetState extends State<RelationshipFormWidget> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Theme(
-                data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                data: Theme.of(context).copyWith(
+                  dividerColor: Colors.transparent,
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                ),
                 child: ExpansionTile(
                   title: Text(
                     s.characterRelationshipsTitle,
                     style: const TextStyle(
                         fontSize: 18,
-                        fontWeight: FontWeight.bold),
+                        fontWeight: FontWeight.bold, color: Colors.black),
                   ),
                   children: [
                     Column(
@@ -574,7 +578,7 @@ class _RelationshipFormWidgetState extends State<RelationshipFormWidget> {
                                   s.generalInformationTitle,
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 18,
+                                    fontSize: 18, color: Colors.black
                                   ),
                                 ),
                                 const SizedBox(height: 16),
@@ -686,7 +690,7 @@ class _RelationshipFormWidgetState extends State<RelationshipFormWidget> {
       child: Theme(
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
-          title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+          title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black)),
           children: [
             Padding(
               padding: const EdgeInsets.all(16),
@@ -841,7 +845,7 @@ class _RelationshipFormWidgetState extends State<RelationshipFormWidget> {
                       children: [
                         Text(
                             s.currentRelationsLabel,
-                            style: const TextStyle(fontWeight: FontWeight.bold)),
+                            style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black)),
                         const SizedBox(height: 8),
                         ...relationsList.asMap().entries.map((entry) {
                           final index = entry.key;
@@ -856,23 +860,61 @@ class _RelationshipFormWidgetState extends State<RelationshipFormWidget> {
                             elevation: 4,
                             margin: const EdgeInsets.only(bottom: 8),
                             child: ListTile(
-                              title: Text(relation['characterName'] ?? ''),
+                              title: Text(relation['characterName'] ?? '', style: const TextStyle(color: Colors.black),),
                               subtitle: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('${s.firstToSecondRelationLabel}: ${relation['characterRelation'] ?? ''}'),
-                                  Text('${s.secondToFirstRelationLabel}: ${relation['selectedCharacterRelation'] ?? ''}'),
+                                  Text.rich(
+                                    TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text: '${s.firstToSecondRelationLabel}: ',
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        TextSpan(
+                                          text: relation['characterRelation'] ?? '',
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Text.rich(
+                                    TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text: '${s.secondToFirstRelationLabel}: ',
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        TextSpan(
+                                          text: relation['selectedCharacterRelation'] ?? '',
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ],
                               ),
                               trailing: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   IconButton(
-                                    icon: const Icon(Icons.edit),
+                                    icon: const Icon(Icons.edit, color: Colors.black),
                                     onPressed: () => _startEditingRelation(groupType, index),
                                   ),
                                   IconButton(
-                                    icon: const Icon(Icons.delete),
+                                    icon: const Icon(Icons.delete, color: Colors.black),
                                     onPressed: () => _deleteRelation(groupType, index),
                                   ),
                                 ],

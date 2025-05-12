@@ -10,7 +10,6 @@ import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../../../generated/l10n.dart';
 import '../../../../models/book_character_model.dart';
-import '../../widget_base/button_base.dart';
 import 'character_questionnaire_screen.dart';
 import 'character_references_screen.dart';
 
@@ -228,6 +227,36 @@ class _AboutCharacterScreenState extends State<AboutCharacterScreen> {
     );
   }
 
+  Widget _buildTextField(String label, TextEditingController controller,
+      {int maxLines = 1}) {
+    return TextField(
+      controller: controller,
+      cursorColor: Theme.of(context).colorScheme.tertiary,
+      style: const TextStyle(color: Colors.black),
+      onChanged: (value) => _checkForChanges(),
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: const TextStyle(color: Colors.black),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(
+            width: 0.5,
+            color: Theme.of(context).colorScheme.tertiary,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(
+            width: 1.5,
+            color: Theme.of(context).colorScheme.tertiary,
+          ),
+        ),
+      ),
+      maxLines: maxLines,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final character = widget.character;
@@ -410,8 +439,13 @@ class _AboutCharacterScreenState extends State<AboutCharacterScreen> {
                               fontWeight: FontWeight.w500,
                               color: Colors.black),
                         ),
-                        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                          CharacterReferencesScreen(bookId: widget.bookId, userId: widget.userId, character: widget.character!))),
+                        onTap: () {
+                          Navigator.push(
+                              context, MaterialPageRoute(builder: (context) =>
+                              CharacterReferencesScreen(bookId: widget.bookId,
+                                  userId: widget.userId,
+                                  character: widget.character!)));
+                        },
                         trailing: const Icon(
                           Icons.chevron_right,
                           color: Colors.black,
@@ -445,36 +479,6 @@ class _AboutCharacterScreenState extends State<AboutCharacterScreen> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildTextField(String label, TextEditingController controller,
-      {int maxLines = 1}) {
-    return TextField(
-      controller: controller,
-      cursorColor: Theme.of(context).colorScheme.tertiary,
-      style: const TextStyle(color: Colors.black),
-      onChanged: (value) => _checkForChanges(),
-      decoration: InputDecoration(
-        labelText: label,
-        labelStyle: const TextStyle(color: Colors.black),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(
-            width: 0.5,
-            color: Theme.of(context).colorScheme.tertiary,
-          ),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(
-            width: 1.5,
-            color: Theme.of(context).colorScheme.tertiary,
-          ),
-        ),
-      ),
-      maxLines: maxLines,
     );
   }
 }

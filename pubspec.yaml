@@ -62,6 +62,7 @@ dependencies:
   file_selector: ^1.0.3
   file_selector_android: ^0.5.1+14
   file_selector_ios: ^0.5.3+1
+  flutter_colorpicker: ^1.1.0
 
 dev_dependencies:
   flutter_test:

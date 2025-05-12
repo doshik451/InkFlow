@@ -194,13 +194,17 @@ class _CharacterProfileWidgetState extends State<CharacterProfileWidget> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Theme(
-                  data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                  data: Theme.of(context).copyWith(
+                    dividerColor: Colors.transparent,
+                    splashColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                  ),
                   child: ExpansionTile(
                     title: Text(
                       S.of(context).characterProfileTitle,
                       style: const TextStyle(
                         fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.bold, color: Colors.black
                       ),
                     ),
                     children: [

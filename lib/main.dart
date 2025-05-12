@@ -70,7 +70,6 @@ class _MyAppState extends State<MyApp> {
           builder: (context, localeState) {
             return BlocBuilder<AppModeCubit, AppMode>(
               builder: (context, appMode) {
-                // Определяем начальный маршрут
                 final initialRoute = widget.isLoggedIn
                     ? Routes.getMainRoute(context)
                     : Routes.login;
@@ -86,9 +85,9 @@ class _MyAppState extends State<MyApp> {
                   ],
                   supportedLocales: S.delegate.supportedLocales,
                   theme: themeState.isDark ? darkThemeData : lightThemeData,
-                  initialRoute: initialRoute, // Теперь точно String, не String?
+                  initialRoute: initialRoute,
                   onGenerateRoute: (settings) {
-                    final routeName = settings.name ?? Routes.login; // Обработка null
+                    final routeName = settings.name ?? Routes.login;
                     final builder = Routes.getRouteBuilder(context, routeName);
                     if (builder != null) {
                       return MaterialPageRoute(
@@ -115,6 +114,6 @@ class NotFoundScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(body: Center(child: Text("404 - Not Found")));
+    return Scaffold(body: Center(child: Text(S.of(context).notFoundPageText)));
   }
 }

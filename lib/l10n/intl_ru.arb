@@ -168,5 +168,37 @@
   "temperamentLabel": "Темперамент",
   "stressBehaviorLabel": "Поведение при стрессе",
   "attitudeToLifeLabel": "Отношение к жизни",
-  "innerContradictionsLabel": "Внутренние противоречия"
+  "innerContradictionsLabel": "Внутренние противоречия",
+
+
+  "plan": "В планах",
+  "no_books_in_plan": "Произведений в планах еще нет:(",
+  "high": "Высокий",
+  "medium": "Средний",
+  "low": "Низкий",
+  "notDefined": "Не определен",
+  "workName": "Название произведения",
+  "genreNTags": "Жанры/теги",
+  "priority": "Приоритет",
+  "links": "Ссылки",
+  "add_link": "Добавить ссылку",
+
+
+  "criterion_plot": "Сюжет",
+  "criterion_characters": "Персонажи",
+  "criterion_worldbuilding": "Мир",
+  "criterion_emotion": "Эмоциональность",
+  "criterion_writingStyle": "Стиль написания",
+  "category_read": "Прочитано",
+  "category_favorite": "Любимое",
+  "category_abandoned": "Заброшено",
+  "category_reRead": "Хочу перечитать",
+  "category_disliked": "Не понравилось",
+  "categories": "Категории",
+  "no_categories": "Категории еще нет:(",
+  "selectColor": "Выберите цвет",
+  "color": "Цвет",
+  "ok": "OK",
+  "collection": "Коллекции",
+  "notFoundPageText": "404 - Страница не найдена"
 }

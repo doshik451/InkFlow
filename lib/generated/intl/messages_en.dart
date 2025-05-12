@@ -41,6 +41,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "After adding a character you will be able to add a picture",
     ),
     "add_key_moment": MessageLookupByLibrary.simpleMessage("Add key moment"),
+    "add_link": MessageLookupByLibrary.simpleMessage("Add link"),
     "additionalInfoTitle": MessageLookupByLibrary.simpleMessage(
       "Additional Info",
     ),
@@ -78,6 +79,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "cancelButton": MessageLookupByLibrary.simpleMessage("Cancel"),
     "canceled": MessageLookupByLibrary.simpleMessage("Canceled"),
     "captionSaved": MessageLookupByLibrary.simpleMessage("Caption saved"),
+    "categories": MessageLookupByLibrary.simpleMessage("Categories"),
+    "category_abandoned": MessageLookupByLibrary.simpleMessage("Abandoned"),
+    "category_disliked": MessageLookupByLibrary.simpleMessage("Disliked"),
+    "category_favorite": MessageLookupByLibrary.simpleMessage("Favorite"),
+    "category_reRead": MessageLookupByLibrary.simpleMessage("Want to reread"),
+    "category_read": MessageLookupByLibrary.simpleMessage("Read"),
     "change_lang": MessageLookupByLibrary.simpleMessage("Change language"),
     "change_mode": MessageLookupByLibrary.simpleMessage("Change mode"),
     "characterDevelopmentLabel": MessageLookupByLibrary.simpleMessage(
@@ -92,6 +99,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "characters": MessageLookupByLibrary.simpleMessage("Characters"),
     "choose_mode": MessageLookupByLibrary.simpleMessage("Choose mode"),
     "clothing": MessageLookupByLibrary.simpleMessage("Clothing"),
+    "collection": MessageLookupByLibrary.simpleMessage("Collection"),
+    "color": MessageLookupByLibrary.simpleMessage("Color"),
     "confirm_password": MessageLookupByLibrary.simpleMessage(
       "Confirm password",
     ),
@@ -99,6 +108,17 @@ class MessageLookup extends MessageLookupByLibrary {
       "Record successfully created",
     ),
     "creating": MessageLookupByLibrary.simpleMessage("Creating"),
+    "criterion_characters": MessageLookupByLibrary.simpleMessage("Characters"),
+    "criterion_emotion": MessageLookupByLibrary.simpleMessage(
+      "Emotional impact",
+    ),
+    "criterion_plot": MessageLookupByLibrary.simpleMessage("Plot"),
+    "criterion_worldbuilding": MessageLookupByLibrary.simpleMessage(
+      "Worldbuilding",
+    ),
+    "criterion_writingStyle": MessageLookupByLibrary.simpleMessage(
+      "Writing Style",
+    ),
     "currentRelationsLabel": MessageLookupByLibrary.simpleMessage(
       "Current Relationships:",
     ),
@@ -151,6 +171,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "General Information",
     ),
     "genre": MessageLookupByLibrary.simpleMessage("Genre"),
+    "genreNTags": MessageLookupByLibrary.simpleMessage("Genre/tags"),
     "goalLabel": MessageLookupByLibrary.simpleMessage("Goal"),
     "habitsLabel": MessageLookupByLibrary.simpleMessage("Habits"),
     "happiestMemoryLabel": MessageLookupByLibrary.simpleMessage(
@@ -159,6 +180,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "hiddenAspectsLabel": MessageLookupByLibrary.simpleMessage(
       "Hidden Aspects",
     ),
+    "high": MessageLookupByLibrary.simpleMessage("High"),
     "ideas": MessageLookupByLibrary.simpleMessage("Ideas"),
     "imageLink": MessageLookupByLibrary.simpleMessage("Image link"),
     "inMind": MessageLookupByLibrary.simpleMessage("In mind"),
@@ -181,6 +203,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "linkCaptionOptional": MessageLookupByLibrary.simpleMessage(
       "Link caption (optional)",
     ),
+    "links": MessageLookupByLibrary.simpleMessage("Links"),
     "loading": MessageLookupByLibrary.simpleMessage("Loading..."),
     "login": MessageLookupByLibrary.simpleMessage("Login"),
     "login_failed": MessageLookupByLibrary.simpleMessage("Login failed"),
@@ -188,6 +211,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "lossesAndGainsLabel": MessageLookupByLibrary.simpleMessage(
       "Losses and Gains",
     ),
+    "low": MessageLookupByLibrary.simpleMessage("Low"),
+    "medium": MessageLookupByLibrary.simpleMessage("Medium"),
     "message": MessageLookupByLibrary.simpleMessage("Message"),
     "mode_changed_to_reader": MessageLookupByLibrary.simpleMessage(
       "You are in reader mode",
@@ -201,6 +226,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "neutral": MessageLookupByLibrary.simpleMessage("Neutral"),
     "no": MessageLookupByLibrary.simpleMessage("No"),
     "no_books": MessageLookupByLibrary.simpleMessage("No books:("),
+    "no_books_in_plan": MessageLookupByLibrary.simpleMessage(
+      "No reads in plan",
+    ),
+    "no_categories": MessageLookupByLibrary.simpleMessage("No categories:("),
     "no_chapters": MessageLookupByLibrary.simpleMessage("No chapters:("),
     "no_characters": MessageLookupByLibrary.simpleMessage("No characters:("),
     "no_environment_items": MessageLookupByLibrary.simpleMessage(
@@ -209,8 +238,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "no_ideas": MessageLookupByLibrary.simpleMessage("No ideas:("),
     "no_notes": MessageLookupByLibrary.simpleMessage("No notes:("),
     "no_story_arc": MessageLookupByLibrary.simpleMessage("No story arcs:("),
+    "notDefined": MessageLookupByLibrary.simpleMessage("Not defined"),
+    "notFoundPageText": MessageLookupByLibrary.simpleMessage("404 - Not Found"),
     "notes": MessageLookupByLibrary.simpleMessage("Notes"),
     "occupation": MessageLookupByLibrary.simpleMessage("Occupation"),
+    "ok": MessageLookupByLibrary.simpleMessage("OK"),
     "other": MessageLookupByLibrary.simpleMessage("Other"),
     "otherRelationsTitle": MessageLookupByLibrary.simpleMessage(
       "Other Relationships",
@@ -230,7 +262,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Permission required",
     ),
     "personalityLabel": MessageLookupByLibrary.simpleMessage("Personality"),
+    "plan": MessageLookupByLibrary.simpleMessage("Plan"),
     "plot": MessageLookupByLibrary.simpleMessage("Plot"),
+    "priority": MessageLookupByLibrary.simpleMessage("Priority"),
     "profile": MessageLookupByLibrary.simpleMessage("Profile"),
     "questionnaire": MessageLookupByLibrary.simpleMessage("Questionnaire"),
     "quoteLabel": MessageLookupByLibrary.simpleMessage("Quote"),
@@ -267,6 +301,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "selectCharacterLabel": MessageLookupByLibrary.simpleMessage(
       "Select a Character",
     ),
+    "selectColor": MessageLookupByLibrary.simpleMessage("Select color"),
     "send_email_to_reset": MessageLookupByLibrary.simpleMessage(
       "Send reset letter",
     ),
@@ -305,6 +340,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "You have unsaved data. Save?",
     ),
     "weaknessesLabel": MessageLookupByLibrary.simpleMessage("Weaknesses"),
+    "workName": MessageLookupByLibrary.simpleMessage("Work name"),
     "worstMemoryLabel": MessageLookupByLibrary.simpleMessage("Worst Memory"),
     "writer_mode_description": MessageLookupByLibrary.simpleMessage(
       "Here, you can organize your creative ideas, develop plots, and flesh out characters. You can:\n- Jot down ideas for future works.\n- Keep detailed notes for each book.\n- Store information about your projects.",

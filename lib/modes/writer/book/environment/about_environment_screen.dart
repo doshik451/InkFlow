@@ -4,7 +4,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import '../../../../generated/l10n.dart';
@@ -181,7 +180,7 @@ class _AboutEnvironmentScreenState extends State<AboutEnvironmentScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(widget.environment != null ? S.of(context).editing : S.of(context).creating),
+          title: Text(widget.environment != null ? widget.environment!.title : S.of(context).creating),
           centerTitle: true,
         ),
         body: Center(
@@ -439,13 +438,13 @@ class _EnvironmentImageSliderState extends State<EnvironmentImageSlider> {
           children: [
             if (canAddMore)
               IconButton(
-                icon: const Icon(Icons.add_photo_alternate),
+                icon: const Icon(Icons.add_photo_alternate, color: Colors.black),
                 onPressed: _addImage,
               ),
 
             if (allImages.isNotEmpty)
               IconButton(
-                icon: const Icon(Icons.delete),
+                icon: const Icon(Icons.delete, color: Colors.black),
                 onPressed: _deleteCurrentImage,
               ),
           ],

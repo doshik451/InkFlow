@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../plans_to_read/plans_list_screen.dart';
+import '../read_book/category_list_screen.dart';
 
 import '../../../generated/l10n.dart';
 import '../../general/profile_screen.dart';
@@ -14,7 +16,7 @@ class MainScreenBaseReader extends StatefulWidget {
 }
 
 class _MainScreenBaseReaderState extends State<MainScreenBaseReader> {
-  int _selectedPage = 2;
+  int _selectedPage = 0;
 
   void onSelectTab(int index) {
     if(_selectedPage == index) return;
@@ -41,8 +43,8 @@ class _MainScreenBaseReaderState extends State<MainScreenBaseReader> {
           body: IndexedStack(
             index: _selectedPage,
             children: [
-              const Center(child: Text('коллекции прочитанного')),
-              const Center(child: Text('планы чтения')),
+              const CategoryListPage(),
+              const PlansListScreen(),
               const ProfileScreen(),
             ],
           ),
@@ -52,10 +54,11 @@ class _MainScreenBaseReaderState extends State<MainScreenBaseReader> {
               type: BottomNavigationBarType.fixed,
               currentIndex: _selectedPage,
               showUnselectedLabels: false,
+              showSelectedLabels: false,
               items: [
-                BottomNavigationBarItem(icon: const Icon(Icons.collections_bookmark), label: 'Прочитано'),
-                BottomNavigationBarItem(icon: const Icon(Icons.timer), label: 'Планы'),
-                BottomNavigationBarItem(icon: const Icon(Icons.account_circle), label: S.of(context).profile),
+                BottomNavigationBarItem(icon: Icon(Icons.collections_bookmark, size: _selectedPage == 0 ? 28 : 18,), label: ''),
+                BottomNavigationBarItem(icon: Icon(Icons.timer, size: _selectedPage == 1 ? 28 : 18,), label: ''),
+                BottomNavigationBarItem(icon: Icon(Icons.account_circle, size: _selectedPage == 2 ? 28 : 18,), label: ''),
               ],
               onTap: onSelectTab,
             ),

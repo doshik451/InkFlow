@@ -15,8 +15,8 @@ import '../../bloc/mode/app_mode_cubit.dart';
 import '../../bloc/theme/theme_cubit.dart';
 import '../../generated/l10n.dart';
 import '../app_mode.dart';
-import '../writer/widget_base/button_base.dart';
-import '../writer/widget_base/short_data_field_base.dart';
+import 'base/button_base.dart';
+import 'base/short_data_field_base.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -157,12 +157,9 @@ class _LanguageOption extends StatelessWidget {
           fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           color: isSelected
               ? Theme.of(context).colorScheme.secondary
-              : Theme.of(context).textTheme.bodyMedium!.color,
+              : Colors.grey,
         ),
       ),
-      trailing: isSelected
-          ? Icon(Icons.check, color: Theme.of(context).colorScheme.secondary)
-          : null,
       onTap: () => Navigator.pop(context, languageCode),
     );
   }

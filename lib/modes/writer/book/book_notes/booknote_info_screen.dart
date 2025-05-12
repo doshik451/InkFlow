@@ -138,7 +138,7 @@ class _BooknoteInfoScreenState extends State<BooknoteInfoScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(widget.note != null ? S.of(context).editing : S.of(context).creating),
+          title: Text(widget.note != null ? widget.note!.title : S.of(context).creating),
           centerTitle: true,
         ),
         body: Center(

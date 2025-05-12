@@ -168,5 +168,36 @@
   "temperamentLabel": "Temperament",
   "stressBehaviorLabel": "Stress Behavior",
   "attitudeToLifeLabel": "Attitude to Life",
-  "innerContradictionsLabel": "Inner Contradictions"
+  "innerContradictionsLabel": "Inner Contradictions",
+
+
+  "plan": "Plan",
+  "no_books_in_plan": "No reads in plan",
+  "high": "High",
+  "medium": "Medium",
+  "low": "Low",
+  "notDefined": "Not defined",
+  "workName": "Work name",
+  "genreNTags": "Genre/tags",
+  "priority": "Priority",
+  "links": "Links",
+  "add_link": "Add link",
+
+  "criterion_plot": "Plot",
+  "criterion_characters": "Characters",
+  "criterion_worldbuilding": "Worldbuilding",
+  "criterion_emotion": "Emotional impact",
+  "criterion_writingStyle": "Writing Style",
+  "category_read": "Read",
+  "category_favorite": "Favorite",
+  "category_abandoned": "Abandoned",
+  "category_reRead": "Want to reread",
+  "category_disliked": "Disliked",
+  "categories": "Categories",
+  "no_categories": "No categories:(",
+  "selectColor": "Select color",
+  "color": "Color",
+  "ok": "OK",
+  "collection": "Collection",
+  "notFoundPageText": "404 - Not Found"
 }

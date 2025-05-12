@@ -1,26 +1,22 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import '../../general/base/search_poly.dart';
+import '../../../models/book_in_plan_model.dart';
+import '../../../modes/reader/plans_to_read/book_in_plan_screen.dart';
 
-import '../../../../generated/l10n.dart';
-import '../../../../models/plot_models.dart';
-import '../../../general/base/confirm_delete_base.dart';
-import '../../../general/base/delete_swipe_background_base.dart';
-import '../../../general/base/search_poly.dart';
-import 'about_story_arc_screen.dart';
+import '../../../generated/l10n.dart';
+import '../../general/base/confirm_delete_base.dart';
+import '../../general/base/delete_swipe_background_base.dart';
 
-class PlotListScreen extends StatefulWidget {
-  final String bookId;
-  final String authorId;
-
-  const PlotListScreen(
-      {super.key, required this.bookId, required this.authorId});
+class PlansListScreen extends StatefulWidget {
+  const PlansListScreen({super.key});
 
   @override
-  State<PlotListScreen> createState() => _PlotListScreenState();
+  State<PlansListScreen> createState() => _PlansListScreenState();
 }
 
-class _PlotListScreenState extends State<PlotListScreen> {
+class _PlansListScreenState extends State<PlansListScreen> {
   String _searchQuery = '';
 
   @override
@@ -29,30 +25,31 @@ class _PlotListScreenState extends State<PlotListScreen> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         appBar: AppBar(
-          title: Text(S.of(context).plot),
+          title: Text(S.of(context).plan),
           centerTitle: true,
           automaticallyImplyLeading: false,
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         floatingActionButton: FloatingActionButton(
-          heroTag: 'add_story_arc_tag',
+          heroTag: 'add_plan_book_tag',
           shape: const CircleBorder(),
           backgroundColor: Theme.of(context).colorScheme.tertiary,
           child: const Icon(
             Icons.add,
             color: Colors.white,
           ),
-          onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => AboutStoryArcScreen(bookId: widget.bookId, userId: widget.authorId,))); },
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => BookInPlanScreen(userId: FirebaseAuth.instance.currentUser!.uid))); },
         ),
         body: Center(
           child: Stack(
             children: [
-              StoryArcsList(bookId: widget.bookId, userId: widget.authorId, searchQuery: _searchQuery,),
+              PlanList(searchQuery: _searchQuery),
               SearchPoly(onChanged: (value) {
                 setState(() {
                   _searchQuery = value.toLowerCase();
                 });
-              }),
+              })
             ],
           ),
         ),
@@ -61,31 +58,24 @@ class _PlotListScreenState extends State<PlotListScreen> {
   }
 }
 
-class StoryArcsList extends StatefulWidget {
-  final String userId;
-  final String bookId;
+class PlanList extends StatefulWidget {
   final String searchQuery;
 
-  const StoryArcsList({
-    super.key,
-    required this.bookId,
-    required this.userId,
-    required this.searchQuery,
-  });
+  const PlanList({super.key, required this.searchQuery});
 
   @override
-  State<StoryArcsList> createState() => _StoryArcsListState();
+  State<PlanList> createState() => _PlanListState();
 }
 
-class _StoryArcsListState extends State<StoryArcsList> {
+class _PlanListState extends State<PlanList> {
   late DatabaseReference _databaseReference;
+  final userId = FirebaseAuth.instance.currentUser!.uid;
   late Stream<DatabaseEvent> _stream;
 
   @override
   void initState() {
     super.initState();
-    _databaseReference = FirebaseDatabase.instance
-        .ref('books/${widget.userId}/${widget.bookId}/plot');
+    _databaseReference = FirebaseDatabase.instance.ref('planBooks/$userId');
     _stream = _databaseReference.onValue;
   }
 
@@ -103,7 +93,9 @@ class _StoryArcsListState extends State<StoryArcsList> {
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
-            child: CircularProgressIndicator(),
+            child: CircularProgressIndicator(
+              color: Color(0xFF89B0D9),
+            ),
           );
         }
 
@@ -114,19 +106,19 @@ class _StoryArcsListState extends State<StoryArcsList> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(height: 60),
-                Text(S.of(context).no_story_arc,
+                Text(S.of(context).no_books_in_plan,
                     style: Theme.of(context).textTheme.titleMedium),
               ],
             ),
           );
         }
 
-        final storyArcsMap = data;
-        List<StoryArc> storyArcs = storyArcsMap.entries
-            .map((entry) => StoryArc.fromMap(
+        final booksInPlanMap = data;
+        List<BookInPlan> booksInPlan = booksInPlanMap.entries
+            .map((entry) => BookInPlan.fromMap(
                 entry.key, entry.value as Map<dynamic, dynamic>))
             .toList();
-        storyArcs.sort((a, b) => b.lastUpdate.compareTo(a.lastUpdate));
+        booksInPlan.sort((a, b) => b.lastUpdate.compareTo(a.lastUpdate));
 
         return FutureBuilder(
           future: _loadAdditionalData(),
@@ -138,20 +130,24 @@ class _StoryArcsListState extends State<StoryArcsList> {
             }
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
-                child: CircularProgressIndicator(color: Color(0xFFA5C6EA),),
+                child: CircularProgressIndicator(),
               );
             }
 
-            List<StoryArc> filteredStoryArcs = widget.searchQuery.isEmpty
-                ? storyArcs
-                : storyArcs.where((item) {
+            List<BookInPlan> filteredBooksInPlan = widget.searchQuery.isEmpty
+                ? booksInPlan
+                : booksInPlan.where((item) {
                     final title = item.title.toLowerCase();
-                    final desc = item.description.toLowerCase();
+                    final genreNTags = item.genreNTags.toLowerCase();
+                    final authorName = item.authorName.toLowerCase();
+                    final priority = item.priority.title(context).toLowerCase();
                     return title.contains(widget.searchQuery) ||
-                        desc.contains(widget.searchQuery);
+                        genreNTags.contains(widget.searchQuery) ||
+                        authorName.contains(widget.searchQuery) ||
+                        priority.contains(widget.searchQuery);
                   }).toList();
 
-            if (filteredStoryArcs.isEmpty) {
+            if (filteredBooksInPlan.isEmpty) {
               return Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -168,7 +164,7 @@ class _StoryArcsListState extends State<StoryArcsList> {
                       height: 16,
                     ),
                     Text(
-                      S.of(context).no_story_arc,
+                      S.of(context).no_books_in_plan,
                       style: Theme.of(context).textTheme.titleMedium,
                       textAlign: TextAlign.center,
                     ),
@@ -181,10 +177,10 @@ class _StoryArcsListState extends State<StoryArcsList> {
               addAutomaticKeepAlives: true,
               keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
               padding: const EdgeInsets.only(top: 60, left: 16, right: 16),
-              itemCount: filteredStoryArcs.length,
+              itemCount: filteredBooksInPlan.length,
               itemBuilder: (context, index) {
-                final item = filteredStoryArcs[index];
-                return _StoryArcCard(storyArc: item, index: index, userId: widget.userId, bookId: widget.bookId,);
+                final item = filteredBooksInPlan[index];
+                return BookInPlanCard(book: item, index: index, userId: userId);
               },
             );
           },
@@ -194,13 +190,12 @@ class _StoryArcsListState extends State<StoryArcsList> {
   }
 }
 
-class _StoryArcCard extends StatelessWidget {
-  final StoryArc storyArc;
+class BookInPlanCard extends StatelessWidget {
+  final BookInPlan book;
   final int index;
   final String userId;
-  final String bookId;
   static const duration = Duration(milliseconds: 500);
-  const _StoryArcCard({super.key, required this.storyArc, required this.index, required this.userId, required this.bookId});
+  const BookInPlanCard({super.key, required this.book, required this.index, required this.userId,});
 
   @override
   Widget build(BuildContext context) {
@@ -210,18 +205,18 @@ class _StoryArcCard extends StatelessWidget {
       curve: Curves.easeOut,
       builder: (context, value, child) {
         return Dismissible(
-          key: Key(storyArc.id),
+          key: Key(book.id),
           direction: DismissDirection.endToStart,
           background: buildSwipeBackground(context),
           confirmDismiss: (direction) => confirmDelete(context),
-          onDismissed: (direction) => _deleteStoryArc(storyArc.id, bookId, userId, context),
+          onDismissed: (direction) => _deleteItem(book.id, userId, context),
           child: GestureDetector(
-            onTap: () => _navigateToStoryArcDetail(context, storyArc),
+            onTap: () => _navigateToItemDetail(context, book),
             child: Opacity(
               opacity: value,
               child: Transform.translate(
                 offset: Offset(0, (1 - value) * 20),
-                child: storyArcCardContent(storyArc, context),
+                child: bookCardContent(book, context),
               ),
             ),
           ),
@@ -230,31 +225,17 @@ class _StoryArcCard extends StatelessWidget {
     );
   }
 
-  void _navigateToStoryArcDetail(BuildContext context, StoryArc storyArc) {
+  void _navigateToItemDetail(BuildContext context, BookInPlan book) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => AboutStoryArcScreen(storyArc: storyArc, bookId: bookId, userId: userId,),
+        builder: (context) => BookInPlanScreen(bookInPlan: book, userId: userId,),
       ),
     );
   }
 
-  Future<void> _updateBook() async {
-    final updateDate = DateTime.now();
-    final formatter = DateFormat('yyyy-MM-dd HH:mm');
-    final updates = {
-      'lastUpdate': formatter.format(updateDate),
-    };
-
-    await FirebaseDatabase.instance
-        .ref(
-        'books/$userId/$bookId')
-        .update(updates);
-  }
-
-  Future<void> _deleteStoryArc(String storyArcId, String bookId, String userId, BuildContext context) async {
+  Future<void> _deleteItem(String bookId, String userId, BuildContext context) async {
     try {
-      await FirebaseDatabase.instance.ref('books/$userId/$bookId/plot/$storyArcId').remove();
-      await _updateBook();
+      await FirebaseDatabase.instance.ref('planBooks/$userId/$bookId').remove();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(S.current.record_is_deleted)),
       );
@@ -266,15 +247,15 @@ class _StoryArcCard extends StatelessWidget {
   }
 }
 
-Widget storyArcCardContent(StoryArc storyArc, BuildContext context) {
+Widget bookCardContent(BookInPlan book, BuildContext context) {
   return Card(
     margin: const EdgeInsets.symmetric(vertical: 8),
     elevation: 4,
-    color: Color.lerp(const Color(0xFFA5C6EA), Colors.white, 0.5),
+    color: Color.lerp(book.priority.color, Colors.white, 0.5),
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(12),
-      side: const BorderSide(
-        color: Color(0xFFA5C6EA),
+      side: BorderSide(
+        color: book.priority.color,
         width: 2,
       ),
     ),
@@ -292,7 +273,7 @@ Widget storyArcCardContent(StoryArc storyArc, BuildContext context) {
               children: [
                 Expanded(
                   child: Text(
-                    storyArc.title,
+                    book.title,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: Colors.black87,
@@ -301,11 +282,51 @@ Widget storyArcCardContent(StoryArc storyArc, BuildContext context) {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
+                const SizedBox(width: 8,),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: book.priority.color,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    book.priority.title(context),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                )
               ],
             ),
             const SizedBox(height: 8,),
+            Row(
+              children: [
+                Text(
+                  '${S.of(context).author}: ',
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Colors.grey[600],
+                      fontSize: 14
+                  ),
+                ),
+                Flexible(
+                  child: Text(
+                    book.authorName,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                        fontSize: 14
+                    ),
+                  ),
+                )
+              ],
+            ),
+            const SizedBox(height: 8),
             Text(
-              storyArc.description,
+              book.description,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.black87),
@@ -322,7 +343,7 @@ Widget storyArcCardContent(StoryArc storyArc, BuildContext context) {
                 ),
                 Flexible(
                   child: Text(
-                    storyArc.lastUpdate,
+                    book.lastUpdate,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -340,5 +361,3 @@ Widget storyArcCardContent(StoryArc storyArc, BuildContext context) {
     ),
   );
 }
-
-

@@ -1339,6 +1339,206 @@ class S {
       args: [],
     );
   }
+
+  /// `Plan`
+  String get plan {
+    return Intl.message('Plan', name: 'plan', desc: '', args: []);
+  }
+
+  /// `No reads in plan`
+  String get no_books_in_plan {
+    return Intl.message(
+      'No reads in plan',
+      name: 'no_books_in_plan',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `High`
+  String get high {
+    return Intl.message('High', name: 'high', desc: '', args: []);
+  }
+
+  /// `Medium`
+  String get medium {
+    return Intl.message('Medium', name: 'medium', desc: '', args: []);
+  }
+
+  /// `Low`
+  String get low {
+    return Intl.message('Low', name: 'low', desc: '', args: []);
+  }
+
+  /// `Not defined`
+  String get notDefined {
+    return Intl.message('Not defined', name: 'notDefined', desc: '', args: []);
+  }
+
+  /// `Work name`
+  String get workName {
+    return Intl.message('Work name', name: 'workName', desc: '', args: []);
+  }
+
+  /// `Genre/tags`
+  String get genreNTags {
+    return Intl.message('Genre/tags', name: 'genreNTags', desc: '', args: []);
+  }
+
+  /// `Priority`
+  String get priority {
+    return Intl.message('Priority', name: 'priority', desc: '', args: []);
+  }
+
+  /// `Links`
+  String get links {
+    return Intl.message('Links', name: 'links', desc: '', args: []);
+  }
+
+  /// `Add link`
+  String get add_link {
+    return Intl.message('Add link', name: 'add_link', desc: '', args: []);
+  }
+
+  /// `Plot`
+  String get criterion_plot {
+    return Intl.message('Plot', name: 'criterion_plot', desc: '', args: []);
+  }
+
+  /// `Characters`
+  String get criterion_characters {
+    return Intl.message(
+      'Characters',
+      name: 'criterion_characters',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Worldbuilding`
+  String get criterion_worldbuilding {
+    return Intl.message(
+      'Worldbuilding',
+      name: 'criterion_worldbuilding',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Emotional impact`
+  String get criterion_emotion {
+    return Intl.message(
+      'Emotional impact',
+      name: 'criterion_emotion',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Writing Style`
+  String get criterion_writingStyle {
+    return Intl.message(
+      'Writing Style',
+      name: 'criterion_writingStyle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Read`
+  String get category_read {
+    return Intl.message('Read', name: 'category_read', desc: '', args: []);
+  }
+
+  /// `Favorite`
+  String get category_favorite {
+    return Intl.message(
+      'Favorite',
+      name: 'category_favorite',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Abandoned`
+  String get category_abandoned {
+    return Intl.message(
+      'Abandoned',
+      name: 'category_abandoned',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Want to reread`
+  String get category_reRead {
+    return Intl.message(
+      'Want to reread',
+      name: 'category_reRead',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Disliked`
+  String get category_disliked {
+    return Intl.message(
+      'Disliked',
+      name: 'category_disliked',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Categories`
+  String get categories {
+    return Intl.message('Categories', name: 'categories', desc: '', args: []);
+  }
+
+  /// `No categories:(`
+  String get no_categories {
+    return Intl.message(
+      'No categories:(',
+      name: 'no_categories',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select color`
+  String get selectColor {
+    return Intl.message(
+      'Select color',
+      name: 'selectColor',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Color`
+  String get color {
+    return Intl.message('Color', name: 'color', desc: '', args: []);
+  }
+
+  /// `OK`
+  String get ok {
+    return Intl.message('OK', name: 'ok', desc: '', args: []);
+  }
+
+  /// `Collection`
+  String get collection {
+    return Intl.message('Collection', name: 'collection', desc: '', args: []);
+  }
+
+  /// `404 - Not Found`
+  String get notFoundPageText {
+    return Intl.message(
+      '404 - Not Found',
+      name: 'notFoundPageText',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

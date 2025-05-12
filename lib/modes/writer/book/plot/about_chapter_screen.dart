@@ -194,7 +194,7 @@ class _AboutChapterScreenState extends State<AboutChapterScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(widget.chapter != null ? S.of(context).editing : S.of(context).creating),
+          title: Text(widget.chapter != null ? widget.chapter!.title : S.of(context).creating),
           centerTitle: true,
         ),
         body: Center(

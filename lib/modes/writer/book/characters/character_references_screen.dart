@@ -48,6 +48,7 @@ class _CharacterReferencesScreenState extends State<CharacterReferencesScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.character.name),
+        centerTitle: true,
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -517,7 +518,7 @@ class _CharacterReferenceCardState extends State<CharacterReferenceCard> {
             Text(
               widget.title,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.bold, color: Colors.black,
                   ),
             ),
             const SizedBox(height: 10),
@@ -605,17 +606,17 @@ class _CharacterReferenceCardState extends State<CharacterReferenceCard> {
           children: [
             if (canAddMore) ...[
               IconButton(
-                icon: const Icon(Icons.add_photo_alternate),
+                icon: const Icon(Icons.add_photo_alternate, color: Colors.black,),
                 onPressed: _addImage,
               ),
               IconButton(
-                icon: const Icon(Icons.link),
+                icon: const Icon(Icons.link, color: Colors.black,),
                 onPressed: _toggleLinkInput,
               ),
             ],
             if (allItems.isNotEmpty)
               IconButton(
-                icon: const Icon(Icons.delete),
+                icon: const Icon(Icons.delete, color: Colors.black,),
                 onPressed: _deleteCurrentItem,
               ),
           ],
@@ -655,8 +656,8 @@ class _CharacterReferenceCardState extends State<CharacterReferenceCard> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.link, size: 40),
-                  Text(_linkUrls[linkIndex]),
+                  const Icon(Icons.link, size: 40, color: Colors.black,),
+                  Text(_linkUrls[linkIndex], style: const TextStyle(color: Colors.black),),
                 ],
               ),
             ),

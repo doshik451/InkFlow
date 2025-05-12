@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../../generated/l10n.dart';
 import '../../../../models/plot_models.dart';
-import '../../widget_base/confirm_delete_base.dart';
-import '../../widget_base/delete_swipe_background_base.dart';
+import '../../../general/base/confirm_delete_base.dart';
+import '../../../general/base/delete_swipe_background_base.dart';
 import 'about_chapter_screen.dart';
 
 class AboutStoryArcScreen extends StatefulWidget {
@@ -233,7 +233,7 @@ class _AboutStoryArcScreenState extends State<AboutStoryArcScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(widget.storyArc != null ? S.of(context).editing : S.of(context).creating),
+          title: Text(widget.storyArc != null ? widget.storyArc!.title : S.of(context).creating),
           centerTitle: true,
         ),
         body: Center(

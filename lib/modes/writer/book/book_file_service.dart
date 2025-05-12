@@ -5,7 +5,6 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:file_selector/file_selector.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
@@ -16,14 +15,15 @@ import '../../../generated/l10n.dart';
 class BookFileService {
   final String userId;
   final String bookId;
+  final String pathPart;
   final BuildContext context;
 
   final FirebaseStorage storage = FirebaseStorage.instance;
   final DefaultCacheManager cacheManager = DefaultCacheManager();
 
-  BookFileService({required this.userId, required this.bookId, required this.context});
+  BookFileService({required this.userId, required this.bookId, required this.pathPart, required this.context});
 
-  String get storagePath => 'bookFiles/$userId/$bookId';
+  String get storagePath => '$pathPart/$userId/$bookId';
 
   Future<String?> uploadFile() async {
     try {
@@ -76,6 +76,7 @@ class BookFileService {
   Future<File> downloadToDownloads({
     required String userId,
     required String bookId,
+    required String pathPart,
     required String fileName,
   }) async {
     try {
@@ -95,9 +96,9 @@ class BookFileService {
         if (!status.isGranted) {
           if (status.isPermanentlyDenied) {
             AppSettings.openAppSettings();
-            throw Exception('Разрешение навсегда запрещено. Включи его в настройках.');
+            throw Exception(S.of(context).permissionRequiredTitle);
           }
-          throw Exception('Доступ к хранилищу не предоставлен.');
+          throw Exception(S.of(context).permissionRequiredTitle);
         }
       }
 
@@ -110,7 +111,7 @@ class BookFileService {
       final file = File(filePath);
 
       final ref = FirebaseStorage.instance
-          .ref('bookFiles/$userId/$bookId/$fileName');
+          .ref('$pathPart/$userId/$bookId/$fileName');
 
       final task = ref.writeToFile(file);
       await task.whenComplete(() {});

@@ -4,8 +4,9 @@ import 'package:intl/intl.dart';
 
 import '../../../../generated/l10n.dart';
 import '../../../../models/book_character_model.dart';
-import '../../widget_base/confirm_delete_base.dart';
-import '../../widget_base/delete_swipe_background_base.dart';
+import '../../../general/base/confirm_delete_base.dart';
+import '../../../general/base/delete_swipe_background_base.dart';
+import '../../../general/base/search_poly.dart';
 import 'about_character_screen.dart';
 
 class CharactersListScreen extends StatefulWidget {
@@ -22,66 +23,36 @@ class _CharactersListScreenState extends State<CharactersListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(S.of(context).characters),
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: FloatingActionButton(
-        heroTag: 'add_book_character_tag',
-        shape: const CircleBorder(),
-        backgroundColor: Theme.of(context).colorScheme.tertiary,
-        child: const Icon(
-          Icons.add,
-          color: Colors.white,
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(S.of(context).characters),
+          centerTitle: true,
+          automaticallyImplyLeading: false,
         ),
-        onPressed: () { Navigator.push(context, MaterialPageRoute(builder: (context) => AboutCharacterScreen(bookId: widget.bookId, userId: widget.authorId,))); },
-      ),
-      body: Center(
-        child: Stack(
-          children: [
-            CharactersList(userId: widget.authorId, bookId: widget.bookId, searchQuery: _searchQuery,),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-              ),
-              child: TextField(
-                onChanged: (value) {
-                  setState(() {
-                    _searchQuery = value.toLowerCase();
-                  });
-                },
-                cursorColor: Theme.of(context).colorScheme.surface,
-                style:
-                TextStyle(color: Theme.of(context).colorScheme.secondary),
-                decoration: InputDecoration(
-                    isDense: true,
-                    contentPadding:
-                    const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                    filled: true,
-                    fillColor: Theme.of(context)
-                        .scaffoldBackgroundColor
-                        .withAlpha(180),
-                    hintText: S.of(context).search,
-                    hintStyle: TextStyle(
-                        color: Theme.of(context).colorScheme.secondary),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
-                            width: 3,
-                            color: Theme.of(context).colorScheme.secondary)),
-                    prefixIcon: const Icon(Icons.search),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(
-                          width: 1.5,
-                          color: Theme.of(context).colorScheme.secondary),
-                    )),
-              ),
-            )
-          ],
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        floatingActionButton: FloatingActionButton(
+          heroTag: 'add_book_character_tag',
+          shape: const CircleBorder(),
+          backgroundColor: Theme.of(context).colorScheme.tertiary,
+          child: const Icon(
+            Icons.add,
+            color: Colors.white,
+          ),
+          onPressed: () { Navigator.push(context, MaterialPageRoute(builder: (context) => AboutCharacterScreen(bookId: widget.bookId, userId: widget.authorId,))); },
+        ),
+        body: Center(
+          child: Stack(
+            children: [
+              CharactersList(userId: widget.authorId, bookId: widget.bookId, searchQuery: _searchQuery,),
+              SearchPoly(onChanged: (value) {
+                setState(() {
+                  _searchQuery = value.toLowerCase();
+                });
+              }),
+            ],
+          ),
         ),
       ),
     );
@@ -175,6 +146,7 @@ class _CharactersListState extends State<CharactersList> {
             if (filteredCharacters.isEmpty) {
               return Center(
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const SizedBox(
                       height: 60,
@@ -358,7 +330,7 @@ Widget characterCardContent(Character character, BuildContext context) {
                 )
                     : null,
               ),
-              child: hasMainImage ? null : const Icon(Icons.person, size: 30),
+              child: hasMainImage ? null : const Icon(Icons.person, size: 30, color: Color(0xFFA5C6EA)),
             ),
             const SizedBox(width: 16,),
             Expanded(

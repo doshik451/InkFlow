@@ -26,7 +26,7 @@ Future<bool?> confirmDelete(BuildContext context) async {
                 children: [
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(false),
-                    child: Text(S.current.cancel),
+                    child: Text(S.current.cancel, style: const TextStyle(color: Colors.grey)),
                   ),
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(true),
