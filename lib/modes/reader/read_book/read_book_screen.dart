@@ -355,11 +355,11 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
                           const SizedBox(height: 16),
                           Row(
                             children: [
-                              const Align(
+                              Align(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
-                                  'Даты чтения',
-                                  style: TextStyle(
+                                  S.of(context).reading_dates,
+                                  style: const TextStyle(
                                       fontSize: 16,
                                       color: Colors.black,
                                       fontWeight: FontWeight.w500),
@@ -419,7 +419,7 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(SnackBar(
                                             content: Text(
-                                                'Сначала выберите дату начала')));
+                                                S.of(context).select_start_date)));
                                         return;
                                       }
 
@@ -539,9 +539,9 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
                             crossAxisAlignment: CrossAxisAlignment.baseline,
                             textBaseline: TextBaseline.alphabetic,
                             children: [
-                              const Text(
-                                'Общий рейтинг:',
-                                style: TextStyle(fontSize: 16, color: Colors.black),
+                              Text(
+                                '${S.of(context).general_impression}:',
+                                style: const TextStyle(fontSize: 16, color: Colors.black),
                               ),
                               const SizedBox(width: 8),
                               SizedBox(
@@ -610,7 +610,7 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
                                   horizontal: 16,
                                 ),
                                 title: Text(
-                                  'Отзыв',
+                                  S.of(context).review_and_criteria,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
@@ -647,7 +647,7 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
                                   horizontal: 16,
                                 ),
                                 title: Text(
-                                  'Моменты',
+                                  S.of(context).moments,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(

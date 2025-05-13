@@ -199,5 +199,10 @@
   "color": "Color",
   "ok": "OK",
   "collection": "Collection",
-  "notFoundPageText": "404 - Not Found"
+  "notFoundPageText": "404 - Not Found",
+  "reading_dates": "Reading dates",
+  "select_start_date": "First select the start date",
+  "general_impression": "General impression",
+  "review_and_criteria": "Review and criteria",
+  "moments": "Moments"
 }

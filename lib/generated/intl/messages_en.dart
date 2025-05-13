@@ -170,6 +170,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "generalInformationTitle": MessageLookupByLibrary.simpleMessage(
       "General Information",
     ),
+    "general_impression": MessageLookupByLibrary.simpleMessage(
+      "General impression",
+    ),
     "genre": MessageLookupByLibrary.simpleMessage("Genre"),
     "genreNTags": MessageLookupByLibrary.simpleMessage("Genre/tags"),
     "goalLabel": MessageLookupByLibrary.simpleMessage("Goal"),
@@ -220,6 +223,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "mode_changed_to_writer": MessageLookupByLibrary.simpleMessage(
       "You are in writer mode",
     ),
+    "moments": MessageLookupByLibrary.simpleMessage("Moments"),
     "moodboard": MessageLookupByLibrary.simpleMessage("Moodboard"),
     "motivationLabel": MessageLookupByLibrary.simpleMessage("Motivation"),
     "name": MessageLookupByLibrary.simpleMessage("Name"),
@@ -273,6 +277,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "This mode helps you manage your reading experience. You can:\n- Save quotes from books you’ve read.\n- Rate books based on different criteria.\n- Maintain a to-read list.",
     ),
     "reader_mode_title": MessageLookupByLibrary.simpleMessage("Reader Mode"),
+    "reading_dates": MessageLookupByLibrary.simpleMessage("Reading dates"),
     "record_is_deleted": MessageLookupByLibrary.simpleMessage(
       "Record is deleted",
     ),
@@ -286,6 +291,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Required field is empty",
     ),
     "reset_password": MessageLookupByLibrary.simpleMessage("Reset password"),
+    "review_and_criteria": MessageLookupByLibrary.simpleMessage(
+      "Review and criteria",
+    ),
     "rivals": MessageLookupByLibrary.simpleMessage("Rivals"),
     "role": MessageLookupByLibrary.simpleMessage("Role"),
     "save": MessageLookupByLibrary.simpleMessage("Save"),
@@ -302,6 +310,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Select a Character",
     ),
     "selectColor": MessageLookupByLibrary.simpleMessage("Select color"),
+    "select_start_date": MessageLookupByLibrary.simpleMessage(
+      "First select the start date",
+    ),
     "send_email_to_reset": MessageLookupByLibrary.simpleMessage(
       "Send reset letter",
     ),

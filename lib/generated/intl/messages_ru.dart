@@ -168,6 +168,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "generalInformationTitle": MessageLookupByLibrary.simpleMessage(
       "Общая информация",
     ),
+    "general_impression": MessageLookupByLibrary.simpleMessage(
+      "Общее впечатление",
+    ),
     "genre": MessageLookupByLibrary.simpleMessage("Жанр"),
     "genreNTags": MessageLookupByLibrary.simpleMessage("Жанры/теги"),
     "goalLabel": MessageLookupByLibrary.simpleMessage("Цель"),
@@ -218,6 +221,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "mode_changed_to_writer": MessageLookupByLibrary.simpleMessage(
       "Вы в режиме писателя",
     ),
+    "moments": MessageLookupByLibrary.simpleMessage("Моменты"),
     "moodboard": MessageLookupByLibrary.simpleMessage("Мудборд"),
     "motivationLabel": MessageLookupByLibrary.simpleMessage("Мотивация"),
     "name": MessageLookupByLibrary.simpleMessage("Имя"),
@@ -279,6 +283,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Этот режим поможет организовать ваше чтение. Вы можете:\n- Сохранять цитаты из прочитанных книг.\n- Оценивать произведения по разным критериям.\n- Вести список книг для чтения.",
     ),
     "reader_mode_title": MessageLookupByLibrary.simpleMessage("Режим читателя"),
+    "reading_dates": MessageLookupByLibrary.simpleMessage("Даты чтения"),
     "record_is_deleted": MessageLookupByLibrary.simpleMessage("Запись удалена"),
     "references": MessageLookupByLibrary.simpleMessage("Референсы"),
     "registration": MessageLookupByLibrary.simpleMessage("Регистрация"),
@@ -290,6 +295,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Обязательное поле пустое",
     ),
     "reset_password": MessageLookupByLibrary.simpleMessage("Сброс пароля"),
+    "review_and_criteria": MessageLookupByLibrary.simpleMessage(
+      "Отзыв и критерии",
+    ),
     "rivals": MessageLookupByLibrary.simpleMessage("Соперники"),
     "role": MessageLookupByLibrary.simpleMessage("Роль"),
     "save": MessageLookupByLibrary.simpleMessage("Сохранить"),
@@ -306,6 +314,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Выберите персонажа",
     ),
     "selectColor": MessageLookupByLibrary.simpleMessage("Выберите цвет"),
+    "select_start_date": MessageLookupByLibrary.simpleMessage(
+      "Сначала выберите дату начала",
+    ),
     "send_email_to_reset": MessageLookupByLibrary.simpleMessage(
       "Отправить письмо для сброса",
     ),

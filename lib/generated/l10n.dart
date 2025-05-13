@@ -1539,6 +1539,51 @@ class S {
       args: [],
     );
   }
+
+  /// `Reading dates`
+  String get reading_dates {
+    return Intl.message(
+      'Reading dates',
+      name: 'reading_dates',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `First select the start date`
+  String get select_start_date {
+    return Intl.message(
+      'First select the start date',
+      name: 'select_start_date',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `General impression`
+  String get general_impression {
+    return Intl.message(
+      'General impression',
+      name: 'general_impression',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Review and criteria`
+  String get review_and_criteria {
+    return Intl.message(
+      'Review and criteria',
+      name: 'review_and_criteria',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Moments`
+  String get moments {
+    return Intl.message('Moments', name: 'moments', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -200,5 +200,10 @@
   "color": "Цвет",
   "ok": "OK",
   "collection": "Коллекции",
-  "notFoundPageText": "404 - Страница не найдена"
+  "notFoundPageText": "404 - Страница не найдена",
+  "reading_dates": "Даты чтения",
+  "select_start_date": "Сначала выберите дату начала",
+  "general_impression": "Общее впечатление",
+  "review_and_criteria": "Отзыв и критерии",
+  "moments": "Моменты"
 }
