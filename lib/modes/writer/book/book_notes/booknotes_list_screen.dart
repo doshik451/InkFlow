@@ -111,15 +111,13 @@ class _NoteCard extends StatelessWidget {
   final int index;
   final String userId;
   final String bookId;
-  final Duration animationDuration;
+  static const animationDuration = Duration(milliseconds: 500);
 
   const _NoteCard({
-    super.key,
     required this.note,
     required this.index,
     required this.userId,
     required this.bookId,
-    this.animationDuration = const Duration(milliseconds: 500),
   });
 
   @override

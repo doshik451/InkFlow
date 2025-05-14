@@ -18,6 +18,7 @@ class PlansListScreen extends StatefulWidget {
 
 class _PlansListScreenState extends State<PlansListScreen> {
   String _searchQuery = '';
+  final userId = FirebaseAuth.instance.currentUser!.uid;
 
   @override
   Widget build(BuildContext context) {
@@ -38,8 +39,30 @@ class _PlansListScreenState extends State<PlansListScreen> {
             Icons.add,
             color: Colors.white,
           ),
-          onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => BookInPlanScreen(userId: FirebaseAuth.instance.currentUser!.uid))); },
+          onPressed: () async {
+            final result = await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => BookInPlanScreen(
+                  userId: userId,
+                ),
+              ),
+            );
+
+            if (result is Map && result['reload'] == true) {
+              final BookInPlan book = result['bookInPlan'];
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => BookInPlanScreen(
+                    userId: userId,
+                    bookInPlan: book,
+                  ),
+                ),
+              );
+              setState(() { });
+            }
+          },
         ),
         body: Center(
           child: Stack(
@@ -80,6 +103,11 @@ class _PlanListState extends State<PlanList> {
   }
 
   Future<Map<String, String>> _loadAdditionalData() async => {};
+
+  void _loadData() {
+    _databaseReference = FirebaseDatabase.instance.ref('planBooks/$userId');
+    _stream = _databaseReference.onValue;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -180,7 +208,11 @@ class _PlanListState extends State<PlanList> {
               itemCount: filteredBooksInPlan.length,
               itemBuilder: (context, index) {
                 final item = filteredBooksInPlan[index];
-                return BookInPlanCard(book: item, index: index, userId: userId);
+                return BookInPlanCard(book: item, index: index, userId: userId, onUpdate: () {
+                  setState(() {
+                    _loadData();
+                  });
+                },);
               },
             );
           },
@@ -195,7 +227,8 @@ class BookInPlanCard extends StatelessWidget {
   final int index;
   final String userId;
   static const duration = Duration(milliseconds: 500);
-  const BookInPlanCard({super.key, required this.book, required this.index, required this.userId,});
+  final VoidCallback? onUpdate;
+  const BookInPlanCard({super.key, required this.book, required this.index, required this.userId, this.onUpdate,});
 
   @override
   Widget build(BuildContext context) {
@@ -225,24 +258,36 @@ class BookInPlanCard extends StatelessWidget {
     );
   }
 
-  void _navigateToItemDetail(BuildContext context, BookInPlan book) {
-    Navigator.of(context).push(
+  void _navigateToItemDetail(BuildContext context, BookInPlan book) async {
+    final result = await Navigator.push(
+      context,
       MaterialPageRoute(
-        builder: (context) => BookInPlanScreen(bookInPlan: book, userId: userId,),
+        builder: (_) => BookInPlanScreen(
+          userId: userId,
+          bookInPlan: book
+        ),
       ),
     );
+
+    if (result is Map && result['reload'] == true) {
+      onUpdate?.call();
+    }
   }
 
   Future<void> _deleteItem(String bookId, String userId, BuildContext context) async {
     try {
       await FirebaseDatabase.instance.ref('planBooks/$userId/$bookId').remove();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.current.record_is_deleted)),
-      );
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(S.current.record_is_deleted)),
+        );
+      }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('${S.current.an_error_occurred}: $e')),
-      );
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('${S.current.an_error_occurred}: $e')),
+        );
+      }
     }
   }
 }

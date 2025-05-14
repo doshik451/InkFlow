@@ -174,7 +174,7 @@ class _IdeaInfoScreenState extends State<IdeaInfoScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(widget.idea != null ? S.of(context).editing : S.of(context).creating),
+          title: Text(widget.idea != null ? widget.idea!.title : S.of(context).creating),
           centerTitle: true,
         ),
         body: Center(
@@ -413,8 +413,8 @@ class _IdeaInfoScreenState extends State<IdeaInfoScreen> {
                         ElevatedButton(
                           onPressed: _saveIdea,
                           style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(_selectedStatus.color),
-                            padding: MaterialStateProperty.all<EdgeInsets>(
+                            backgroundColor: WidgetStateProperty.all<Color>(_selectedStatus.color),
+                            padding: WidgetStateProperty.all<EdgeInsets>(
                               const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
                             ),
                           ),

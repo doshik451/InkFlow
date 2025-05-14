@@ -194,6 +194,7 @@
   "category_abandoned": "Заброшено",
   "category_reRead": "Хочу перечитать",
   "category_disliked": "Не понравилось",
+  "category_in_process": "В процессе",
   "categories": "Категории",
   "no_categories": "Категории еще нет:(",
   "selectColor": "Выберите цвет",
@@ -205,5 +206,6 @@
   "select_start_date": "Сначала выберите дату начала",
   "general_impression": "Общее впечатление",
   "review_and_criteria": "Отзыв и критерии",
-  "moments": "Моменты"
+  "moments": "Моменты",
+  "review": "Отзыв"
 }

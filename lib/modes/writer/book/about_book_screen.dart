@@ -263,12 +263,10 @@ class _AboutBookPageState extends State<AboutBookPage> {
         _checkForChanges();
         _showSuccessSnackbar(_isEditing ? s.update_success : s.create_success);
 
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => MainBookBase(book: result),
-          ),
-        );
+        Navigator.pop(context, {
+          'reload': true,
+          'book': result,
+        });
       }
     } catch (e) {
       if (mounted) {
@@ -478,7 +476,9 @@ class _AboutBookPageState extends State<AboutBookPage> {
                           )),
                     ],
                   ));
-          if (shouldLeave == true && mounted) Navigator.of(context).pop();
+          if (shouldLeave == true && mounted) Navigator.of(context).pop(true);
+        } else {
+          Navigator.of(context).pop(true);
         }
       },
       child: Scaffold(
@@ -520,17 +520,19 @@ class _AboutBookPageState extends State<AboutBookPage> {
                       maxLines: 5),
                   const SizedBox(height: 16,),
                   _buildLinksSection(),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  _buildFilesSection(),
+                  if(_isEditing)...[
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    _buildFilesSection(),
+                  ],
                   const SizedBox(height: 24),
                   ElevatedButton(
                     onPressed: _isSaving ? null : _saveBook,
                     style: ButtonStyle(
                       backgroundColor:
-                          MaterialStateProperty.all<Color>(_status.color),
-                      padding: MaterialStateProperty.all<EdgeInsets>(
+                          WidgetStateProperty.all<Color>(_status.color),
+                      padding: WidgetStateProperty.all<EdgeInsets>(
                         const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
                       ),
                     ),
@@ -574,7 +576,7 @@ class _AboutBookPageState extends State<AboutBookPage> {
           duration: const Duration(seconds: 3),
         ),
       );
-    } on Exception catch (e) {
+    } on Exception {
       if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -854,6 +856,7 @@ class _AboutBookPageState extends State<AboutBookPage> {
 class ErrorPlaceholderWidget extends StatelessWidget {
   const ErrorPlaceholderWidget({super.key});
 
+  @override
   Widget build(BuildContext context) {
     return Center(
       child: Column(

@@ -200,7 +200,7 @@ class _StoryArcCard extends StatelessWidget {
   final String userId;
   final String bookId;
   static const duration = Duration(milliseconds: 500);
-  const _StoryArcCard({super.key, required this.storyArc, required this.index, required this.userId, required this.bookId});
+  const _StoryArcCard({required this.storyArc, required this.index, required this.userId, required this.bookId});
 
   @override
   Widget build(BuildContext context) {

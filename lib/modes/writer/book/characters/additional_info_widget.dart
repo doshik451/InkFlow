@@ -10,11 +10,11 @@ class AdditionalInfoWidget extends StatefulWidget {
   final String characterId;
 
   const AdditionalInfoWidget({
-    Key? key,
+    super.key,
     required this.userId,
     required this.bookId,
     required this.characterId,
-  }) : super(key: key);
+  });
 
   @override
   _AdditionalInfoWidgetState createState() => _AdditionalInfoWidgetState();
@@ -166,8 +166,8 @@ class _AdditionalInfoWidgetState extends State<AdditionalInfoWidget> {
                       ElevatedButton(
                         onPressed: _isSaving ? null : _saveAdditionalInfo,
                         style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(const Color(0xFFD3D3D3)),
-                          padding: MaterialStateProperty.all<EdgeInsets>(
+                          backgroundColor: WidgetStateProperty.all<Color>(const Color(0xFFD3D3D3)),
+                          padding: WidgetStateProperty.all<EdgeInsets>(
                             const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
                           ),
                         ),

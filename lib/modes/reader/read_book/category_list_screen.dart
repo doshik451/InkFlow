@@ -101,18 +101,26 @@ class _CategoryListPageState extends State<CategoryListPage> {
   }
 
   List<BookCategory> _filterItems(List<BookCategory> categories) {
-    if (_searchQuery.isEmpty) return categories;
-
-    return categories.where((category) {
-      final titleMatch = category.getLocalizedTitle(context).toLowerCase().contains(_searchQuery);
-
+    final filtered = _searchQuery.isEmpty
+        ? categories
+        : categories.where((category) {
+      final titleMatch = category.getLocalizedTitle(context)
+          .toLowerCase()
+          .contains(_searchQuery);
       final hasMatchingBooks = _allBooks.any((book) =>
       book.category.id == category.id &&
           (book.title.toLowerCase().contains(_searchQuery) ||
               book.author.toLowerCase().contains(_searchQuery)));
-
       return titleMatch || hasMatchingBooks;
     }).toList();
+
+    filtered.sort((a, b) {
+      final countA = _getBookCountForCategory(a.id);
+      final countB = _getBookCountForCategory(b.id);
+      return countB.compareTo(countA);
+    });
+
+    return filtered;
   }
 
   Future<void> _deleteCategoryWithBooks(String categoryId) async {
@@ -177,11 +185,11 @@ class _CategoryListPageState extends State<CategoryListPage> {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());
                     }
-      
+
                     if (snapshot.hasError || !snapshot.hasData) {
                       return Center(child: Text(S.of(context).an_error_occurred));
                     }
-      
+
                     final categories = _filterItems(snapshot.data!);
                     if (categories.isEmpty) {
                       return Center(
@@ -312,7 +320,6 @@ class _CategoryListPageState extends State<CategoryListPage> {
     setState(() {});
   }
 
-
   Future<void> showAddCategoryDialog(BuildContext context, String userId, VoidCallback onCategoryAdded) {
     final TextEditingController titleController = TextEditingController();
     Color selectedColor = Colors.blue;
@@ -356,7 +363,7 @@ class _CategoryListPageState extends State<CategoryListPage> {
                             actions: [
                               TextButton(
                                 onPressed: () => Navigator.pop(context),
-                                style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Theme.of(context).colorScheme.tertiary)),
+                                style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(Theme.of(context).colorScheme.tertiary)),
                                 child: Text(s.ok, style: const TextStyle(color: Colors.white),),
                               )
                             ],
@@ -404,7 +411,7 @@ class _CategoryListPageState extends State<CategoryListPage> {
                   Navigator.pop(context);
                   onCategoryAdded();
                 },
-                style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Theme.of(context).colorScheme.tertiary)),
+                style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(Theme.of(context).colorScheme.tertiary)),
                 child: Text(s.save, style: const TextStyle(color: Colors.white),),
               ),
             ],

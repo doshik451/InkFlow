@@ -182,7 +182,7 @@ class _BookInPlanScreenState extends State<BookInPlanScreen> {
       final lastUpdate = DateFormat('yyyy-MM-dd HH:mm').format(updateDate);
 
       final bookData = _createBookData(title, author, lastUpdate);
-      await _saveBookToDatabase(bookData);
+      final updatedBook = await _saveBookToDatabase(bookData);
 
       if (mounted) {
         _initialTitle = _titleController.text;
@@ -193,7 +193,10 @@ class _BookInPlanScreenState extends State<BookInPlanScreen> {
         _initialLinks = List.from(_links);
         _checkForChanges();
 
-        Navigator.pop(context);
+        Navigator.pop(context, {
+          'reload': true,
+          'bookInPlan': updatedBook,
+        });
       }
     } catch (e) {
       if (mounted) {
@@ -289,7 +292,9 @@ class _BookInPlanScreenState extends State<BookInPlanScreen> {
                       )),
                 ],
               ));
-          if (shouldLeave == true && mounted) Navigator.of(context).pop();
+          if (shouldLeave == true && mounted) Navigator.of(context).pop(true);
+        } else {
+          Navigator.of(context).pop(true);
         }
       },
       child: Scaffold(
@@ -327,15 +332,19 @@ class _BookInPlanScreenState extends State<BookInPlanScreen> {
                       height: 16,
                     ),
                     _buildLinksSection(),
-                    const SizedBox(height: 16),
-                    _buildFilesSection(),
+                    if(_isEditing)...[
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      _buildFilesSection(),
+                    ],
                     const SizedBox(height: 24),
                     ElevatedButton(
                       onPressed: _isSaving ? null : _saveBook,
                       style: ButtonStyle(
                         backgroundColor:
-                        MaterialStateProperty.all<Color>(_priority.color),
-                        padding: MaterialStateProperty.all<EdgeInsets>(
+                        WidgetStateProperty.all<Color>(_priority.color),
+                        padding: WidgetStateProperty.all<EdgeInsets>(
                           const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
                         ),
                       ),
@@ -571,7 +580,7 @@ class _BookInPlanScreenState extends State<BookInPlanScreen> {
           duration: const Duration(seconds: 3),
         ),
       );
-    } on Exception catch (e) {
+    } on Exception {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

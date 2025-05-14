@@ -156,8 +156,7 @@ class _AboutCharacterScreenState extends State<AboutCharacterScreen> {
   }
 
   Map<String, dynamic> _createCharacterData(
-      String name, String role, String lastUpdate,
-      {String? mainImageUrl}) {
+      String name, String role, String lastUpdate) {
     return {
       'name': name,
       'age': _ageController.text.trim(),
@@ -458,9 +457,9 @@ class _AboutCharacterScreenState extends State<AboutCharacterScreen> {
                   ElevatedButton(
                     onPressed: _isSaving ? null : _saveCharacter,
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(
+                      backgroundColor: WidgetStateProperty.all<Color>(
                           const Color(0xFF89B0D9)),
-                      padding: MaterialStateProperty.all<EdgeInsets>(
+                      padding: WidgetStateProperty.all<EdgeInsets>(
                         const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
                       ),
                     ),
@@ -490,8 +489,7 @@ class _CharacterMainPicWidget extends StatefulWidget {
   String characterId;
 
   _CharacterMainPicWidget(
-      {super.key,
-      required this.mainPicUrl,
+      {required this.mainPicUrl,
       required this.userId,
       required this.bookId,
       required this.characterId});

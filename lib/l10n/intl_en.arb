@@ -193,6 +193,7 @@
   "category_abandoned": "Abandoned",
   "category_reRead": "Want to reread",
   "category_disliked": "Disliked",
+  "category_in_process": "In process",
   "categories": "Categories",
   "no_categories": "No categories:(",
   "selectColor": "Select color",
@@ -204,5 +205,6 @@
   "select_start_date": "First select the start date",
   "general_impression": "General impression",
   "review_and_criteria": "Review and criteria",
-  "moments": "Moments"
+  "moments": "Moments",
+  "review": "Review"
 }

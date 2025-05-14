@@ -10,11 +10,11 @@ class CharacterProfileWidget extends StatefulWidget {
   final String characterId;
 
   const CharacterProfileWidget({
-    Key? key,
+    super.key,
     required this.userId,
     required this.bookId,
     required this.characterId,
-  }) : super(key: key);
+  });
 
   @override
   _CharacterProfileWidgetState createState() => _CharacterProfileWidgetState();
@@ -242,8 +242,8 @@ class _CharacterProfileWidgetState extends State<CharacterProfileWidget> {
                       ElevatedButton(
                         onPressed: _isSaving ? null : _saveCharacterProfile,
                         style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(const Color(0xFFA5C6EA)),
-                          padding: MaterialStateProperty.all<EdgeInsets>(
+                          backgroundColor: WidgetStateProperty.all<Color>(const Color(0xFFA5C6EA)),
+                          padding: WidgetStateProperty.all<EdgeInsets>(
                             const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
                           ),
                         ),

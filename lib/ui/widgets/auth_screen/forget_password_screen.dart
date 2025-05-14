@@ -56,6 +56,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                 const SizedBox(height: 20,),
                 _InputField(
                   controller: _emailController,
+                  obscureText: false,
                   label: S.of(context).email,
                   errorText: _emailError,
                   keyboardType: TextInputType.emailAddress,
@@ -102,10 +103,8 @@ class _InputField extends StatelessWidget {
     required this.controller,
     required this.label,
     this.errorText,
-    this.obscureText = false,
-    this.suffixIcon,
     this.keyboardType,
-    this.onChanged,
+    this.onChanged, required this.obscureText, this.suffixIcon,
   });
 
   @override

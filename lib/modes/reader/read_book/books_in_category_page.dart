@@ -13,10 +13,10 @@ class BooksInCategoryPage extends StatefulWidget {
   final String? initialSearchQuery;
 
   const BooksInCategoryPage({
-    Key? key,
+    super.key,
     required this.category,
     this.initialSearchQuery,
-  }) : super(key: key);
+  });
 
   @override
   State<BooksInCategoryPage> createState() => _BooksInCategoryPageState();
@@ -124,7 +124,7 @@ class _BooksInCategoryPageState extends State<BooksInCategoryPage> {
     return books.where((book) =>
     book.title.toLowerCase().contains(query) ||
         book.author.toLowerCase().contains(query) ||
-        (book.description?.toLowerCase().contains(query) ?? false)).toList();
+        (book.description.toLowerCase().contains(query) ?? false)).toList();
   }
 
   @override
@@ -274,18 +274,6 @@ class _BooksInCategoryPageState extends State<BooksInCategoryPage> {
                                       );
 
                                       if (result is Map && result['reload'] == true) {
-                                        final FinishedBook book = result['book'];
-                                        final BookCategory category = result['category'];
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (_) => ReadBookScreen(
-                                              userId: _userId!,
-                                              bookCategory: category,
-                                              book: book,
-                                            ),
-                                          ),
-                                        );
                                         setState(() {
                                           _futureBooks = _loadBooks();
                                         });
@@ -308,7 +296,7 @@ class _BooksInCategoryPageState extends State<BooksInCategoryPage> {
                                               ),
                                               child: Center(
                                                 child: Text(
-                                                  book.overallRating.toString(),
+                                                  book.overallRating ?? '???',
                                                   style: theme.textTheme.bodyLarge?.copyWith(
                                                     color: book.ratingColor,
                                                     fontWeight: FontWeight.bold,

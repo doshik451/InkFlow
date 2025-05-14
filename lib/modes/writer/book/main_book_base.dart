@@ -7,7 +7,6 @@ import 'package:inkflow/modes/writer/book/plot/plot_list_screen.dart';
 import '../../../models/book_writer_model.dart';
 import 'about_book_screen.dart';
 
-import '../../../generated/l10n.dart';
 
 class MainBookBase extends StatefulWidget {
   final Book book;
@@ -36,10 +35,8 @@ class _MainBookBaseState extends State<MainBookBase> with SingleTickerProviderSt
       ),
     );
 
-    if (widget.book.id != null) {
-      _animationController.forward();
+    _animationController.forward();
     }
-  }
 
   @override
   void dispose() {

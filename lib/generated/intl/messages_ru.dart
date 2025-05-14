@@ -85,6 +85,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "category_abandoned": MessageLookupByLibrary.simpleMessage("Заброшено"),
     "category_disliked": MessageLookupByLibrary.simpleMessage("Не понравилось"),
     "category_favorite": MessageLookupByLibrary.simpleMessage("Любимое"),
+    "category_in_process": MessageLookupByLibrary.simpleMessage("В процессе"),
     "category_reRead": MessageLookupByLibrary.simpleMessage("Хочу перечитать"),
     "category_read": MessageLookupByLibrary.simpleMessage("Прочитано"),
     "change_lang": MessageLookupByLibrary.simpleMessage("Сменить язык"),
@@ -295,6 +296,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Обязательное поле пустое",
     ),
     "reset_password": MessageLookupByLibrary.simpleMessage("Сброс пароля"),
+    "review": MessageLookupByLibrary.simpleMessage("Отзыв"),
     "review_and_criteria": MessageLookupByLibrary.simpleMessage(
       "Отзыв и критерии",
     ),

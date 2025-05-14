@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import '../plans_to_read/plans_list_screen.dart';
 import '../read_book/category_list_screen.dart';
 
-import '../../../generated/l10n.dart';
 import '../../general/profile_screen.dart';
 
 class MainScreenBaseReader extends StatefulWidget {

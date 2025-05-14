@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:inkflow/modes/writer/book/books_list_screen.dart';
 import '../idea/ideas_list_screen.dart';
 
-import '../../../generated/l10n.dart';
 import '../../general/profile_screen.dart';
 
 class MainScreenBaseWriter extends StatefulWidget {

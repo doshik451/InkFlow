@@ -166,7 +166,7 @@ class _LanguageOption extends StatelessWidget {
 }
 
 class _UserDataWidget extends StatefulWidget {
-  const _UserDataWidget({super.key});
+  const _UserDataWidget();
 
   @override
   State<_UserDataWidget> createState() => _UserDataWidgetState();

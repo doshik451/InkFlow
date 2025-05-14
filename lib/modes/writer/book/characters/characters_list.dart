@@ -192,7 +192,7 @@ class _CharacterItemCard extends StatelessWidget {
   final String userId;
   final String bookId;
   static const duration = Duration(milliseconds: 500);
-  const _CharacterItemCard({super.key, required this.character, required this.index, required this.userId, required this.bookId});
+  const _CharacterItemCard({required this.character, required this.index, required this.userId, required this.bookId});
 
   @override
   Widget build(BuildContext context) {

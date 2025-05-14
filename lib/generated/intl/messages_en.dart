@@ -83,6 +83,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "category_abandoned": MessageLookupByLibrary.simpleMessage("Abandoned"),
     "category_disliked": MessageLookupByLibrary.simpleMessage("Disliked"),
     "category_favorite": MessageLookupByLibrary.simpleMessage("Favorite"),
+    "category_in_process": MessageLookupByLibrary.simpleMessage("In process"),
     "category_reRead": MessageLookupByLibrary.simpleMessage("Want to reread"),
     "category_read": MessageLookupByLibrary.simpleMessage("Read"),
     "change_lang": MessageLookupByLibrary.simpleMessage("Change language"),
@@ -291,6 +292,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Required field is empty",
     ),
     "reset_password": MessageLookupByLibrary.simpleMessage("Reset password"),
+    "review": MessageLookupByLibrary.simpleMessage("Review"),
     "review_and_criteria": MessageLookupByLibrary.simpleMessage(
       "Review and criteria",
     ),

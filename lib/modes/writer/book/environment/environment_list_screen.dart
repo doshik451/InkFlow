@@ -193,7 +193,7 @@ class _EnvironmentItemCard extends StatelessWidget {
   final String userId;
   final String bookId;
   static const duration = Duration(milliseconds: 500);
-  const _EnvironmentItemCard({super.key, required this.environment, required this.index, required this.userId, required this.bookId});
+  const _EnvironmentItemCard({required this.environment, required this.index, required this.userId, required this.bookId});
 
   @override
   Widget build(BuildContext context) {

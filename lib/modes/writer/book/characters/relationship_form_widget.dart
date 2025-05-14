@@ -11,11 +11,11 @@ class RelationshipFormWidget extends StatefulWidget {
   final String characterId;
 
   const RelationshipFormWidget({
-    Key? key,
+    super.key,
     required this.userId,
     required this.bookId,
     required this.characterId,
-  }) : super(key: key);
+  });
 
   @override
   _RelationshipFormWidgetState createState() => _RelationshipFormWidgetState();
@@ -321,14 +321,17 @@ class _RelationshipFormWidgetState extends State<RelationshipFormWidget> {
       final character = _characters
           .firstWhere((c) => c.id == _getSelectedCharacterId(groupType));
       final currentCharacter =
-          _characters.firstWhere((c) => c.id == widget.characterId);
+      _characters.firstWhere((c) => c.id == widget.characterId);
+
+      final relationId = DateTime.now().millisecondsSinceEpoch.toString();
 
       final newRelation = {
         'characterId': _getSelectedCharacterId(groupType),
         'characterName': character.name,
         'characterRelation': _getCharacterRelationController(groupType).text,
         'selectedCharacterRelation':
-            _getSelectedCharacterRelationController(groupType).text,
+        _getSelectedCharacterRelationController(groupType).text,
+        'relationId': relationId,
       };
 
       final groupRef = FirebaseDatabase.instance.ref(
@@ -339,9 +342,10 @@ class _RelationshipFormWidgetState extends State<RelationshipFormWidget> {
         'characterId': widget.characterId,
         'characterName': currentCharacter.name,
         'characterRelation':
-            _getSelectedCharacterRelationController(groupType).text,
+        _getSelectedCharacterRelationController(groupType).text,
         'selectedCharacterRelation':
-            _getCharacterRelationController(groupType).text,
+        _getCharacterRelationController(groupType).text,
+        'relationId': relationId,
       };
 
       final targetGroupRef = FirebaseDatabase.instance.ref(
@@ -390,13 +394,17 @@ class _RelationshipFormWidgetState extends State<RelationshipFormWidget> {
     setState(() => _isSaving = true);
 
     try {
+      // Получаем текущую связь, чтобы сохранить relationId
+      final currentRelation = _getRelationsList(groupType)[_editingIndex];
+
       final updatedRelation = {
         'characterId': selectedCharacterId,
         'characterName':
-            _characters.firstWhere((c) => c.id == selectedCharacterId).name,
+        _characters.firstWhere((c) => c.id == selectedCharacterId).name,
         'characterRelation': _getCharacterRelationController(groupType).text,
         'selectedCharacterRelation':
-            _getSelectedCharacterRelationController(groupType).text,
+        _getSelectedCharacterRelationController(groupType).text,
+        'relationId': currentRelation['relationId'], // Сохраняем существующий ID
       };
 
       final groupRef = FirebaseDatabase.instance.ref(
@@ -464,14 +472,16 @@ class _RelationshipFormWidgetState extends State<RelationshipFormWidget> {
       if (!snapshot.exists) return;
 
       final relationsMap =
-          Map<String, dynamic>.from(snapshot.value as Map<dynamic, dynamic>);
+      Map<String, dynamic>.from(snapshot.value as Map<dynamic, dynamic>);
       final relationKey = relationsMap.keys.elementAt(index);
+      final relationToDelete = relationsMap[relationKey];
+      final relationId = relationToDelete['relationId'];
 
+      // Удаляем связь у текущего персонажа
       await relationsRef.child(relationKey).remove();
 
-      final relation = _getRelationsList(groupType)[index];
-      final targetCharacterId = relation['characterId'];
-
+      // Удаляем соответствующую связь у целевого персонажа
+      final targetCharacterId = relationToDelete['characterId'];
       if (targetCharacterId != null) {
         final targetRef = FirebaseDatabase.instance.ref(
             'books/${widget.userId}/${widget.bookId}/characters/$targetCharacterId/questionnaire/relationships/$groupType');
@@ -481,14 +491,16 @@ class _RelationshipFormWidgetState extends State<RelationshipFormWidget> {
           final targetRelations = Map<String, dynamic>.from(
               targetSnapshot.value as Map<dynamic, dynamic>);
 
+          // Ищем связь с таким же relationId
           for (final entry in targetRelations.entries) {
-            if (entry.value['characterId'] == widget.characterId) {
+            if (entry.value['relationId'] == relationId) {
               await targetRef.child(entry.key).remove();
               break;
             }
           }
         }
       }
+
       await _updateBook();
 
       setState(() {
@@ -633,9 +645,9 @@ class _RelationshipFormWidgetState extends State<RelationshipFormWidget> {
                                   child: ElevatedButton(
                                     onPressed: _isSaving ? null : _saveGeneralInfo,
                                     style: ButtonStyle(
-                                      backgroundColor: MaterialStateProperty.all<Color>(
+                                      backgroundColor: WidgetStateProperty.all<Color>(
                                           const Color(0xFFFED1BD)),
-                                      padding: MaterialStateProperty.all<EdgeInsets>(
+                                      padding: WidgetStateProperty.all<EdgeInsets>(
                                         const EdgeInsets.symmetric(
                                             horizontal: 24, vertical: 6),
                                       ),
@@ -818,9 +830,9 @@ class _RelationshipFormWidgetState extends State<RelationshipFormWidget> {
                           }
                         },
                         style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
+                          backgroundColor: WidgetStateProperty.all<Color>(
                               const Color(0xFFFED1BD)),
-                          padding: MaterialStateProperty.all<EdgeInsets>(
+                          padding: WidgetStateProperty.all<EdgeInsets>(
                             const EdgeInsets.symmetric(
                                 horizontal: 24, vertical: 6),
                           ),

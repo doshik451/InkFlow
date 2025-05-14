@@ -31,6 +31,7 @@ class BookFileService {
         XTypeGroup(
           label: S.of(context).add_book_file,
           extensions: ['pdf', 'doc', 'docx', 'txt', 'epub', 'fb2'],
+          mimeTypes: ['application/x-fictionbook+xml', 'text/xml'],
         ),
       ];
 

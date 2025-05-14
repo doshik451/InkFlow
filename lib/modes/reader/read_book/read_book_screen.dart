@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/services.dart';
+import 'package:inkflow/modes/reader/read_book/review_screen.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -11,14 +12,13 @@ import '../../general/base/confirm_delete_base.dart';
 import '../../writer/book/book_file_service.dart';
 import 'package:collection/collection.dart';
 
-import 'books_in_category_page.dart';
-
 class ReadBookScreen extends StatefulWidget {
   final FinishedBook? book;
   final BookCategory bookCategory;
   final String userId;
 
-  ReadBookScreen({this.book, required this.userId, required this.bookCategory});
+  const ReadBookScreen(
+      {super.key, this.book, required this.userId, required this.bookCategory});
 
   @override
   _ReadBookScreenState createState() => _ReadBookScreenState();
@@ -29,7 +29,6 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
   late TextEditingController _titleController;
   late TextEditingController _authorController;
   late TextEditingController _descriptionController;
-  late TextEditingController _overallRatingController;
   late TextEditingController _linkController;
   final DatabaseReference _databaseReference = FirebaseDatabase.instance.ref();
   late String _startDate;
@@ -46,7 +45,6 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
   late String _initialTitle;
   late String _initialAuthorName;
   late String _initialDescription;
-  late String _initialRating;
   late String _initialStartDate;
   late String _initialEndDate;
   late String _initialCategoryId;
@@ -62,12 +60,12 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
     _authorController = TextEditingController(text: widget.book?.author ?? '');
     _descriptionController =
         TextEditingController(text: widget.book?.description ?? '');
-    _overallRatingController =
-        TextEditingController(text: widget.book?.overallRating ?? '50');
+
     _linkController = TextEditingController();
 
     _startDate = widget.book?.startDate ?? '';
     _endDate = widget.book?.endDate ?? '';
+    _links = widget.book?.links ?? [];
 
     _selectedCategory = widget.bookCategory;
     _categoriesFuture = _loadCategories();
@@ -75,7 +73,6 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
     _initialTitle = _titleController.text;
     _initialAuthorName = _authorController.text;
     _initialDescription = _descriptionController.text;
-    _initialRating = _overallRatingController.text;
     _initialStartDate = _startDate;
     _initialEndDate = _endDate;
     _initialCategoryId = _selectedCategory.id;
@@ -96,7 +93,6 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
     _titleController.dispose();
     _authorController.dispose();
     _descriptionController.dispose();
-    _overallRatingController.dispose();
     _linkController.dispose();
     super.dispose();
   }
@@ -106,7 +102,6 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
     final hasDescriptionChanged =
         _descriptionController.text != _initialDescription;
     final hasAuthorNameChanged = _authorController.text != _initialAuthorName;
-    final hasRatingChanged = _overallRatingController.text != _initialRating;
     final hasStartDateChanged = _startDate != _initialStartDate;
     final hasEndDateChanged = _endDate != _initialEndDate;
     final hasCategoryChanged = _selectedCategory.id != _initialCategoryId;
@@ -117,7 +112,6 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
       _hasUnsavedData = hasTitleChanged ||
           hasDescriptionChanged ||
           hasAuthorNameChanged ||
-          hasRatingChanged ||
           hasStartDateChanged ||
           hasEndDateChanged ||
           hasCategoryChanged ||
@@ -136,17 +130,17 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
     final customCategories = <BookCategory>[];
 
     if (defaultSnap.exists) {
-      defaultSnap.children.forEach((child) {
+      for (var child in defaultSnap.children) {
         defaultCategories.add(BookCategory.fromMap(
             child.key!, Map<String, dynamic>.from(child.value as Map)));
-      });
+      }
     }
 
     if (customSnap.exists) {
-      customSnap.children.forEach((child) {
+      for (var child in customSnap.children) {
         customCategories.add(BookCategory.fromMap(
             child.key!, Map<String, dynamic>.from(child.value as Map)));
-      });
+      }
     }
 
     return [...defaultCategories, ...customCategories];
@@ -155,9 +149,8 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
   Future<void> _saveBook() async {
     final title = _titleController.text.trim();
     final authorName = _authorController.text.trim();
-    final overallRating = _overallRatingController.text.trim();
 
-    if (title.isEmpty || authorName.isEmpty || overallRating.isEmpty) {
+    if (title.isEmpty || authorName.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(S.of(context).requiredField)),
       );
@@ -175,16 +168,14 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
           'description': _descriptionController.text.trim(),
           'startDate': _startDate,
           'endDate': _endDate,
-          'overallRating': overallRating,
           'categoryId': _selectedCategory.id,
           'files': _files,
           'links': _links,
         });
         bookId = widget.book!.id;
       } else {
-        final ref = await _databaseReference
-            .child('finishedBooks/${widget.userId}')
-            .push();
+        final ref =
+            _databaseReference.child('finishedBooks/${widget.userId}').push();
         await ref.set({
           'userId': widget.userId,
           'title': title,
@@ -192,7 +183,6 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
           'description': _descriptionController.text.trim(),
           'startDate': _startDate,
           'endDate': _endDate,
-          'overallRating': overallRating,
           'categoryId': _selectedCategory.id,
           'files': _files,
           'links': _links,
@@ -205,7 +195,6 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
           _initialTitle = title;
           _initialDescription = _descriptionController.text.trim();
           _initialAuthorName = authorName;
-          _initialRating = overallRating;
           _initialStartDate = _startDate;
           _initialEndDate = _endDate;
           _initialCategoryId = _selectedCategory.id;
@@ -225,7 +214,6 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
           'description': _descriptionController.text.trim(),
           'startDate': _startDate,
           'endDate': _endDate,
-          'overallRating': overallRating,
           'categoryId': _selectedCategory.id,
           'files': _files,
           'links': _links,
@@ -276,25 +264,28 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
                   onPressed: () => Navigator.of(context).pop(true),
                   child: Text(
                     S.of(context).no,
-                    style: TextStyle(color: Theme.of(context).colorScheme.tertiary),
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.tertiary),
                   ),
                 ),
                 TextButton(
-                  onPressed: () {
+                  onPressed: () async {
                     Navigator.of(context).pop(true);
-                    _saveBook();
                   },
                   child: Text(
                     S.of(context).save,
-                    style: TextStyle(color: Theme.of(context).colorScheme.tertiary),
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.tertiary),
                   ),
                 ),
               ],
             ),
           );
-          if (shouldLeave == true && mounted) Navigator.of(context).pop(true);
+          if (shouldLeave == true && mounted) await _saveBook();
         } else {
-          Navigator.of(context).pop(true);
+          Navigator.pop(context, {
+            'reload': true
+          });
         }
       },
       child: Scaffold(
@@ -322,374 +313,363 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
             final categories = snapshot.data!;
 
             return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 8.0,
+              ),
               child: Form(
                 key: _formKey,
                 child: SingleChildScrollView(
-                  child: Card(
-                    color: Color.lerp(
-                        Color(int.parse(_selectedCategory.colorCode)),
-                        Colors.white,
-                        0.7),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                        side: BorderSide(
-                            color:
-                                Color(int.parse(_selectedCategory.colorCode)))),
-                    elevation: 4,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          const SizedBox(height: 16),
-                          _buildTextField(
-                              S.of(context).workName, _titleController),
-                          const SizedBox(height: 16),
-                          _buildTextField(
-                              S.of(context).author, _authorController),
-                          const SizedBox(height: 16),
-                          _buildTextField(
-                              S.of(context).description, _descriptionController,
-                              maxLines: 5),
-                          const SizedBox(height: 16),
-                          Row(
+                  child: Column(
+                    children: [
+                      Card(
+                        color: Color.lerp(
+                            Color(int.parse(_selectedCategory.colorCode)),
+                            Colors.white,
+                            0.7),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            side: BorderSide(
+                                color: Color(
+                                    int.parse(_selectedCategory.colorCode)))),
+                        elevation: 4,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  S.of(context).reading_dates,
-                                  style: const TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              ),
-                              const SizedBox(width: 8),
+                              const SizedBox(height: 16),
+                              _buildTextField(
+                                  S.of(context).workName, _titleController),
+                              const SizedBox(height: 16),
+                              _buildTextField(
+                                  S.of(context).author, _authorController),
+                              const SizedBox(height: 16),
+                              _buildTextField(S.of(context).description,
+                                  _descriptionController,
+                                  maxLines: 5),
+                              const SizedBox(height: 16),
                               Row(
                                 children: [
-                                  GestureDetector(
-                                    onTap: () async {
-                                      final date = await _showCustomDatePicker(
-                                        context: context,
-                                        initialDate: _startDate.isEmpty
-                                            ? DateTime.now()
-                                            : DateTime.parse(_startDate),
-                                        firstDate: DateTime(2000),
-                                        lastDate: DateTime(2100),
-                                      );
-
-                                      if (date != null && mounted) {
-                                        setState(() {
-                                          _startDate = DateFormat('yyyy-MM-dd')
-                                              .format(date);
-                                        });
-                                      }
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-                                      child: Text(
-                                        _startDate.isEmpty
-                                            ? '...'
-                                            : _formatDate(_startDate),
-                                        style: TextStyle(
-                                          fontSize: _startDate.isEmpty ? 20 : 16,
-                                          color: _startDate.isEmpty
-                                              ? Colors.grey
-                                              : Colors.black,
-                                          decoration: TextDecoration.underline,
-                                          decorationColor: Colors.black,
-                                        ),
-                                      ),
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      S.of(context).reading_dates,
+                                      style: const TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w500),
                                     ),
                                   ),
+                                  const SizedBox(width: 8),
+                                  Row(
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () async {
+                                          final date =
+                                              await _showCustomDatePicker(
+                                            context: context,
+                                            initialDate: _startDate.isEmpty
+                                                ? DateTime.now()
+                                                : DateTime.parse(_startDate),
+                                            firstDate: DateTime(2000),
+                                            lastDate: DateTime(2100),
+                                          );
 
-                                  const Padding(
-                                      padding:
-                                      EdgeInsets.symmetric(horizontal: 8),
-                                      child: Text('—',
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold))),
-
-                                  GestureDetector(
-                                    onTap: () async {
-                                      if (_startDate.isEmpty) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                            content: Text(
-                                                S.of(context).select_start_date)));
-                                        return;
-                                      }
-
-                                      final initial = _endDate.isEmpty
-                                          ? DateTime.tryParse(_startDate)
-                                          : DateTime.tryParse(_endDate);
-
-                                      final date = await _showCustomDatePicker(
-                                        context: context,
-                                        initialDate: initial ?? DateTime.now(),
-                                        firstDate:
-                                        DateTime.tryParse(_startDate)!,
-                                        lastDate: DateTime(2101),
-                                      );
-
-                                      if (date != null && mounted) {
-                                        setState(() {
-                                          _endDate = DateFormat('yyyy-MM-dd')
-                                              .format(date);
-                                          _checkForChanges();
-                                        });
-                                      }
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-                                      child: Text(
-                                        _endDate.isEmpty ? '...' : _formatDate(_endDate),
-                                        style: TextStyle(
-                                            fontSize: _endDate.isEmpty ? 20 : 16,
-                                            color: Colors.black,
-                                            decoration: TextDecoration.underline,
-                                            decorationColor: Colors.black,
-                                            decorationThickness: 1
+                                          if (date != null && mounted) {
+                                            setState(() {
+                                              _startDate =
+                                                  DateFormat('yyyy-MM-dd')
+                                                      .format(date);
+                                            });
+                                          }
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 16.0, vertical: 8),
+                                          child: Text(
+                                            _startDate.isEmpty
+                                                ? '...'
+                                                : _formatDate(_startDate),
+                                            style: TextStyle(
+                                              fontSize:
+                                                  _startDate.isEmpty ? 20 : 16,
+                                              color: _startDate.isEmpty
+                                                  ? Colors.grey
+                                                  : Colors.black,
+                                              decoration:
+                                                  TextDecoration.underline,
+                                              decorationColor: Colors.black,
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                    ),
+                                      const Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 8),
+                                          child: Text('—',
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 16,
+                                                  fontWeight:
+                                                      FontWeight.bold))),
+                                      GestureDetector(
+                                        onTap: () async {
+                                          if (_startDate.isEmpty) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(SnackBar(
+                                                    content: Text(S
+                                                        .of(context)
+                                                        .select_start_date)));
+                                            return;
+                                          }
+
+                                          final initial = _endDate.isEmpty
+                                              ? DateTime.tryParse(_startDate)
+                                              : DateTime.tryParse(_endDate);
+
+                                          final date =
+                                              await _showCustomDatePicker(
+                                            context: context,
+                                            initialDate:
+                                                initial ?? DateTime.now(),
+                                            firstDate:
+                                                DateTime.tryParse(_startDate)!,
+                                            lastDate: DateTime(2101),
+                                          );
+
+                                          if (date != null && mounted) {
+                                            setState(() {
+                                              _endDate =
+                                                  DateFormat('yyyy-MM-dd')
+                                                      .format(date);
+                                              _checkForChanges();
+                                            });
+                                          }
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 16.0, vertical: 8),
+                                          child: Text(
+                                            _endDate.isEmpty
+                                                ? '...'
+                                                : _formatDate(_endDate),
+                                            style: TextStyle(
+                                                fontSize:
+                                                    _endDate.isEmpty ? 20 : 16,
+                                                color: Colors.black,
+                                                decoration:
+                                                    TextDecoration.underline,
+                                                decorationColor: Colors.black,
+                                                decorationThickness: 1),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
-                            ],
-                          ),
-
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          _buildLinksSection(),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          _buildFilesSection(),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          DropdownButtonFormField<BookCategory>(
-                            value: _selectedCategory,
-                            decoration: InputDecoration(
-                              labelText: S.of(context).categories,
-                              labelStyle: const TextStyle(color: Colors.black),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Color(
-                                        int.parse(_selectedCategory.colorCode)),
-                                    width: 2),
-                                borderRadius: BorderRadius.circular(12),
+                              const SizedBox(
+                                height: 16,
                               ),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Color(
-                                        int.parse(_selectedCategory.colorCode)),
-                                    width: 1),
-                                borderRadius: BorderRadius.circular(12),
+                              _buildLinksSection(),
+                              if (_isEditing) ...[
+                                const SizedBox(
+                                  height: 16,
+                                ),
+                                _buildFilesSection(),
+                              ],
+                              const SizedBox(
+                                height: 16,
                               ),
-                            ),
-                            dropdownColor: Color.lerp(
-                                Color(int.parse(_selectedCategory.colorCode)),
-                                Colors.white,
-                                0.7),
-                            style: const TextStyle(color: Colors.black),
-                            items: categories.map((category) {
-                              final isSelected = category == _selectedCategory;
-                              return DropdownMenuItem(
-                                value: category,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: isSelected
-                                        ? Color(int.parse(
-                                        _selectedCategory.colorCode))
-                                        : Colors.transparent,
-                                    borderRadius: BorderRadius.circular(8),
+                              DropdownButtonFormField<BookCategory>(
+                                value: _selectedCategory,
+                                decoration: InputDecoration(
+                                  labelText: S.of(context).categories,
+                                  labelStyle:
+                                      const TextStyle(color: Colors.black),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Color(int.parse(
+                                            _selectedCategory.colorCode)),
+                                        width: 2),
+                                    borderRadius: BorderRadius.circular(12),
                                   ),
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 3, horizontal: 12),
-                                  child: Text(
-                                    category.getLocalizedTitle(context),
-                                    style: TextStyle(
-                                      fontWeight: isSelected
-                                          ? FontWeight.bold
-                                          : FontWeight.normal,
-                                    ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Color(int.parse(
+                                            _selectedCategory.colorCode)),
+                                        width: 1),
+                                    borderRadius: BorderRadius.circular(12),
                                   ),
                                 ),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              if (value != null) {
-                                setState(() {
-                                  _selectedCategory = value;
-                                  _checkForChanges();
-                                });
-                              }
-                            },
-                          ),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.baseline,
-                            textBaseline: TextBaseline.alphabetic,
-                            children: [
-                              Text(
-                                '${S.of(context).general_impression}:',
-                                style: const TextStyle(fontSize: 16, color: Colors.black),
-                              ),
-                              const SizedBox(width: 8),
-                              SizedBox(
-                                width: 65,
-                                child: TextFormField(
-                                  controller: _overallRatingController,
-                                  decoration: InputDecoration(
-                                    border: const UnderlineInputBorder(),
-                                    focusedBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Color(int.parse(
-                                                _selectedCategory.colorCode)))),
-                                    contentPadding: EdgeInsets.zero,
-                                    isDense: true,
-                                    suffix: const Padding(
-                                      padding: EdgeInsets.only(left: 4),
+                                dropdownColor: Color.lerp(
+                                    Color(
+                                        int.parse(_selectedCategory.colorCode)),
+                                    Colors.white,
+                                    0.7),
+                                style: const TextStyle(color: Colors.black),
+                                items: categories.map((category) {
+                                  final isSelected =
+                                      category == _selectedCategory;
+                                  return DropdownMenuItem(
+                                    value: category,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: isSelected
+                                            ? Color(int.parse(
+                                                _selectedCategory.colorCode))
+                                            : Colors.transparent,
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 3, horizontal: 12),
                                       child: Text(
-                                        '/100',
-                                        style: TextStyle(color: Colors.grey),
+                                        category.getLocalizedTitle(context),
+                                        style: TextStyle(
+                                          fontWeight: isSelected
+                                              ? FontWeight.bold
+                                              : FontWeight.normal,
+                                        ),
                                       ),
                                     ),
-                                    counterText: '',
-                                  ),
-                                  cursorColor: Color(
-                                      int.parse(_selectedCategory.colorCode)),
-                                  style: const TextStyle(fontSize: 16, color: Colors.black),
-                                  textAlign: TextAlign.end,
-                                  keyboardType: TextInputType.number,
-                                  maxLength: 3,
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly,
-                                    TextInputFormatter.withFunction(
-                                            (oldValue, newValue) {
-                                          if (newValue.text.isEmpty)
-                                            return newValue;
-                                          final value = int.tryParse(newValue.text);
-                                          if (value == null ||
-                                              value < 0 ||
-                                              value > 100) return oldValue;
-                                          return newValue;
-                                        }),
-                                  ],
-                                ),
+                                  );
+                                }).toList(),
+                                onChanged: (value) {
+                                  if (value != null) {
+                                    setState(() {
+                                      _selectedCategory = value;
+                                      _checkForChanges();
+                                    });
+                                  }
+                                },
                               ),
+                              if (_isEditing) ...[
+                                const SizedBox(
+                                  height: 16,
+                                ),
+                                Card(
+                                  elevation: 0,
+                                  color: Color.lerp(
+                                      Color(int.parse(
+                                          _selectedCategory.colorCode)),
+                                      Colors.white,
+                                      0.3),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    side: BorderSide(
+                                      color: Color(int.parse(
+                                          _selectedCategory.colorCode)),
+                                      width: 1,
+                                    ),
+                                  ),
+                                  child: ListTile(
+                                    contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                    ),
+                                    title: Text(
+                                      S.of(context).review_and_criteria,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.black),
+                                    ),
+                                    onTap: () async {
+                                      final result = await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => ReviewScreen(
+                                            userId: widget.userId,
+                                            category: _selectedCategory,
+                                            book: widget.book!,
+                                          ),
+                                        ),
+                                      );
+
+                                      if (result is Map && result['reload'] == true) {
+                                        setState(() {
+                                          _hasUnsavedData = true;
+                                        });
+                                      }
+                                    },
+                                    trailing: const Icon(
+                                      Icons.chevron_right,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 16,
+                                ),
+                                Card(
+                                  elevation: 0,
+                                  color: Color.lerp(
+                                      Color(int.parse(
+                                          _selectedCategory.colorCode)),
+                                      Colors.white,
+                                      0.3),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    side: BorderSide(
+                                      color: Color(int.parse(
+                                          _selectedCategory.colorCode)),
+                                      width: 1,
+                                    ),
+                                  ),
+                                  child: ListTile(
+                                    contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                    ),
+                                    title: Text(
+                                      S.of(context).moments,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.black),
+                                    ),
+                                    onTap: () {
+                                      //todo
+                                    },
+                                    trailing: const Icon(
+                                      Icons.chevron_right,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                              const SizedBox(
+                                height: 24,
+                              ),
+                              ElevatedButton(
+                                onPressed: _saveBook,
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      WidgetStateProperty.all<Color>(Color(
+                                          int.parse(
+                                              _selectedCategory.colorCode))),
+                                  padding: WidgetStateProperty.all<EdgeInsets>(
+                                    const EdgeInsets.symmetric(
+                                        horizontal: 24, vertical: 6),
+                                  ),
+                                ),
+                                child: Text(
+                                  S.of(context).save,
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              )
                             ],
                           ),
-                          if(_isEditing) ...[
-                            const SizedBox(
-                              height: 16,
-                            ),
-                            Card(
-                              elevation: 0,
-                              color: Color.lerp(
-                                  Color(int.parse(_selectedCategory.colorCode)), Colors.white,
-                                  0.3),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                side: BorderSide(
-                                  color: Color(int.parse(_selectedCategory.colorCode)),
-                                  width: 1,
-                                ),
-                              ),
-                              child: ListTile(
-                                contentPadding: const EdgeInsets
-                                    .symmetric(
-                                  horizontal: 16,
-                                ),
-                                title: Text(
-                                  S.of(context).review_and_criteria,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.black),
-                                ),
-                                onTap: () {
-                                  //todo
-                                },
-                                trailing: const Icon(
-                                  Icons.chevron_right,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 16,
-                            ),
-                            Card(
-                              elevation: 0,
-                              color: Color.lerp(
-                                  Color(int.parse(_selectedCategory.colorCode)), Colors.white,
-                                  0.3),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                side: BorderSide(
-                                  color: Color(int.parse(_selectedCategory.colorCode)),
-                                  width: 1,
-                                ),
-                              ),
-                              child: ListTile(
-                                contentPadding: const EdgeInsets
-                                    .symmetric(
-                                  horizontal: 16,
-                                ),
-                                title: Text(
-                                  S.of(context).moments,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.black),
-                                ),
-                                onTap: () {
-                                  //todo
-                                },
-                                trailing: const Icon(
-                                  Icons.chevron_right,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ),
-                          ],
-                          const SizedBox(
-                            height: 24,
-                          ),
-                          ElevatedButton(
-                            onPressed: _saveBook,
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  Color(
-                                      int.parse(_selectedCategory.colorCode))),
-                              padding: MaterialStateProperty.all<EdgeInsets>(
-                                const EdgeInsets.symmetric(
-                                    horizontal: 24, vertical: 6),
-                              ),
-                            ),
-                            child: Text(
-                              S.of(context).save,
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          )
-                        ],
+                        ),
                       ),
-                    ),
+                      const SizedBox(
+                        height: 24,
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -760,7 +740,10 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
                 overflow: TextOverflow.ellipsis,
               ),
               trailing: IconButton(
-                icon: const Icon(Icons.delete, color: Colors.black,),
+                icon: const Icon(
+                  Icons.delete,
+                  color: Colors.black,
+                ),
                 onPressed: () async {
                   final shouldDelete = await confirmDelete(context);
                   if (shouldDelete ?? false) {
@@ -825,13 +808,17 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
           )
         else
           ..._files.map((file) => ListTile(
-                title: Text(file, style: const TextStyle(color: Colors.black),),
+                title: Text(
+                  file,
+                  style: const TextStyle(color: Colors.black),
+                ),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     IconButton(
                       onPressed: () => _bookFileService.openSavedFile(file),
-                      icon: const Icon(Icons.remove_red_eye, color: Colors.black),
+                      icon:
+                          const Icon(Icons.remove_red_eye, color: Colors.black),
                     ),
                     IconButton(
                       icon: const Icon(Icons.download, color: Colors.black),
@@ -842,7 +829,10 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
                           : () => _downloadFile(file),
                     ),
                     IconButton(
-                      icon: const Icon(Icons.delete, color: Colors.black,),
+                      icon: const Icon(
+                        Icons.delete,
+                        color: Colors.black,
+                      ),
                       onPressed: () async {
                         final shouldDelete = await confirmDelete(context);
                         if (shouldDelete ?? false) {
@@ -932,7 +922,7 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
           duration: const Duration(seconds: 3),
         ),
       );
-    } on Exception catch (e) {
+    } on Exception {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('❌ ${S.of(context).an_error_occurred}'),
@@ -968,21 +958,21 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
                 onSurface: Colors.black,
               ),
               textTheme: Theme.of(context).textTheme.copyWith(
-                titleLarge: const TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
-                titleMedium: const TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w500,
-                ),
-                bodyLarge: const TextStyle(
-                  color: Colors.black,
-                ),
-                bodySmall: const TextStyle(
-                  color: Colors.grey,
-                ),
-              ),
+                    titleLarge: const TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    titleMedium: const TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    bodyLarge: const TextStyle(
+                      color: Colors.black,
+                    ),
+                    bodySmall: const TextStyle(
+                      color: Colors.grey,
+                    ),
+                  ),
               textButtonTheme: TextButtonThemeData(
                 style: TextButton.styleFrom(
                   foregroundColor: categoryColor,

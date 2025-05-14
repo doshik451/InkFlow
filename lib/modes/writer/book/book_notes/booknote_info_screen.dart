@@ -5,7 +5,6 @@ import 'package:inkflow/models/booknote_model.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../generated/l10n.dart';
-import '../../../../models/book_writer_model.dart';
 
 class BooknoteInfoScreen extends StatefulWidget {
   final Booknote? note;
@@ -219,8 +218,8 @@ class _BooknoteInfoScreenState extends State<BooknoteInfoScreen> {
                         ElevatedButton(
                           onPressed: _saveNote,
                           style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(const Color(0xFFA5C6EA)),
-                            padding: MaterialStateProperty.all<EdgeInsets>(
+                            backgroundColor: WidgetStateProperty.all<Color>(const Color(0xFFA5C6EA)),
+                            padding: WidgetStateProperty.all<EdgeInsets>(
                               const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
                             ),
                           ),

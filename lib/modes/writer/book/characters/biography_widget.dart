@@ -10,11 +10,11 @@ class BiographyWidget extends StatefulWidget {
   final String characterId;
 
   const BiographyWidget({
-    Key? key,
+    super.key,
     required this.userId,
     required this.bookId,
     required this.characterId,
-  }) : super(key: key);
+  });
 
   @override
   _BiographyWidgetState createState() => _BiographyWidgetState();
@@ -200,8 +200,8 @@ class _BiographyWidgetState extends State<BiographyWidget> {
                       ElevatedButton(
                         onPressed: _isSaving ? null : _saveBiography,
                         style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(const Color(0xFFC9A6D4)),
-                          padding: MaterialStateProperty.all<EdgeInsets>(
+                          backgroundColor: WidgetStateProperty.all<Color>(const Color(0xFFC9A6D4)),
+                          padding: WidgetStateProperty.all<EdgeInsets>(
                             const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
                           ),
                         ),

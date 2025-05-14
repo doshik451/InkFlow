@@ -96,8 +96,8 @@ class _CharacterReferencesScreenState extends State<CharacterReferencesScreen> {
                           child: ElevatedButton(
                             onPressed: _isLoading ? null : _saveAllReferences,
                             style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(const Color(0xFFA5C6EA)),
-                              padding: MaterialStateProperty.all<EdgeInsets>(
+                              backgroundColor: WidgetStateProperty.all<Color>(const Color(0xFFA5C6EA)),
+                              padding: WidgetStateProperty.all<EdgeInsets>(
                                 const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
                               ),
                             ),
@@ -230,7 +230,7 @@ class _CharacterReferencesScreenState extends State<CharacterReferencesScreen> {
         );
       }
     } catch (e) {
-      debugPrint("Error reloading character: $e");
+      debugPrint('Error reloading character: $e');
     }
   }
 }
@@ -697,8 +697,8 @@ class _CharacterReferenceCardState extends State<CharacterReferenceCard> {
   }
 
   Widget _buildLinkInputField() {
-    final TextEditingController _linkUrlController = TextEditingController();
-    final TextEditingController _linkLabelController = TextEditingController();
+    final TextEditingController linkUrlController = TextEditingController();
+    final TextEditingController linkLabelController = TextEditingController();
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -707,7 +707,7 @@ class _CharacterReferenceCardState extends State<CharacterReferenceCard> {
         child: Column(
           children: [
             TextFormField(
-              controller: _linkUrlController,
+              controller: linkUrlController,
               cursorColor: const Color(0xFFA5C6EA),
               style: const TextStyle(color: Colors.black),
               decoration: InputDecoration(
@@ -728,7 +728,7 @@ class _CharacterReferenceCardState extends State<CharacterReferenceCard> {
             ),
             const SizedBox(height: 8),
             TextFormField(
-              controller: _linkLabelController,
+              controller: linkLabelController,
               cursorColor: const Color(0xFFA5C6EA),
               style: const TextStyle(color: Colors.black),
               decoration: InputDecoration(
@@ -751,11 +751,11 @@ class _CharacterReferenceCardState extends State<CharacterReferenceCard> {
                 if (_linkFormKey.currentState!.validate() &&
                     _linkUrls.length < 5) {
                   setState(() {
-                    _linkUrls.add(_linkUrlController.text.trim());
+                    _linkUrls.add(linkUrlController.text.trim());
                     _linkCaptionControllers.add(TextEditingController(
-                        text: _linkLabelController.text.trim()));
-                    _linkUrlController.clear();
-                    _linkLabelController.clear();
+                        text: linkLabelController.text.trim()));
+                    linkUrlController.clear();
+                    linkLabelController.clear();
                     _showLinkInput = false;
                     _updateCurrentPage();
                   });
@@ -765,8 +765,8 @@ class _CharacterReferenceCardState extends State<CharacterReferenceCard> {
               icon: const Icon(Icons.check),
               label: Text(S.of(context).addLink),
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(const Color(0xFFA5C6EA)),
-                padding: MaterialStateProperty.all<EdgeInsets>(
+                backgroundColor: WidgetStateProperty.all<Color>(const Color(0xFFA5C6EA)),
+                padding: WidgetStateProperty.all<EdgeInsets>(
                   const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
                 ),
               ),

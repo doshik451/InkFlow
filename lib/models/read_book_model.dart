@@ -10,7 +10,7 @@ class FinishedBook {
   final String description;
   final String startDate;
   final String endDate;
-  final String overallRating; // 0–100
+  final String? overallRating; // 0–100
   final String personalReview;
   final BookCategory category;
   final List<BookMoment> moments;
@@ -36,10 +36,14 @@ class FinishedBook {
   });
 
   Color get ratingColor {
-    if (int.parse(overallRating) >= 80) return const Color(0xFF81C784);
-    if (int.parse(overallRating) >= 60) return const Color(0xFFAED581);
-    if (int.parse(overallRating) >= 40) return const Color(0xFFFFCE73);
-    if (int.parse(overallRating) >= 20) return const Color(0xFFFFA840);
+    if (overallRating == null || overallRating == '???') return const Color(0xFFBEBCE1);
+    else {
+      if (int.parse(overallRating!) >= 80) return const Color(0xFF81C784);
+      if (int.parse(overallRating!) >= 60) return const Color(0xFFAED581);
+      if (int.parse(overallRating!) >= 40) return const Color(0xFFFFCE73);
+      if (int.parse(overallRating!) >= 20) return const Color(0xFFFFA840);
+    }
+
     return const Color(0xFFE57373);
   }
 
@@ -52,7 +56,7 @@ class FinishedBook {
       description: map['description'] ?? '',
       startDate: map['startDate'] ?? '',
       endDate: map['endDate'] ?? '',
-      overallRating: map['overallRating'] ?? '0',
+      overallRating: map['overallRating'] ?? '???',
       personalReview: map['personalReview'] ?? '',
       moments: (map['moments'] as Map? ?? {}).entries.map((e) {
         return BookMoment.fromMap(e.key, Map<String, dynamic>.from(e.value));
@@ -205,6 +209,7 @@ class BookCategory {
       'category_abandoned': s.category_abandoned,
       'category_reRead': s.category_reRead,
       'category_disliked': s.category_disliked,
+      'category_in_process': s.category_in_process
     };
     return map[titleKey] ?? titleKey!;
   }

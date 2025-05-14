@@ -1490,6 +1490,16 @@ class S {
     );
   }
 
+  /// `In process`
+  String get category_in_process {
+    return Intl.message(
+      'In process',
+      name: 'category_in_process',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Categories`
   String get categories {
     return Intl.message('Categories', name: 'categories', desc: '', args: []);
@@ -1583,6 +1593,11 @@ class S {
   /// `Moments`
   String get moments {
     return Intl.message('Moments', name: 'moments', desc: '', args: []);
+  }
+
+  /// `Review`
+  String get review {
+    return Intl.message('Review', name: 'review', desc: '', args: []);
   }
 }
 
