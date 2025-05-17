@@ -2,6 +2,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../../generated/l10n.dart';
+import '../../../../models/book_writer_model.dart';
 import '../../../../models/plot_models.dart';
 import '../../../general/base/confirm_delete_base.dart';
 import '../../../general/base/delete_swipe_background_base.dart';
@@ -11,9 +12,10 @@ class AboutStoryArcScreen extends StatefulWidget {
   final StoryArc? storyArc;
   final String bookId;
   final String userId;
+  final Status status;
 
   const AboutStoryArcScreen(
-      {super.key, this.storyArc, required this.bookId, required this.userId});
+      {super.key, this.storyArc, required this.bookId, required this.userId, required this.status});
 
   @override
   State<AboutStoryArcScreen> createState() => _AboutStoryArcScreenState();
@@ -81,6 +83,7 @@ class _AboutStoryArcScreenState extends State<AboutStoryArcScreen> {
           userId: widget.userId,
           bookId: widget.bookId,
           arcId: widget.storyArc!.id,
+          status: widget.status,
         ),
       ),
     ).then((_) => _loadChapters());
@@ -132,6 +135,7 @@ class _AboutStoryArcScreenState extends State<AboutStoryArcScreen> {
           context,
           MaterialPageRoute(
             builder: (context) => AboutStoryArcScreen(
+              status: widget.status,
               storyArc: result,
               bookId: widget.bookId,
               userId: widget.userId,
@@ -247,10 +251,10 @@ class _AboutStoryArcScreenState extends State<AboutStoryArcScreen> {
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(16),
                 child: Card(
-                  color: Color.lerp(const Color(0xFFA5C6EA), Colors.white, 0.7),
+                  color: Color.lerp(widget.status.color, Colors.white, 0.7),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
-                      side: const BorderSide(color: Color(0xFFA5C6EA))
+                      side: BorderSide(color: widget.status.color)
                   ),
                   elevation: 4,
                   child: Padding(
@@ -262,7 +266,7 @@ class _AboutStoryArcScreenState extends State<AboutStoryArcScreen> {
                         const SizedBox(height: 20),
                         TextField(
                           controller: _titleController,
-                          cursorColor: const Color(0xFFA5C6EA),
+                          cursorColor: widget.status.color,
                           onChanged: (value) => _checkForChanges(),
                           style: const TextStyle(color: Colors.black),
                           decoration: InputDecoration(
@@ -271,11 +275,11 @@ class _AboutStoryArcScreenState extends State<AboutStoryArcScreen> {
                             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide: const BorderSide(width: 0.5, color: Color(0xFFA5C6EA)),
+                              borderSide: BorderSide(width: 0.5, color: widget.status.color),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide: const BorderSide(width: 1.5, color: Color(0xFFA5C6EA)),
+                              borderSide: BorderSide(width: 1.5, color: widget.status.color),
                             ),
                           ),
                         ),
@@ -286,7 +290,7 @@ class _AboutStoryArcScreenState extends State<AboutStoryArcScreen> {
                           minLines: 3,
                           onChanged: (value) => _checkForChanges(),
                           keyboardType: TextInputType.multiline,
-                          cursorColor: const Color(0xFFA5C6EA),
+                          cursorColor: widget.status.color,
                           style: const TextStyle(color: Colors.black),
                           decoration: InputDecoration(
                             labelText: S.of(context).description,
@@ -294,11 +298,11 @@ class _AboutStoryArcScreenState extends State<AboutStoryArcScreen> {
                             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide: const BorderSide(width: 0.5, color: Color(0xFFA5C6EA)),
+                              borderSide: BorderSide(width: 0.5, color: widget.status.color),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide: const BorderSide(width: 1.5, color: Color(0xFFA5C6EA)),
+                              borderSide: BorderSide(width: 1.5, color: widget.status.color),
                             ),
                           ),
                         ),
@@ -306,7 +310,7 @@ class _AboutStoryArcScreenState extends State<AboutStoryArcScreen> {
                         ElevatedButton(
                           onPressed: _saveStoryArc,
                           style: ButtonStyle(
-                            backgroundColor: WidgetStateProperty.all<Color>(const Color(0xFFA5C6EA)),
+                            backgroundColor: WidgetStateProperty.all<Color>(widget.status.color),
                             padding: WidgetStateProperty.all<EdgeInsets>(
                               const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
                             ),
@@ -324,9 +328,9 @@ class _AboutStoryArcScreenState extends State<AboutStoryArcScreen> {
                           const SizedBox(height: 32),
                           Row(
                             children: [
-                              const Expanded(
+                              Expanded(
                                 child: Divider(
-                                  color: Color(0xFFA5C6EA),
+                                  color: widget.status.color,
                                   thickness: 1,
                                 ),
                               ),
@@ -343,7 +347,7 @@ class _AboutStoryArcScreenState extends State<AboutStoryArcScreen> {
                               ),
                               Expanded(
                                 child: Divider(
-                                  color: const Color(0xFFA5C6EA).withOpacity(0.5),
+                                  color: widget.status.color.withOpacity(0.5),
                                   thickness: 1,
                                 ),
                               ),
@@ -364,7 +368,7 @@ class _AboutStoryArcScreenState extends State<AboutStoryArcScreen> {
                                 ),
                               ),
                               style: ButtonStyle(
-                                backgroundColor: WidgetStateProperty.all<Color>(const Color(0xFFA5C6EA)),
+                                backgroundColor: WidgetStateProperty.all<Color>(widget.status.color),
                                 padding: WidgetStateProperty.all<EdgeInsets>(
                                   const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
                                 ),
@@ -411,12 +415,12 @@ class _AboutStoryArcScreenState extends State<AboutStoryArcScreen> {
                                         margin: const EdgeInsets.only(bottom: 8),
                                         elevation: 0,
                                         color: Color.lerp(
-                                            const Color(0xFFA5C6EA), Colors.white,
+                                            widget.status.color, Colors.white,
                                             0.3),
                                         shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(12),
-                                          side: const BorderSide(
-                                            color: Color(0xFFA5C6EA),
+                                          side: BorderSide(
+                                            color: widget.status.color,
                                             width: 1,
                                           ),
                                         ),

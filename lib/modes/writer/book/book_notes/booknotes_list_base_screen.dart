@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../models/book_writer_model.dart';
 import '../../../general/base/search_poly.dart';
 import 'booknote_info_screen.dart';
 import 'booknotes_list_screen.dart';
@@ -8,7 +9,8 @@ import '../../../../generated/l10n.dart';
 class BookNotesListBaseScreen extends StatefulWidget {
   final String bookId;
   final String authorId;
-  const BookNotesListBaseScreen({super.key, required this.bookId, required this.authorId});
+  final Status status;
+  const BookNotesListBaseScreen({super.key, required this.bookId, required this.authorId, required this.status});
 
   @override
   State<BookNotesListBaseScreen> createState() => _BookNotesListBaseScreenState();
@@ -28,12 +30,12 @@ class _BookNotesListBaseScreenState extends State<BookNotesListBaseScreen> {
             shape: const CircleBorder(),
             backgroundColor: Theme.of(context).colorScheme.tertiary,
             child: const Icon(Icons.add, color: Colors.white,),
-            onPressed: () { Navigator.push(context, MaterialPageRoute(builder: (context) => BooknoteInfoScreen(bookId: widget.bookId, userId: widget.authorId,))); }
+            onPressed: () { Navigator.push(context, MaterialPageRoute(builder: (context) => BooknoteInfoScreen(bookId: widget.bookId, userId: widget.authorId, status: widget.status,))); }
         ),
         body: Center(
           child: Stack(
             children: [
-              BooknotesListScreen(searchQuery: _searchQuery, bookId: widget.bookId, authorId: widget.authorId,),
+              BooknotesListScreen(searchQuery: _searchQuery, bookId: widget.bookId, authorId: widget.authorId, status: widget.status,),
               SearchPoly(onChanged: (value) {
                 setState(() {
                   _searchQuery = value.toLowerCase();

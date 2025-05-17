@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 
 import '../../../../generated/l10n.dart';
 import '../../../../models/book_character_model.dart';
+import '../../../../models/book_writer_model.dart';
 import '../../../general/base/confirm_delete_base.dart';
 import '../../../general/base/delete_swipe_background_base.dart';
 import '../../../general/base/search_poly.dart';
@@ -12,7 +13,8 @@ import 'about_character_screen.dart';
 class CharactersListScreen extends StatefulWidget {
   final String bookId;
   final String authorId;
-  const CharactersListScreen({super.key, required this.bookId, required this.authorId});
+  final Status status;
+  const CharactersListScreen({super.key, required this.bookId, required this.authorId, required this.status});
 
   @override
   State<CharactersListScreen> createState() => _CharactersListScreenState();
@@ -40,12 +42,12 @@ class _CharactersListScreenState extends State<CharactersListScreen> {
             Icons.add,
             color: Colors.white,
           ),
-          onPressed: () { Navigator.push(context, MaterialPageRoute(builder: (context) => AboutCharacterScreen(bookId: widget.bookId, userId: widget.authorId,))); },
+          onPressed: () { Navigator.push(context, MaterialPageRoute(builder: (context) => AboutCharacterScreen(bookId: widget.bookId, userId: widget.authorId, status: widget.status,))); },
         ),
         body: Center(
           child: Stack(
             children: [
-              CharactersList(userId: widget.authorId, bookId: widget.bookId, searchQuery: _searchQuery,),
+              CharactersList(userId: widget.authorId, bookId: widget.bookId, searchQuery: _searchQuery, status: widget.status,),
               SearchPoly(onChanged: (value) {
                 setState(() {
                   _searchQuery = value.toLowerCase();
@@ -63,12 +65,14 @@ class CharactersList extends StatefulWidget {
   final String userId;
   final String bookId;
   final String searchQuery;
+  final Status status;
 
   const CharactersList({
     super.key,
     required this.bookId,
     required this.userId,
     required this.searchQuery,
+    required this.status
   });
 
   @override
@@ -84,7 +88,13 @@ class _CharactersListState extends State<CharactersList> {
     super.initState();
     _databaseReference = FirebaseDatabase.instance
         .ref('books/${widget.userId}/${widget.bookId}/characters');
-    _stream = _databaseReference.onValue;
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    setState(() {
+      _stream = _databaseReference.onValue;
+    });
   }
 
   Future<Map<String, String>> _loadAdditionalData() async => {};
@@ -100,8 +110,8 @@ class _CharactersListState extends State<CharactersList> {
           );
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(color: Color(0xFF89B0D9),),
+          return Center(
+            child: CircularProgressIndicator(color: widget.status.color,),
           );
         }
 
@@ -130,7 +140,7 @@ class _CharactersListState extends State<CharactersList> {
           future: _loadAdditionalData(),
           builder: (context, snapshot) {
             if(snapshot.hasError) return Center(child: Text('${S.current.an_error_occurred} ${snapshot.error}'),);
-            if(snapshot.connectionState == ConnectionState.waiting) return const Center(child: CircularProgressIndicator(color: Color(0xFF89B0D9),),);
+            if(snapshot.connectionState == ConnectionState.waiting) return Center(child: CircularProgressIndicator(color: widget.status.color,),);
 
             List<Character> filteredCharacters =
             widget.searchQuery.isEmpty
@@ -169,15 +179,18 @@ class _CharactersListState extends State<CharactersList> {
               );
             }
 
-            return ListView.builder(
-              addAutomaticKeepAlives: true,
-              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-              padding: const EdgeInsets.only(top: 60, left: 16, right: 16),
-              itemCount: filteredCharacters.length,
-              itemBuilder: (context, index) {
-                final item = filteredCharacters[index];
-                return _CharacterItemCard(character: item, index: index, userId: widget.userId, bookId: widget.bookId);
-              },
+            return RefreshIndicator(
+              onRefresh: _loadData,
+              child: ListView.builder(
+                addAutomaticKeepAlives: true,
+                keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                padding: const EdgeInsets.only(top: 60, left: 16, right: 16),
+                itemCount: filteredCharacters.length,
+                itemBuilder: (context, index) {
+                  final item = filteredCharacters[index];
+                  return _CharacterItemCard(character: item, index: index, userId: widget.userId, bookId: widget.bookId, status: widget.status,);
+                },
+              ),
             );
           },
         );
@@ -191,8 +204,9 @@ class _CharacterItemCard extends StatelessWidget {
   final int index;
   final String userId;
   final String bookId;
+  final Status status;
   static const duration = Duration(milliseconds: 500);
-  const _CharacterItemCard({required this.character, required this.index, required this.userId, required this.bookId});
+  const _CharacterItemCard({required this.character, required this.index, required this.userId, required this.bookId, required this.status});
 
   @override
   Widget build(BuildContext context) {
@@ -213,7 +227,7 @@ class _CharacterItemCard extends StatelessWidget {
               opacity: value,
               child: Transform.translate(
                 offset: Offset(0, (1 - value) * 20),
-                child: characterCardContent(character, context),
+                child: characterCardContent(character, context, status),
               ),
             ),
           ),
@@ -225,7 +239,7 @@ class _CharacterItemCard extends StatelessWidget {
   void _navigateToCharacterDetail(BuildContext context, Character character) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => AboutCharacterScreen(character: character, bookId: bookId, userId: userId,),
+        builder: (context) => AboutCharacterScreen(character: character, bookId: bookId, userId: userId, status: status,),
       ),
     );
   }
@@ -297,16 +311,16 @@ class _CharacterItemCard extends StatelessWidget {
 
 }
 
-Widget characterCardContent(Character character, BuildContext context) {
+Widget characterCardContent(Character character, BuildContext context, Status status) {
   final hasMainImage = character.images?.mainImage?.url.isNotEmpty ?? false;
   return Card(
     margin: const EdgeInsets.symmetric(vertical: 8),
     elevation: 4,
-    color: Color.lerp(const Color(0xFFA5C6EA), Colors.white, 0.5),
+    color: Color.lerp(status.color, Colors.white, 0.5),
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(12),
-      side: const BorderSide(
-        color: Color(0xFFA5C6EA),
+      side: BorderSide(
+        color: status.color,
         width: 2,
       ),
     ),
@@ -322,7 +336,7 @@ Widget characterCardContent(Character character, BuildContext context) {
               height: 60,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(color: const Color(0xFFA5C6EA), width: 2),
+                border: Border.all(color: status.color, width: 2),
                 image: hasMainImage
                     ? DecorationImage(
                   image: NetworkImage(character.images!.mainImage!.url),
@@ -330,7 +344,7 @@ Widget characterCardContent(Character character, BuildContext context) {
                 )
                     : null,
               ),
-              child: hasMainImage ? null : const Icon(Icons.person, size: 30, color: Color(0xFFA5C6EA)),
+              child: hasMainImage ? null : Icon(Icons.person, size: 30, color: status.color),
             ),
             const SizedBox(width: 16,),
             Expanded(

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../generated/l10n.dart';
 
 class FinishedBook {
@@ -14,7 +13,7 @@ class FinishedBook {
   final String personalReview;
   final BookCategory category;
   final List<BookMoment> moments;
-  final List<RatingCriterion> criteria;
+  final Map<String, String> criteria;
   final List<String>? files;
   final List<String>? links;
 
@@ -36,8 +35,9 @@ class FinishedBook {
   });
 
   Color get ratingColor {
-    if (overallRating == null || overallRating == '???') return const Color(0xFFBEBCE1);
-    else {
+    if (overallRating == null || overallRating == '???') {
+      return const Color(0xFFBEBCE1);
+    } else {
       if (int.parse(overallRating!) >= 80) return const Color(0xFF81C784);
       if (int.parse(overallRating!) >= 60) return const Color(0xFFAED581);
       if (int.parse(overallRating!) >= 40) return const Color(0xFFFFCE73);
@@ -48,6 +48,23 @@ class FinishedBook {
   }
 
   factory FinishedBook.fromMap(String id, Map<dynamic, dynamic> map) {
+    final rawCriteria = map['criteriaRatings'];
+
+    Map<String, String> criteriaMap = {};
+
+    if (rawCriteria == null) {
+      criteriaMap = {};
+    } else if (rawCriteria is Map) {
+      criteriaMap = rawCriteria.map((key, value) => MapEntry(key.toString(), value.toString()));
+    } else if (rawCriteria is List) {
+      criteriaMap = {
+        for (int i = 0; i < rawCriteria.length; i++)
+          if (rawCriteria[i] != null) i.toString() : rawCriteria[i].toString(),
+      };
+    } else {
+      criteriaMap = {};
+    }
+
     return FinishedBook(
       id: id,
       userId: map['userId'] ?? '',
@@ -58,12 +75,12 @@ class FinishedBook {
       endDate: map['endDate'] ?? '',
       overallRating: map['overallRating'] ?? '???',
       personalReview: map['personalReview'] ?? '',
-      moments: (map['moments'] as Map? ?? {}).entries.map((e) {
-        return BookMoment.fromMap(e.key, Map<String, dynamic>.from(e.value));
-      }).toList(),
-      criteria: (map['criteria'] as Map? ?? {}).entries.map((e) {
-        return RatingCriterion.fromMap(e.key, Map<String, dynamic>.from(e.value));
-      }).toList(),
+        moments: map['moments'] is List
+            ? (map['moments'] as List)
+            .map((e) => BookMoment.fromMap('', Map<String, dynamic>.from(e)))
+            .toList()
+            : [],
+      criteria: criteriaMap,
       category: BookCategory.fromMap(
         map['categoryId'] ?? '',
         Map<String, dynamic>.from(map['category'] ?? {}),
@@ -85,50 +102,22 @@ class FinishedBook {
       'categoryId': category.id,
       'personalReview': personalReview,
       'moments': moments.map((e) => e.toMap()).toList(),
-      'criteria': criteria.map((e) => e.toMap()).toList(),
-    };
-  }
-}
-
-class BookMoment {
-  final String id;
-  final String type;
-  final String content;
-
-  BookMoment({
-    required this.id,
-    required this.type,
-    required this.content,
-  });
-
-  factory BookMoment.fromMap(String id, Map<dynamic, dynamic> map) {
-    return BookMoment(
-      id: id,
-      type: map['type'] ?? 'text',
-      content: map['content'] ?? '',
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'type': type,
-      'content': content,
+      'criteriaRatings': criteria.map((key, value) => MapEntry(key, value)),
     };
   }
 }
 
 class RatingCriterion {
   final String id;
-  final String? title;        // Для пользовательских
-  final String? titleKey;     // Для базовых (используем .arb)
-  final int score;
+  final String? title;
+  final String? titleKey;
+  final String? score;
   final bool isCustom;
 
   RatingCriterion({
     this.title,
     this.titleKey,
-    required this.score,
+    this.score,
     required this.isCustom,
     required this.id
   });
@@ -138,7 +127,7 @@ class RatingCriterion {
       id: id,
       title: map['title'],
       titleKey: map['titleKey'],
-      score: map['score'] ?? 0,
+      score: map['score'] ?? '0',
       isCustom: map['isCustom'] ?? false,
     );
   }
@@ -162,6 +151,7 @@ class RatingCriterion {
       'criterion_worldbuilding': s.criterion_worldbuilding,
       'criterion_emotion': s.criterion_emotion,
       'criterion_writingStyle': s.criterion_writingStyle,
+      'criterion_ending': s.criterion_ending,
     };
     return map[titleKey] ?? titleKey!;
   }
@@ -212,5 +202,33 @@ class BookCategory {
       'category_in_process': s.category_in_process
     };
     return map[titleKey] ?? titleKey!;
+  }
+}
+
+class BookMoment {
+  final String id;
+  final String type;
+  final String content;
+
+  BookMoment({
+    required this.id,
+    required this.type,
+    required this.content,
+  });
+
+  factory BookMoment.fromMap(String id, Map<dynamic, dynamic> map) {
+    return BookMoment(
+      id: id,
+      type: map['type'] ?? 'text',
+      content: map['content'] ?? '',
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'type': type,
+      'content': content,
+    };
   }
 }

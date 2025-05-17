@@ -49,7 +49,8 @@ class _CategoryListPageState extends State<CategoryListPage> {
       }
 
       if (_userId != null) {
-        final customSnap = await _database.child('customCategories/$_userId').get();
+        final customSnap =
+            await _database.child('customCategories/$_userId').get();
         if (customSnap.exists) {
           for (final child in customSnap.children) {
             final map = Map<String, dynamic>.from(child.value as Map);
@@ -104,15 +105,16 @@ class _CategoryListPageState extends State<CategoryListPage> {
     final filtered = _searchQuery.isEmpty
         ? categories
         : categories.where((category) {
-      final titleMatch = category.getLocalizedTitle(context)
-          .toLowerCase()
-          .contains(_searchQuery);
-      final hasMatchingBooks = _allBooks.any((book) =>
-      book.category.id == category.id &&
-          (book.title.toLowerCase().contains(_searchQuery) ||
-              book.author.toLowerCase().contains(_searchQuery)));
-      return titleMatch || hasMatchingBooks;
-    }).toList();
+            final titleMatch = category
+                .getLocalizedTitle(context)
+                .toLowerCase()
+                .contains(_searchQuery);
+            final hasMatchingBooks = _allBooks.any((book) =>
+                book.category.id == category.id &&
+                (book.title.toLowerCase().contains(_searchQuery) ||
+                    book.author.toLowerCase().contains(_searchQuery)));
+            return titleMatch || hasMatchingBooks;
+          }).toList();
 
     filtered.sort((a, b) {
       final countA = _getBookCountForCategory(a.id);
@@ -167,14 +169,15 @@ class _CategoryListPageState extends State<CategoryListPage> {
           onPressed: () {
             showAddCategoryDialog(context, _userId!, () async {
               await _loadData();
-              setState(() { });
+              setState(() {});
             });
           },
         ),
         body: Column(
           children: [
             SearchPoly(
-              onChanged: (value) => setState(() => _searchQuery = value.toLowerCase()),
+              onChanged: (value) =>
+                  setState(() => _searchQuery = value.toLowerCase()),
             ),
             Expanded(
               child: Padding(
@@ -187,7 +190,8 @@ class _CategoryListPageState extends State<CategoryListPage> {
                     }
 
                     if (snapshot.hasError || !snapshot.hasData) {
-                      return Center(child: Text(S.of(context).an_error_occurred));
+                      return Center(
+                          child: Text(S.of(context).an_error_occurred));
                     }
 
                     final categories = _filterItems(snapshot.data!);
@@ -213,24 +217,46 @@ class _CategoryListPageState extends State<CategoryListPage> {
                         ),
                       );
                     }
-      
-                    return ListView.builder(
-                      itemCount: categories.length,
-                      itemBuilder: (context, index) {
-                        final category = categories[index];
-                        final bookCount = _getBookCountForCategory(category.id);
-      
-                        return category.isCustom
-                            ? Dismissible(
-                          key: Key(category.id),
-                          direction: DismissDirection.endToStart,
-                          background: buildSwipeBackground(context),
-                          confirmDismiss: (direction) => confirmDelete(context),
-                          onDismissed: (direction) => _deleteCategoryWithBooks(category.id),
-                          child: _buildCategoryCard(category, bookCount),
-                        )
-                            : _buildCategoryCard(category, bookCount);
-                      },
+
+                    return RefreshIndicator(
+                      onRefresh: _loadData,
+                      child: ListView.builder(
+                        itemCount: categories.length,
+                        itemBuilder: (context, index) {
+                          final category = categories[index];
+                          final bookCount =
+                              _getBookCountForCategory(category.id);
+
+                          return category.isCustom
+                              ? TweenAnimationBuilder(
+                                  tween: Tween<double>(begin: 0, end: 1),
+                                  duration: const Duration(milliseconds: 500),
+                                  curve: Curves.easeOut,
+                                  builder: (context, value, child) {
+                                    return Dismissible(
+                                      key: Key(category.id),
+                                      direction: DismissDirection.endToStart,
+                                      background: buildSwipeBackground(context),
+                                      confirmDismiss: (direction) =>
+                                          confirmDelete(context),
+                                      onDismissed: (direction) =>
+                                          _deleteCategoryWithBooks(category.id),
+                                      child: _buildCategoryCard(
+                                          category, bookCount),
+                                    );
+                                  },
+                                )
+                              : TweenAnimationBuilder(
+                                  tween: Tween<double>(begin: 0, end: 1),
+                                  duration: const Duration(milliseconds: 500),
+                                  curve: Curves.easeOut,
+                                  builder: (context, value, child) {
+                                    return _buildCategoryCard(
+                                        category, bookCount);
+                                  },
+                                );
+                        },
+                      ),
                     );
                   },
                 ),
@@ -253,7 +279,8 @@ class _CategoryListPageState extends State<CategoryListPage> {
           width: 2,
         ),
       ),
-      color: Color.lerp(Color(int.parse(category.colorCode)), Colors.white, 0.7),
+      color:
+          Color.lerp(Color(int.parse(category.colorCode)), Colors.white, 0.7),
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
         onTap: () => _openCategory(context, category),
@@ -267,9 +294,9 @@ class _CategoryListPageState extends State<CategoryListPage> {
                 child: Text(
                   category.getLocalizedTitle(context),
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black,
-                  ),
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black,
+                      ),
                 ),
               ),
               const SizedBox(width: 8),
@@ -286,7 +313,8 @@ class _CategoryListPageState extends State<CategoryListPage> {
       width: 40,
       height: 40,
       decoration: BoxDecoration(
-        color: Color.lerp(Color(int.parse(category.colorCode)), Colors.white, 0.9),
+        color:
+            Color.lerp(Color(int.parse(category.colorCode)), Colors.white, 0.9),
         shape: BoxShape.circle,
         border: Border.all(
           color: Color(int.parse(category.colorCode)),
@@ -297,16 +325,16 @@ class _CategoryListPageState extends State<CategoryListPage> {
         child: Text(
           bookCount < 100 ? bookCount.toString() : '99+',
           style: TextStyle(
-            color: Color(int.parse(category.colorCode)),
-            fontSize: 16,
-            fontWeight: FontWeight.bold
-          ),
+              color: Color(int.parse(category.colorCode)),
+              fontSize: 16,
+              fontWeight: FontWeight.bold),
         ),
       ),
     );
   }
 
-  Future<void> _openCategory(BuildContext context, BookCategory category) async {
+  Future<void> _openCategory(
+      BuildContext context, BookCategory category) async {
     await Navigator.push(
       context,
       MaterialPageRoute(
@@ -320,7 +348,8 @@ class _CategoryListPageState extends State<CategoryListPage> {
     setState(() {});
   }
 
-  Future<void> showAddCategoryDialog(BuildContext context, String userId, VoidCallback onCategoryAdded) {
+  Future<void> showAddCategoryDialog(
+      BuildContext context, String userId, VoidCallback onCategoryAdded) {
     final TextEditingController titleController = TextEditingController();
     Color selectedColor = Colors.blue;
 
@@ -363,8 +392,15 @@ class _CategoryListPageState extends State<CategoryListPage> {
                             actions: [
                               TextButton(
                                 onPressed: () => Navigator.pop(context),
-                                style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(Theme.of(context).colorScheme.tertiary)),
-                                child: Text(s.ok, style: const TextStyle(color: Colors.white),),
+                                style: ButtonStyle(
+                                    backgroundColor: WidgetStatePropertyAll(
+                                        Theme.of(context)
+                                            .colorScheme
+                                            .tertiary)),
+                                child: Text(
+                                  s.ok,
+                                  style: const TextStyle(color: Colors.white),
+                                ),
                               )
                             ],
                           ),
@@ -393,26 +429,34 @@ class _CategoryListPageState extends State<CategoryListPage> {
                 onPressed: isSaving
                     ? null
                     : () async {
-                  final title = titleController.text.trim();
-                  if (title.isEmpty) return;
+                        final title = titleController.text.trim();
+                        if (title.isEmpty) return;
 
-                  setState(() => isSaving = true);
+                        setState(() => isSaving = true);
 
-                  final ref = FirebaseDatabase.instance
-                      .ref('customCategories/$userId')
-                      .push();
+                        final ref = FirebaseDatabase.instance
+                            .ref('customCategories/$userId')
+                            .push();
 
-                  await ref.set({
-                    'title': title,
-                    'isCustom': true,
-                    'colorCode': selectedColor.value.toRadixString(16).padLeft(8, '0').replaceFirst('', '0x'),
-                  });
+                        await ref.set({
+                          'title': title,
+                          'isCustom': true,
+                          'colorCode': selectedColor.value
+                              .toRadixString(16)
+                              .padLeft(8, '0')
+                              .replaceFirst('', '0x'),
+                        });
 
-                  Navigator.pop(context);
-                  onCategoryAdded();
-                },
-                style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(Theme.of(context).colorScheme.tertiary)),
-                child: Text(s.save, style: const TextStyle(color: Colors.white),),
+                        Navigator.pop(context);
+                        onCategoryAdded();
+                      },
+                style: ButtonStyle(
+                    backgroundColor: WidgetStatePropertyAll(
+                        Theme.of(context).colorScheme.tertiary)),
+                child: Text(
+                  s.save,
+                  style: const TextStyle(color: Colors.white),
+                ),
               ),
             ],
           );
@@ -433,11 +477,13 @@ class _CategoryListPageState extends State<CategoryListPage> {
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(width: 0.5, color: Theme.of(context).colorScheme.tertiary),
+          borderSide: BorderSide(
+              width: 0.5, color: Theme.of(context).colorScheme.tertiary),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(width: 1.5, color: Theme.of(context).colorScheme.tertiary),
+          borderSide: BorderSide(
+              width: 1.5, color: Theme.of(context).colorScheme.tertiary),
         ),
       ),
       maxLines: maxLines,

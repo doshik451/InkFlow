@@ -36,6 +36,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Добавить файл (pdf, doc, docx, txt, epub, fb2)",
     ),
     "add_chapter": MessageLookupByLibrary.simpleMessage("Добавить главу"),
+    "add_criteria": MessageLookupByLibrary.simpleMessage("Добавить критерий"),
     "add_image": MessageLookupByLibrary.simpleMessage("Добавить изображение"),
     "add_image_after_character": MessageLookupByLibrary.simpleMessage(
       "После добавления персонажа вы сможете добавить картинку",
@@ -51,6 +52,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "age": MessageLookupByLibrary.simpleMessage("Возраст"),
     "allReferencesSaved": MessageLookupByLibrary.simpleMessage(
       "Все референсы сохранены!",
+    ),
+    "all_criteria_added": MessageLookupByLibrary.simpleMessage(
+      "Все критерии уже добавлены",
     ),
     "allies": MessageLookupByLibrary.simpleMessage("Союзнки"),
     "an_error_occurred": MessageLookupByLibrary.simpleMessage(
@@ -111,10 +115,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Запись успешно создана",
     ),
     "creating": MessageLookupByLibrary.simpleMessage("Создание"),
+    "criteria": MessageLookupByLibrary.simpleMessage("Критерии"),
     "criterion_characters": MessageLookupByLibrary.simpleMessage("Персонажи"),
     "criterion_emotion": MessageLookupByLibrary.simpleMessage(
       "Эмоциональность",
     ),
+    "criterion_ending": MessageLookupByLibrary.simpleMessage("Финал"),
     "criterion_plot": MessageLookupByLibrary.simpleMessage("Сюжет"),
     "criterion_worldbuilding": MessageLookupByLibrary.simpleMessage("Мир"),
     "criterion_writingStyle": MessageLookupByLibrary.simpleMessage(
@@ -125,6 +131,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "dark_theme": MessageLookupByLibrary.simpleMessage("Темная тема"),
     "delete": MessageLookupByLibrary.simpleMessage("Удалить"),
+    "deleted": MessageLookupByLibrary.simpleMessage("Удалено"),
     "description": MessageLookupByLibrary.simpleMessage("Описание"),
     "don_t_have_access": MessageLookupByLibrary.simpleMessage("Нет доступа"),
     "done": MessageLookupByLibrary.simpleMessage("Сделано"),

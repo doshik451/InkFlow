@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 
 import '../../../../generated/l10n.dart';
 import '../../../../models/book_environment_model.dart';
+import '../../../../models/book_writer_model.dart';
 import '../../../general/base/confirm_delete_base.dart';
 import '../../../general/base/delete_swipe_background_base.dart';
 import '../../../general/base/search_poly.dart';
@@ -12,9 +13,10 @@ import 'about_environment_screen.dart';
 class EnvironmentListScreen extends StatefulWidget {
   final String bookId;
   final String authorId;
+  final Status status;
 
   const EnvironmentListScreen(
-      {super.key, required this.bookId, required this.authorId});
+      {super.key, required this.bookId, required this.authorId, required this.status});
 
   @override
   State<EnvironmentListScreen> createState() => _EnvironmentListScreenState();
@@ -42,12 +44,12 @@ class _EnvironmentListScreenState extends State<EnvironmentListScreen> {
             Icons.add,
             color: Colors.white,
           ),
-          onPressed: () { Navigator.push(context, MaterialPageRoute(builder: (context) => AboutEnvironmentScreen(bookId: widget.bookId, userId: widget.authorId,))); },
+          onPressed: () { Navigator.push(context, MaterialPageRoute(builder: (context) => AboutEnvironmentScreen(bookId: widget.bookId, userId: widget.authorId, status: widget.status,))); },
         ),
         body: Center(
           child: Stack(
             children: [
-              EnvironmentsList(userId: widget.authorId, bookId: widget.bookId, searchQuery: _searchQuery,),
+              EnvironmentsList(userId: widget.authorId, bookId: widget.bookId, searchQuery: _searchQuery, status: widget.status,),
               SearchPoly(onChanged: (value) {
                 setState(() {
                   _searchQuery = value.toLowerCase();
@@ -65,12 +67,14 @@ class EnvironmentsList extends StatefulWidget {
   final String userId;
   final String bookId;
   final String searchQuery;
+  final Status status;
 
   const EnvironmentsList({
     super.key,
     required this.bookId,
     required this.userId,
     required this.searchQuery,
+    required this.status
   });
 
   @override
@@ -84,9 +88,15 @@ class _EnvironmentsListState extends State<EnvironmentsList> {
   @override
   void initState() {
     super.initState();
-    _databaseReference = FirebaseDatabase.instance
-        .ref('books/${widget.userId}/${widget.bookId}/environment');
-    _stream = _databaseReference.onValue;
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    setState(() {
+      _databaseReference = FirebaseDatabase.instance
+          .ref('books/${widget.userId}/${widget.bookId}/environment');
+      _stream = _databaseReference.onValue;
+    });
   }
 
   Future<Map<String, String>> _loadAdditionalData() async => {};
@@ -102,8 +112,8 @@ class _EnvironmentsListState extends State<EnvironmentsList> {
           );
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(color: Color(0xFF89B0D9),),
+          return Center(
+            child: CircularProgressIndicator(color: widget.status.color,),
           );
         }
 
@@ -170,15 +180,18 @@ class _EnvironmentsListState extends State<EnvironmentsList> {
               );
             }
 
-            return ListView.builder(
-              addAutomaticKeepAlives: true,
-              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-              padding: const EdgeInsets.only(top: 60, left: 16, right: 16),
-              itemCount: filteredEnvironmentItems.length,
-              itemBuilder: (context, index) {
-                final item = filteredEnvironmentItems[index];
-                return _EnvironmentItemCard(environment: item, index: index, userId: widget.userId, bookId: widget.bookId);
-              },
+            return RefreshIndicator(
+              onRefresh: _loadData,
+              child: ListView.builder(
+                addAutomaticKeepAlives: true,
+                keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                padding: const EdgeInsets.only(top: 60, left: 16, right: 16),
+                itemCount: filteredEnvironmentItems.length,
+                itemBuilder: (context, index) {
+                  final item = filteredEnvironmentItems[index];
+                  return _EnvironmentItemCard(environment: item, index: index, userId: widget.userId, bookId: widget.bookId, status: widget.status,);
+                },
+              ),
             );
           },
         );
@@ -192,8 +205,9 @@ class _EnvironmentItemCard extends StatelessWidget {
   final int index;
   final String userId;
   final String bookId;
+  final Status status;
   static const duration = Duration(milliseconds: 500);
-  const _EnvironmentItemCard({required this.environment, required this.index, required this.userId, required this.bookId});
+  const _EnvironmentItemCard({required this.environment, required this.status, required this.index, required this.userId, required this.bookId});
 
   @override
   Widget build(BuildContext context) {
@@ -214,7 +228,7 @@ class _EnvironmentItemCard extends StatelessWidget {
               opacity: value,
               child: Transform.translate(
                 offset: Offset(0, (1 - value) * 20),
-                child: environmentCardContent(environment, context),
+                child: environmentCardContent(environment, context, status),
               ),
             ),
           ),
@@ -226,7 +240,7 @@ class _EnvironmentItemCard extends StatelessWidget {
   void _navigateToEnItemDetail(BuildContext context, BookEnvironmentModel enItem) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => AboutEnvironmentScreen(environment: enItem, bookId: bookId, userId: userId,),
+        builder: (context) => AboutEnvironmentScreen(environment: enItem, bookId: bookId, userId: userId, status: status,),
       ),
     );
   }
@@ -259,15 +273,15 @@ class _EnvironmentItemCard extends StatelessWidget {
   }
 }
 
-Widget environmentCardContent(BookEnvironmentModel environment, BuildContext context) {
+Widget environmentCardContent(BookEnvironmentModel environment, BuildContext context, Status status) {
   return Card(
     margin: const EdgeInsets.symmetric(vertical: 8),
     elevation: 4,
-    color: Color.lerp(const Color(0xFFA5C6EA), Colors.white, 0.5),
+    color: Color.lerp(status.color, Colors.white, 0.5),
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(12),
-      side: const BorderSide(
-        color: Color(0xFFA5C6EA),
+      side: BorderSide(
+        color: status.color,
         width: 2,
       ),
     ),

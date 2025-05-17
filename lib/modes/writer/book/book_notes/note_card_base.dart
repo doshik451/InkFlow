@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
+import '../../../../models/book_writer_model.dart';
 
 import '../../../../generated/l10n.dart';
 import '../../../../models/booknote_model.dart';
 
-Widget noteCardContent(Booknote note, BuildContext context) {
+Widget noteCardContent(Booknote note, BuildContext context, Status status) {
   return Card(
     margin: const EdgeInsets.symmetric(vertical: 8),
     elevation: 4,
-    color: Color.lerp(const Color(0xFFA5C6EA), Colors.white, 0.5),
+    color: Color.lerp(status.color, Colors.white, 0.5),
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(12),
-      side: const BorderSide(
-        color: Color(0xFFA5C6EA),
+      side: BorderSide(
+        color: status.color,
         width: 2,
       ),
     ),

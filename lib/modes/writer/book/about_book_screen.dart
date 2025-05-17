@@ -12,7 +12,6 @@ import '../../../generated/l10n.dart';
 import '../../../models/book_writer_model.dart';
 import '../../general/base/confirm_delete_base.dart';
 import 'book_file_service.dart';
-import 'main_book_base.dart';
 import 'package:collection/collection.dart';
 
 class AboutBookPage extends StatefulWidget {

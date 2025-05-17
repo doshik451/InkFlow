@@ -12,17 +12,20 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../generated/l10n.dart';
 import '../../../../models/book_character_model.dart';
+import '../../../../models/book_writer_model.dart';
 
 class CharacterReferencesScreen extends StatefulWidget {
   final Character character;
   final String bookId;
   final String userId;
+  final Status status;
 
   const CharacterReferencesScreen({
     super.key,
     required this.character,
     required this.bookId,
     required this.userId,
+    required this.status
   });
 
   @override
@@ -71,6 +74,7 @@ class _CharacterReferencesScreenState extends State<CharacterReferencesScreen> {
                           userId: widget.userId,
                           bookId: widget.bookId,
                           category: 'appearance',
+                          status: widget.status,
                         ),
                         CharacterReferenceCard(
                           key: _clothingKey,
@@ -80,6 +84,7 @@ class _CharacterReferencesScreenState extends State<CharacterReferencesScreen> {
                           userId: widget.userId,
                           bookId: widget.bookId,
                           category: 'clothing',
+                          status: widget.status,
                         ),
                         CharacterReferenceCard(
                           key: _moodboardKey,
@@ -89,6 +94,7 @@ class _CharacterReferencesScreenState extends State<CharacterReferencesScreen> {
                           userId: widget.userId,
                           bookId: widget.bookId,
                           category: 'moodboard',
+                          status: widget.status,
                         ),
                         const SizedBox(height: 8,),
                         SizedBox(
@@ -96,13 +102,13 @@ class _CharacterReferencesScreenState extends State<CharacterReferencesScreen> {
                           child: ElevatedButton(
                             onPressed: _isLoading ? null : _saveAllReferences,
                             style: ButtonStyle(
-                              backgroundColor: WidgetStateProperty.all<Color>(const Color(0xFFA5C6EA)),
+                              backgroundColor: WidgetStateProperty.all<Color>(widget.status.color),
                               padding: WidgetStateProperty.all<EdgeInsets>(
                                 const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
                               ),
                             ),
                             child: _isLoading
-                                ? const CircularProgressIndicator( color: Color(0xFFA5C6EA),)
+                                ? CircularProgressIndicator( color: widget.status.color,)
                                 : Text(
                               S.of(context).save,
                               style: const TextStyle(
@@ -225,6 +231,7 @@ class _CharacterReferencesScreenState extends State<CharacterReferencesScreen> {
               character: updatedCharacter,
               userId: widget.userId,
               bookId: widget.bookId,
+              status: widget.status,
             ),
           ),
         );
@@ -242,6 +249,7 @@ class CharacterReferenceCard extends StatefulWidget {
   final String userId;
   final String bookId;
   final String category;
+  final Status status;
 
   const CharacterReferenceCard({
     super.key,
@@ -251,6 +259,7 @@ class CharacterReferenceCard extends StatefulWidget {
     required this.userId,
     required this.bookId,
     required this.category,
+    required this.status
   });
 
   @override
@@ -509,7 +518,7 @@ class _CharacterReferenceCardState extends State<CharacterReferenceCard> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
-      color: Color.lerp(const Color(0xFFA5C6EA), Colors.white, 0.7),
+      color: Color.lerp(widget.status.color, Colors.white, 0.7),
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
@@ -522,23 +531,23 @@ class _CharacterReferenceCardState extends State<CharacterReferenceCard> {
                   ),
             ),
             const SizedBox(height: 10),
-            _buildImageSlider(allItems),
-            if (_showLinkInput) _buildLinkInputField(),
-            if (_currentPage < _captionControllers.length) _buildCaptionField(),
+            _buildImageSlider(allItems, widget.status),
+            if (_showLinkInput) _buildLinkInputField(widget.status),
+            if (_currentPage < _captionControllers.length) _buildCaptionField(widget.status),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildImageSlider(List<String> allItems) {
+  Widget _buildImageSlider(List<String> allItems, Status status) {
     final canAddMore = allItems.length < 5;
     return Column(
       children: [
         Container(
           height: 250,
           decoration: BoxDecoration(
-            color: const Color(0xFFA5C6EA),
+            color: status.color,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Stack(
@@ -564,7 +573,7 @@ class _CharacterReferenceCardState extends State<CharacterReferenceCard> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(8),
                           child: Center(
-                            child: _buildItemContent(item, index),
+                            child: _buildItemContent(item, index, status),
                           ),
                         ),
                       ),
@@ -588,7 +597,7 @@ class _CharacterReferenceCardState extends State<CharacterReferenceCard> {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: _currentPage == index
-                              ? const Color(0xFFA5C6EA)
+                              ? status.color
                               : Colors.grey.withOpacity(0.5),
                         ),
                       ),
@@ -623,15 +632,15 @@ class _CharacterReferenceCardState extends State<CharacterReferenceCard> {
         ),
 
         if (_isLoading)
-          const Padding(
-            padding: EdgeInsets.only(top: 8),
-            child: LinearProgressIndicator(color: Color(0xFFA5C6EA)),
+          Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: LinearProgressIndicator(color: status.color),
           ),
       ],
     );
   }
 
-  Widget _buildItemContent(String item, int index) {
+  Widget _buildItemContent(String item, int index, Status status) {
     if (item == 'local') {
       return Image.file(
         _newImages[index - _imageUrls.length],
@@ -647,8 +656,8 @@ class _CharacterReferenceCardState extends State<CharacterReferenceCard> {
             fit: BoxFit.cover,
             placeholder: (ctx, url) => Container(
               color: Colors.grey[300],
-              child: const Center(
-                child: CircularProgressIndicator(color: Color(0xFFA5C6EA)),
+              child: Center(
+                child: CircularProgressIndicator(color: status.color),
               ),
             ),
             errorWidget: (ctx, url, err) => Container(
@@ -684,8 +693,8 @@ class _CharacterReferenceCardState extends State<CharacterReferenceCard> {
         fit: BoxFit.cover,
         placeholder: (ctx, url) => Container(
           color: Colors.grey[300],
-          child: const Center(
-            child: CircularProgressIndicator(color: Color(0xFFA5C6EA)),
+          child: Center(
+            child: CircularProgressIndicator(color: status.color),
           ),
         ),
         errorWidget: (ctx, url, err) => Container(
@@ -696,7 +705,7 @@ class _CharacterReferenceCardState extends State<CharacterReferenceCard> {
     }
   }
 
-  Widget _buildLinkInputField() {
+  Widget _buildLinkInputField(Status status) {
     final TextEditingController linkUrlController = TextEditingController();
     final TextEditingController linkLabelController = TextEditingController();
 
@@ -708,7 +717,7 @@ class _CharacterReferenceCardState extends State<CharacterReferenceCard> {
           children: [
             TextFormField(
               controller: linkUrlController,
-              cursorColor: const Color(0xFFA5C6EA),
+              cursorColor: status.color,
               style: const TextStyle(color: Colors.black),
               decoration: InputDecoration(
                 labelText: S.of(context).imageLink,
@@ -716,11 +725,11 @@ class _CharacterReferenceCardState extends State<CharacterReferenceCard> {
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(width: 0.5, color: Color(0xFFA5C6EA)),
+                  borderSide: BorderSide(width: 0.5, color: status.color),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(width: 1.5, color: Color(0xFFA5C6EA)),
+                  borderSide: BorderSide(width: 1.5, color: status.color),
                 ),
               ),
               validator: (value) =>
@@ -729,7 +738,7 @@ class _CharacterReferenceCardState extends State<CharacterReferenceCard> {
             const SizedBox(height: 8),
             TextFormField(
               controller: linkLabelController,
-              cursorColor: const Color(0xFFA5C6EA),
+              cursorColor: status.color,
               style: const TextStyle(color: Colors.black),
               decoration: InputDecoration(
                 labelText: S.of(context).linkCaptionOptional,
@@ -737,11 +746,11 @@ class _CharacterReferenceCardState extends State<CharacterReferenceCard> {
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(width: 0.5, color: Color(0xFFA5C6EA)),
+                  borderSide: BorderSide(width: 0.5, color: status.color),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(width: 1.5, color: Color(0xFFA5C6EA)),
+                  borderSide: BorderSide(width: 1.5, color: status.color),
                 ),
               ),
             ),
@@ -765,7 +774,7 @@ class _CharacterReferenceCardState extends State<CharacterReferenceCard> {
               icon: const Icon(Icons.check),
               label: Text(S.of(context).addLink),
               style: ButtonStyle(
-                backgroundColor: WidgetStateProperty.all<Color>(const Color(0xFFA5C6EA)),
+                backgroundColor: WidgetStateProperty.all<Color>(status.color),
                 padding: WidgetStateProperty.all<EdgeInsets>(
                   const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
                 ),
@@ -777,7 +786,7 @@ class _CharacterReferenceCardState extends State<CharacterReferenceCard> {
     );
   }
 
-  Widget _buildCaptionField() {
+  Widget _buildCaptionField(Status status) {
     final isLink = _currentPage >= _imageUrls.length + _newImages.length;
     final controller = isLink
         ? _linkCaptionControllers[
@@ -788,7 +797,7 @@ class _CharacterReferenceCardState extends State<CharacterReferenceCard> {
       padding: const EdgeInsets.only(top: 8),
       child: TextField(
         controller: controller,
-        cursorColor: const Color(0xFFA5C6EA),
+        cursorColor: status.color,
         style: const TextStyle(color: Colors.black),
         decoration: InputDecoration(
           labelText: S.of(context).notes,
@@ -796,11 +805,11 @@ class _CharacterReferenceCardState extends State<CharacterReferenceCard> {
           contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(width: 0.5, color: Color(0xFFA5C6EA)),
+            borderSide: BorderSide(width: 0.5, color: status.color),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(width: 1.5, color: Color(0xFFA5C6EA)),
+            borderSide: BorderSide(width: 1.5, color: status.color),
           ),
         ),
         maxLength: 100,

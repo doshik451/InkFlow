@@ -188,6 +188,7 @@
   "criterion_worldbuilding": "Worldbuilding",
   "criterion_emotion": "Emotional impact",
   "criterion_writingStyle": "Writing Style",
+  "criterion_ending": "Ending",
   "category_read": "Read",
   "category_favorite": "Favorite",
   "category_abandoned": "Abandoned",
@@ -206,5 +207,9 @@
   "general_impression": "General impression",
   "review_and_criteria": "Review and criteria",
   "moments": "Moments",
-  "review": "Review"
+  "review": "Review",
+  "deleted": "Deleted",
+  "criteria": "Criteria",
+  "all_criteria_added": "All criteria already added",
+  "add_criteria": "Add criteria"
 }

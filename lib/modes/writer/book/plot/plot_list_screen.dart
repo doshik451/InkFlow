@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../generated/l10n.dart';
+import '../../../../models/book_writer_model.dart';
 import '../../../../models/plot_models.dart';
 import '../../../general/base/confirm_delete_base.dart';
 import '../../../general/base/delete_swipe_background_base.dart';
@@ -12,9 +13,10 @@ import 'about_story_arc_screen.dart';
 class PlotListScreen extends StatefulWidget {
   final String bookId;
   final String authorId;
+  final Status status;
 
   const PlotListScreen(
-      {super.key, required this.bookId, required this.authorId});
+      {super.key, required this.bookId, required this.authorId, required this.status});
 
   @override
   State<PlotListScreen> createState() => _PlotListScreenState();
@@ -42,12 +44,12 @@ class _PlotListScreenState extends State<PlotListScreen> {
             Icons.add,
             color: Colors.white,
           ),
-          onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => AboutStoryArcScreen(bookId: widget.bookId, userId: widget.authorId,))); },
+          onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => AboutStoryArcScreen(bookId: widget.bookId, userId: widget.authorId, status: widget.status,))); },
         ),
         body: Center(
           child: Stack(
             children: [
-              StoryArcsList(bookId: widget.bookId, userId: widget.authorId, searchQuery: _searchQuery,),
+              StoryArcsList(bookId: widget.bookId, userId: widget.authorId, searchQuery: _searchQuery, status: widget.status,),
               SearchPoly(onChanged: (value) {
                 setState(() {
                   _searchQuery = value.toLowerCase();
@@ -65,12 +67,14 @@ class StoryArcsList extends StatefulWidget {
   final String userId;
   final String bookId;
   final String searchQuery;
+  final Status status;
 
   const StoryArcsList({
     super.key,
     required this.bookId,
     required this.userId,
     required this.searchQuery,
+    required this.status
   });
 
   @override
@@ -84,9 +88,15 @@ class _StoryArcsListState extends State<StoryArcsList> {
   @override
   void initState() {
     super.initState();
-    _databaseReference = FirebaseDatabase.instance
-        .ref('books/${widget.userId}/${widget.bookId}/plot');
-    _stream = _databaseReference.onValue;
+    _loadData();
+  }
+  
+  Future<void> _loadData() async {
+    setState(() {
+      _databaseReference = FirebaseDatabase.instance
+          .ref('books/${widget.userId}/${widget.bookId}/plot');
+      _stream = _databaseReference.onValue;
+    });
   }
 
   Future<Map<String, String>> _loadAdditionalData() async => {};
@@ -137,8 +147,8 @@ class _StoryArcsListState extends State<StoryArcsList> {
               );
             }
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(color: Color(0xFFA5C6EA),),
+              return Center(
+                child: CircularProgressIndicator(color: widget.status.color,),
               );
             }
 
@@ -177,15 +187,18 @@ class _StoryArcsListState extends State<StoryArcsList> {
               );
             }
 
-            return ListView.builder(
-              addAutomaticKeepAlives: true,
-              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-              padding: const EdgeInsets.only(top: 60, left: 16, right: 16),
-              itemCount: filteredStoryArcs.length,
-              itemBuilder: (context, index) {
-                final item = filteredStoryArcs[index];
-                return _StoryArcCard(storyArc: item, index: index, userId: widget.userId, bookId: widget.bookId,);
-              },
+            return RefreshIndicator(
+              onRefresh: _loadData,
+              child: ListView.builder(
+                addAutomaticKeepAlives: true,
+                keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                padding: const EdgeInsets.only(top: 60, left: 16, right: 16),
+                itemCount: filteredStoryArcs.length,
+                itemBuilder: (context, index) {
+                  final item = filteredStoryArcs[index];
+                  return _StoryArcCard(storyArc: item, index: index, userId: widget.userId, bookId: widget.bookId, status: widget.status,);
+                },
+              ),
             );
           },
         );
@@ -199,8 +212,9 @@ class _StoryArcCard extends StatelessWidget {
   final int index;
   final String userId;
   final String bookId;
+  final Status status;
   static const duration = Duration(milliseconds: 500);
-  const _StoryArcCard({required this.storyArc, required this.index, required this.userId, required this.bookId});
+  const _StoryArcCard({required this.storyArc, required this.index, required this.userId, required this.bookId, required this.status});
 
   @override
   Widget build(BuildContext context) {
@@ -221,7 +235,7 @@ class _StoryArcCard extends StatelessWidget {
               opacity: value,
               child: Transform.translate(
                 offset: Offset(0, (1 - value) * 20),
-                child: storyArcCardContent(storyArc, context),
+                child: storyArcCardContent(storyArc, context, status),
               ),
             ),
           ),
@@ -233,7 +247,7 @@ class _StoryArcCard extends StatelessWidget {
   void _navigateToStoryArcDetail(BuildContext context, StoryArc storyArc) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => AboutStoryArcScreen(storyArc: storyArc, bookId: bookId, userId: userId,),
+        builder: (context) => AboutStoryArcScreen(storyArc: storyArc, bookId: bookId, userId: userId, status: status,),
       ),
     );
   }
@@ -266,15 +280,15 @@ class _StoryArcCard extends StatelessWidget {
   }
 }
 
-Widget storyArcCardContent(StoryArc storyArc, BuildContext context) {
+Widget storyArcCardContent(StoryArc storyArc, BuildContext context, Status status) {
   return Card(
     margin: const EdgeInsets.symmetric(vertical: 8),
     elevation: 4,
-    color: Color.lerp(const Color(0xFFA5C6EA), Colors.white, 0.5),
+    color: Color.lerp(status.color, Colors.white, 0.5),
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(12),
-      side: const BorderSide(
-        color: Color(0xFFA5C6EA),
+      side: BorderSide(
+        color: status.color,
         width: 2,
       ),
     ),

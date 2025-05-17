@@ -36,6 +36,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Add file (pdf, doc, docx, txt, epub, fb2)",
     ),
     "add_chapter": MessageLookupByLibrary.simpleMessage("Add chapter"),
+    "add_criteria": MessageLookupByLibrary.simpleMessage("Add criteria"),
     "add_image": MessageLookupByLibrary.simpleMessage("Add image"),
     "add_image_after_character": MessageLookupByLibrary.simpleMessage(
       "After adding a character you will be able to add a picture",
@@ -49,6 +50,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "age": MessageLookupByLibrary.simpleMessage("Age"),
     "allReferencesSaved": MessageLookupByLibrary.simpleMessage(
       "All references saved!",
+    ),
+    "all_criteria_added": MessageLookupByLibrary.simpleMessage(
+      "All criteria already added",
     ),
     "allies": MessageLookupByLibrary.simpleMessage("Allies"),
     "an_error_occurred": MessageLookupByLibrary.simpleMessage(
@@ -109,10 +113,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Record successfully created",
     ),
     "creating": MessageLookupByLibrary.simpleMessage("Creating"),
+    "criteria": MessageLookupByLibrary.simpleMessage("Criteria"),
     "criterion_characters": MessageLookupByLibrary.simpleMessage("Characters"),
     "criterion_emotion": MessageLookupByLibrary.simpleMessage(
       "Emotional impact",
     ),
+    "criterion_ending": MessageLookupByLibrary.simpleMessage("Ending"),
     "criterion_plot": MessageLookupByLibrary.simpleMessage("Plot"),
     "criterion_worldbuilding": MessageLookupByLibrary.simpleMessage(
       "Worldbuilding",
@@ -125,6 +131,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "dark_theme": MessageLookupByLibrary.simpleMessage("Dark theme"),
     "delete": MessageLookupByLibrary.simpleMessage("Delete"),
+    "deleted": MessageLookupByLibrary.simpleMessage("Deleted"),
     "description": MessageLookupByLibrary.simpleMessage("Description"),
     "don_t_have_access": MessageLookupByLibrary.simpleMessage(
       "We don\'t have access",

@@ -1445,6 +1445,11 @@ class S {
     );
   }
 
+  /// `Ending`
+  String get criterion_ending {
+    return Intl.message('Ending', name: 'criterion_ending', desc: '', args: []);
+  }
+
   /// `Read`
   String get category_read {
     return Intl.message('Read', name: 'category_read', desc: '', args: []);
@@ -1598,6 +1603,36 @@ class S {
   /// `Review`
   String get review {
     return Intl.message('Review', name: 'review', desc: '', args: []);
+  }
+
+  /// `Deleted`
+  String get deleted {
+    return Intl.message('Deleted', name: 'deleted', desc: '', args: []);
+  }
+
+  /// `Criteria`
+  String get criteria {
+    return Intl.message('Criteria', name: 'criteria', desc: '', args: []);
+  }
+
+  /// `All criteria already added`
+  String get all_criteria_added {
+    return Intl.message(
+      'All criteria already added',
+      name: 'all_criteria_added',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add criteria`
+  String get add_criteria {
+    return Intl.message(
+      'Add criteria',
+      name: 'add_criteria',
+      desc: '',
+      args: [],
+    );
   }
 }
 

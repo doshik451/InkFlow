@@ -26,8 +26,14 @@ class _AnimatedIdeaListState extends State<AnimatedIdeaList> {
   @override
   void initState() {
     super.initState();
-    _databaseReference = FirebaseDatabase.instance.ref('ideas/$userId');
-    _ideaStream = _databaseReference.onValue;
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    setState(() {
+      _databaseReference = FirebaseDatabase.instance.ref('ideas/$userId');
+      _ideaStream = _databaseReference.onValue;
+    });
   }
 
   @override
@@ -95,16 +101,19 @@ class _AnimatedIdeaListState extends State<AnimatedIdeaList> {
               );
             }
 
-            return ListView.builder(
-                addAutomaticKeepAlives: true,
-                keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-                padding: const EdgeInsets.only(top: 60, left: 16, right: 16),
-                itemCount: filteredIdeas.length,
-                itemBuilder: (context, index) {
-                  final idea = filteredIdeas[index];
-                  final bookTitle = bookTitles[idea.linkedBookId ?? ''] ?? S.of(context).general;
-                  return _animatedIdeaCard(idea, index, userId, context, bookTitle);
-                }
+            return RefreshIndicator(
+              onRefresh: _loadData,
+              child: ListView.builder(
+                  addAutomaticKeepAlives: true,
+                  keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                  padding: const EdgeInsets.only(top: 60, left: 16, right: 16),
+                  itemCount: filteredIdeas.length,
+                  itemBuilder: (context, index) {
+                    final idea = filteredIdeas[index];
+                    final bookTitle = bookTitles[idea.linkedBookId ?? ''] ?? S.of(context).general;
+                    return _animatedIdeaCard(idea, index, userId, context, bookTitle);
+                  }
+              ),
             );
           },
         );

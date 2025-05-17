@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:intl/intl.dart';
 import '../../../../generated/l10n.dart';
+import '../../../../models/book_writer_model.dart';
 import '../../../../models/plot_models.dart';
 
 class AboutChapterScreen extends StatefulWidget {
@@ -9,6 +10,7 @@ class AboutChapterScreen extends StatefulWidget {
   final String userId;
   final String bookId;
   final String arcId;
+  final Status status;
 
   const AboutChapterScreen({
     super.key,
@@ -16,6 +18,7 @@ class AboutChapterScreen extends StatefulWidget {
     required this.userId,
     required this.bookId,
     required this.arcId,
+    required this.status
   });
 
   @override
@@ -208,10 +211,10 @@ class _AboutChapterScreenState extends State<AboutChapterScreen> {
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(16),
                 child: Card(
-                  color: Color.lerp(const Color(0xFFA5C6EA), Colors.white, 0.7),
+                  color: Color.lerp(widget.status.color, Colors.white, 0.7),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
-                      side: const BorderSide(color: Color(0xFFA5C6EA))
+                      side: BorderSide(color: widget.status.color)
                   ),
                   elevation: 4,
                   child: Padding(
@@ -222,7 +225,7 @@ class _AboutChapterScreenState extends State<AboutChapterScreen> {
                       children: [
                         TextField(
                           controller: _titleController,
-                          cursorColor: const Color(0xFFA5C6EA),
+                          cursorColor: widget.status.color,
                           onChanged: (value) => _checkForChanges(),
                           style: const TextStyle(color: Colors.black),
                           decoration: InputDecoration(
@@ -231,11 +234,11 @@ class _AboutChapterScreenState extends State<AboutChapterScreen> {
                             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide: const BorderSide(width: 0.5, color: Color(0xFFA5C6EA)),
+                              borderSide: BorderSide(width: 0.5, color: widget.status.color),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide: const BorderSide(width: 1.5, color: Color(0xFFA5C6EA)),
+                              borderSide: BorderSide(width: 1.5, color: widget.status.color),
                             ),
                           ),
                         ),
@@ -246,7 +249,7 @@ class _AboutChapterScreenState extends State<AboutChapterScreen> {
                           minLines: 3,
                           onChanged: (value) => _checkForChanges(),
                           keyboardType: TextInputType.multiline,
-                          cursorColor: const Color(0xFFA5C6EA),
+                          cursorColor: widget.status.color,
                           style: const TextStyle(color: Colors.black),
                           decoration: InputDecoration(
                             labelText: S.of(context).description,
@@ -254,11 +257,11 @@ class _AboutChapterScreenState extends State<AboutChapterScreen> {
                             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide: const BorderSide(width: 0.5, color: Color(0xFFA5C6EA)),
+                              borderSide: BorderSide(width: 0.5, color: widget.status.color),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide: const BorderSide(width: 1.5, color: Color(0xFFA5C6EA)),
+                              borderSide: BorderSide(width: 1.5, color: widget.status.color),
                             ),
                           ),
                         ),
@@ -278,7 +281,7 @@ class _AboutChapterScreenState extends State<AboutChapterScreen> {
                               child: TextField(
                                 controller: _keyMomentsController,
                                 onChanged: (value) => _newKeyMoment = value,
-                                cursorColor: const Color(0xFFA5C6EA),
+                                cursorColor: widget.status.color,
                                 style: const TextStyle(color: Colors.black),
                                 decoration: InputDecoration(
                                   hintText: S.of(context).add_key_moment,
@@ -286,15 +289,15 @@ class _AboutChapterScreenState extends State<AboutChapterScreen> {
                                   contentPadding: const EdgeInsets.symmetric(horizontal: 12),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(12),
-                                    borderSide: const BorderSide(color: Color(0xFFA5C6EA)),
+                                    borderSide: BorderSide(color: widget.status.color),
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(12),
-                                    borderSide: const BorderSide(color: Color(0xFFA5C6EA)),
+                                    borderSide: BorderSide(color: widget.status.color),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(12),
-                                    borderSide: const BorderSide(width: 1.5, color: Color(0xFFA5C6EA)),
+                                    borderSide: BorderSide(width: 1.5, color: widget.status.color),
                                   ),
                                 ),
                               ),
@@ -304,7 +307,7 @@ class _AboutChapterScreenState extends State<AboutChapterScreen> {
                               onPressed: _addKeyMoment,
                               icon: const Icon(Icons.add),
                               style: IconButton.styleFrom(
-                                backgroundColor: const Color(0xFFA5C6EA),
+                                backgroundColor: widget.status.color,
                                 foregroundColor: Colors.white,
                               ),
                             ),
@@ -319,7 +322,7 @@ class _AboutChapterScreenState extends State<AboutChapterScreen> {
                               return Card(
                                 margin: const EdgeInsets.only(bottom: 8),
                                 elevation: 0,
-                                color: Color.lerp(const Color(0xFFA5C6EA), Colors.white, 0.3),
+                                color: Color.lerp(widget.status.color, Colors.white, 0.3),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                   side: BorderSide(
@@ -343,13 +346,13 @@ class _AboutChapterScreenState extends State<AboutChapterScreen> {
                         ElevatedButton(
                           onPressed: _isSaving ? null : _saveChapter,
                           style: ButtonStyle(
-                            backgroundColor: WidgetStateProperty.all<Color>(const Color(0xFFA5C6EA)),
+                            backgroundColor: WidgetStateProperty.all<Color>(widget.status.color),
                             padding: WidgetStateProperty.all<EdgeInsets>(
                               const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
                             ),
                           ),
                           child: _isSaving
-                              ? const CircularProgressIndicator( color: Color(0xFFA5C6EA),)
+                              ? CircularProgressIndicator( color: widget.status.color,)
                               : Text(
                             S.of(context).save,
                             style: const TextStyle(

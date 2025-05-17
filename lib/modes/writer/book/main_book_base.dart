@@ -70,10 +70,10 @@ class _MainBookBaseState extends State<MainBookBase> with SingleTickerProviderSt
           index: _selectedPage,
           children: [
             AboutBookPage(book: widget.book, authorId: widget.book.authorId),
-            PlotListScreen(bookId: widget.book.id, authorId: widget.book.authorId,),
-            CharactersListScreen(bookId: widget.book.id, authorId: widget.book.authorId),
-            EnvironmentListScreen(bookId: widget.book.id, authorId: widget.book.authorId),
-            BookNotesListBaseScreen(bookId: widget.book.id, authorId: widget.book.authorId),
+            PlotListScreen(bookId: widget.book.id, authorId: widget.book.authorId, status: widget.book.status,),
+            CharactersListScreen(bookId: widget.book.id, authorId: widget.book.authorId, status: widget.book.status,),
+            EnvironmentListScreen(bookId: widget.book.id, authorId: widget.book.authorId, status: widget.book.status,),
+            BookNotesListBaseScreen(bookId: widget.book.id, authorId: widget.book.authorId, status: widget.book.status,),
           ],
         ),
         bottomNavigationBar: widget.book.id == null

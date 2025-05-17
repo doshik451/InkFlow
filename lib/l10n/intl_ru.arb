@@ -189,6 +189,9 @@
   "criterion_worldbuilding": "Мир",
   "criterion_emotion": "Эмоциональность",
   "criterion_writingStyle": "Стиль написания",
+  "criterion_ending": "Финал",
+  "deleted": "Удалено",
+
   "category_read": "Прочитано",
   "category_favorite": "Любимое",
   "category_abandoned": "Заброшено",
@@ -207,5 +210,8 @@
   "general_impression": "Общее впечатление",
   "review_and_criteria": "Отзыв и критерии",
   "moments": "Моменты",
-  "review": "Отзыв"
+  "review": "Отзыв",
+  "criteria": "Критерии",
+  "all_criteria_added": "Все критерии уже добавлены",
+  "add_criteria": "Добавить критерий"
 }

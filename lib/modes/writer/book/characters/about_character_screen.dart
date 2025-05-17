@@ -10,6 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../../../generated/l10n.dart';
 import '../../../../models/book_character_model.dart';
+import '../../../../models/book_writer_model.dart';
 import 'character_questionnaire_screen.dart';
 import 'character_references_screen.dart';
 
@@ -17,9 +18,10 @@ class AboutCharacterScreen extends StatefulWidget {
   final Character? character;
   final String bookId;
   final String userId;
+  final Status status;
 
   const AboutCharacterScreen(
-      {super.key, this.character, required this.bookId, required this.userId});
+      {super.key, this.character, required this.bookId, required this.userId, required this.status,});
 
   @override
   State<AboutCharacterScreen> createState() => _AboutCharacterScreenState();
@@ -141,6 +143,7 @@ class _AboutCharacterScreenState extends State<AboutCharacterScreen> {
               character: result,
               bookId: widget.bookId,
               userId: widget.userId,
+              status: widget.status,
             ),
           ),
         );
@@ -226,11 +229,11 @@ class _AboutCharacterScreenState extends State<AboutCharacterScreen> {
     );
   }
 
-  Widget _buildTextField(String label, TextEditingController controller,
+  Widget _buildTextField(String label, TextEditingController controller, Status status,
       {int maxLines = 1}) {
     return TextField(
       controller: controller,
-      cursorColor: Theme.of(context).colorScheme.tertiary,
+      cursorColor: status.color,
       style: const TextStyle(color: Colors.black),
       onChanged: (value) => _checkForChanges(),
       decoration: InputDecoration(
@@ -241,14 +244,14 @@ class _AboutCharacterScreenState extends State<AboutCharacterScreen> {
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(
             width: 0.5,
-            color: Theme.of(context).colorScheme.tertiary,
+            color: status.color,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(
             width: 1.5,
-            color: Theme.of(context).colorScheme.tertiary,
+            color: status.color,
           ),
         ),
       ),
@@ -300,11 +303,11 @@ class _AboutCharacterScreenState extends State<AboutCharacterScreen> {
           padding: const EdgeInsets.all(16),
           child: Card(
             color: Color.lerp(
-                const Color(0xFF89B0D9), Colors.white, 0.7),
+                widget.status.color, Colors.white, 0.7),
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
                 side:
-                    const BorderSide(color: Color(0xFF89B0D9))),
+                    BorderSide(color: widget.status.color)),
             elevation: 4,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -320,6 +323,7 @@ class _AboutCharacterScreenState extends State<AboutCharacterScreen> {
                           bookId: widget.bookId,
                           characterId: character!.id,
                           userId: widget.userId,
+                          status: widget.status,
                         )
                       else
                         Container(
@@ -328,7 +332,7 @@ class _AboutCharacterScreenState extends State<AboutCharacterScreen> {
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             border: Border.all(
-                              color: Theme.of(context).colorScheme.tertiary,
+                              color: widget.status.color,
                               width: 3,
                             ),
                           ),
@@ -336,7 +340,7 @@ class _AboutCharacterScreenState extends State<AboutCharacterScreen> {
                             child: Icon(
                               Icons.person,
                               size: 80,
-                              color: Theme.of(context).colorScheme.tertiary,
+                              color: widget.status.color,
                             ),
                           ),
                         ),
@@ -350,9 +354,9 @@ class _AboutCharacterScreenState extends State<AboutCharacterScreen> {
                           children: [
                             const SizedBox(height: 24),
                             _buildTextField(
-                                S.of(context).name, _nameController),
+                                S.of(context).name, _nameController, widget.status),
                             const SizedBox(height: 16),
-                            _buildTextField(S.of(context).age, _ageController),
+                            _buildTextField(S.of(context).age, _ageController, widget.status),
                             const SizedBox(height: 16),
                           ],
                         ),
@@ -366,28 +370,28 @@ class _AboutCharacterScreenState extends State<AboutCharacterScreen> {
                   const SizedBox(
                     height: 24,
                   ),
-                  _buildTextField(S.of(context).role, _roleController),
+                  _buildTextField(S.of(context).role, _roleController, widget.status),
                   const SizedBox(height: 16),
-                  _buildTextField(S.of(context).race, _raceController),
+                  _buildTextField(S.of(context).race, _raceController, widget.status),
                   const SizedBox(height: 16),
                   _buildTextField(
-                      S.of(context).occupation, _occupationController,
+                      S.of(context).occupation, _occupationController, widget.status,
                       maxLines: 2),
                   const SizedBox(height: 16),
                   _buildTextField(S.of(context).appearanceDescription,
-                      _appearanceDescriptionController,
+                      _appearanceDescriptionController, widget.status,
                       maxLines: 5),
                   const SizedBox(height: 24),
                   if(_isEditing) ...[
                     Card(
                       elevation: 0,
                       color: Color.lerp(
-                          const Color(0xFFA5C6EA), Colors.white,
+                          widget.status.color, Colors.white,
                           0.3),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
-                        side: const BorderSide(
-                          color: Color(0xFFA5C6EA),
+                        side: BorderSide(
+                          color: widget.status.color,
                           width: 1,
                         ),
                       ),
@@ -416,12 +420,12 @@ class _AboutCharacterScreenState extends State<AboutCharacterScreen> {
                     Card(
                       elevation: 0,
                       color: Color.lerp(
-                          const Color(0xFFA5C6EA), Colors.white,
+                          widget.status.color, Colors.white,
                           0.3),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
-                        side: const BorderSide(
-                          color: Color(0xFFA5C6EA),
+                        side: BorderSide(
+                          color: widget.status.color,
                           width: 1,
                         ),
                       ),
@@ -443,7 +447,7 @@ class _AboutCharacterScreenState extends State<AboutCharacterScreen> {
                               context, MaterialPageRoute(builder: (context) =>
                               CharacterReferencesScreen(bookId: widget.bookId,
                                   userId: widget.userId,
-                                  character: widget.character!)));
+                                  character: widget.character!, status: widget.status,)));
                         },
                         trailing: const Icon(
                           Icons.chevron_right,
@@ -458,7 +462,7 @@ class _AboutCharacterScreenState extends State<AboutCharacterScreen> {
                     onPressed: _isSaving ? null : _saveCharacter,
                     style: ButtonStyle(
                       backgroundColor: WidgetStateProperty.all<Color>(
-                          const Color(0xFF89B0D9)),
+                          widget.status.color),
                       padding: WidgetStateProperty.all<EdgeInsets>(
                         const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
                       ),
@@ -487,11 +491,13 @@ class _CharacterMainPicWidget extends StatefulWidget {
   String bookId;
   String userId;
   String characterId;
+  final Status status;
 
   _CharacterMainPicWidget(
       {required this.mainPicUrl,
       required this.userId,
       required this.bookId,
+      required this.status,
       required this.characterId});
 
   @override
@@ -611,7 +617,7 @@ class _CharacterMainPicWidgetState extends State<_CharacterMainPicWidget> {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(
-            color: Theme.of(context).colorScheme.tertiary,
+            color: widget.status.color,
             width: 3,
           ),
         ),
@@ -619,13 +625,13 @@ class _CharacterMainPicWidgetState extends State<_CharacterMainPicWidget> {
           child: _isLoadingImage
               ? Center(
                   child: CircularProgressIndicator(
-                      color: Theme.of(context).colorScheme.tertiary))
+                      color: widget.status.color))
               : widget.mainPicUrl != null
                   ? Image.network(widget.mainPicUrl!, fit: BoxFit.cover)
                   : Icon(
                       Icons.person,
                       size: 80,
-                      color: Theme.of(context).colorScheme.tertiary,
+                      color: widget.status.color,
                     ),
         ),
       ),

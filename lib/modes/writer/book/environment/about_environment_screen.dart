@@ -5,6 +5,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import '../../../../models/book_writer_model.dart';
 import 'package:intl/intl.dart';
 import '../../../../generated/l10n.dart';
 import '../../../../models/book_environment_model.dart';
@@ -12,12 +13,14 @@ import '../../../../models/book_environment_model.dart';
 class AboutEnvironmentScreen extends StatefulWidget {
   final BookEnvironmentModel? environment;
   final String bookId;
+  final Status status;
   final String userId;
 
   const AboutEnvironmentScreen({
     super.key,
     this.environment,
     required this.bookId,
+    required this.status,
     required this.userId
   });
 
@@ -194,10 +197,10 @@ class _AboutEnvironmentScreenState extends State<AboutEnvironmentScreen> {
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(16),
                 child: Card(
-                  color: Color.lerp(const Color(0xFFA5C6EA), Colors.white, 0.7),
+                  color: Color.lerp(widget.status.color, Colors.white, 0.7),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
-                      side: const BorderSide(color: Color(0xFFA5C6EA))
+                      side: BorderSide(color: widget.status.color)
                   ),
                   elevation: 4,
                   child: Padding(
@@ -212,13 +215,14 @@ class _AboutEnvironmentScreenState extends State<AboutEnvironmentScreen> {
                           bookId: widget.bookId,
                           environmentId: widget.environment?.id ?? 'temp',
                           initialImages: widget.environment?.images ?? [],
+                          status: widget.status,
                         ),
 
                         const SizedBox(height: 20),
 
                         TextField(
                           controller: _titleController,
-                          cursorColor: const Color(0xFFA5C6EA),
+                          cursorColor: widget.status.color,
                           onChanged: (value) => _checkForChanges(),
                           style: const TextStyle(color: Colors.black),
                           decoration: InputDecoration(
@@ -227,11 +231,11 @@ class _AboutEnvironmentScreenState extends State<AboutEnvironmentScreen> {
                             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide: const BorderSide(width: 0.5, color: Color(0xFFA5C6EA)),
+                              borderSide: BorderSide(width: 0.5, color: widget.status.color),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide: const BorderSide(width: 1.5, color: Color(0xFFA5C6EA)),
+                              borderSide: BorderSide(width: 1.5, color: widget.status.color),
                             ),
                           ),
                         ),
@@ -244,7 +248,7 @@ class _AboutEnvironmentScreenState extends State<AboutEnvironmentScreen> {
                           minLines: 3,
                           onChanged: (value) => _checkForChanges(),
                           keyboardType: TextInputType.multiline,
-                          cursorColor: const Color(0xFFA5C6EA),
+                          cursorColor: widget.status.color,
                           style: const TextStyle(color: Colors.black),
                           decoration: InputDecoration(
                             labelText: S.of(context).description,
@@ -252,11 +256,11 @@ class _AboutEnvironmentScreenState extends State<AboutEnvironmentScreen> {
                             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide: const BorderSide(width: 0.5, color: Color(0xFFA5C6EA)),
+                              borderSide: BorderSide(width: 0.5, color: widget.status.color),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide: const BorderSide(width: 1.5, color: Color(0xFFA5C6EA)),
+                              borderSide: BorderSide(width: 1.5, color: widget.status.color),
                             ),
                           ),
                         ),
@@ -269,7 +273,7 @@ class _AboutEnvironmentScreenState extends State<AboutEnvironmentScreen> {
                           minLines: 3,
                           onChanged: (value) => _checkForChanges(),
                           keyboardType: TextInputType.multiline,
-                          cursorColor: const Color(0xFFA5C6EA),
+                          cursorColor: widget.status.color,
                           style: const TextStyle(color: Colors.black),
                           decoration: InputDecoration(
                             labelText: S.of(context).features,
@@ -277,11 +281,11 @@ class _AboutEnvironmentScreenState extends State<AboutEnvironmentScreen> {
                             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide: const BorderSide(width: 0.5, color: Color(0xFFA5C6EA)),
+                              borderSide: BorderSide(width: 0.5, color: widget.status.color),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide: const BorderSide(width: 1.5, color: Color(0xFFA5C6EA)),
+                              borderSide: BorderSide(width: 1.5, color: widget.status.color),
                             ),
                           ),
                         ),
@@ -291,13 +295,13 @@ class _AboutEnvironmentScreenState extends State<AboutEnvironmentScreen> {
                         ElevatedButton(
                           onPressed: _isSaving ? null : _saveEnvironment,
                           style: ButtonStyle(
-                            backgroundColor: WidgetStateProperty.all<Color>(const Color(0xFFA5C6EA)),
+                            backgroundColor: WidgetStateProperty.all<Color>(widget.status.color),
                             padding: WidgetStateProperty.all<EdgeInsets>(
                               const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
                             ),
                           ),
                           child: _isSaving
-                              ? const CircularProgressIndicator( color: Color(0xFFA5C6EA),)
+                              ? CircularProgressIndicator( color: widget.status.color,)
                               : Text(
                             S.of(context).save,
                             style: const TextStyle(
@@ -325,6 +329,7 @@ class EnvironmentImageSlider extends StatefulWidget {
   final String bookId;
   final String environmentId;
   final List<String> initialImages;
+  final Status status;
 
   const EnvironmentImageSlider({
     super.key,
@@ -332,6 +337,7 @@ class EnvironmentImageSlider extends StatefulWidget {
     required this.bookId,
     required this.environmentId,
     required this.initialImages,
+    required this.status,
   });
 
   @override
@@ -361,7 +367,7 @@ class _EnvironmentImageSliderState extends State<EnvironmentImageSlider> {
         Container(
           height: 250,
           decoration: BoxDecoration(
-            color: const Color(0xFFA5C6EA),
+            color: widget.status.color,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Stack(
@@ -389,8 +395,8 @@ class _EnvironmentImageSliderState extends State<EnvironmentImageSlider> {
                             fit: BoxFit.cover,
                             placeholder: (ctx, url) => Container(
                               color: Colors.grey[300],
-                              child: const Center(
-                                child: CircularProgressIndicator( color: Color(0xFFA5C6EA),),
+                              child: Center(
+                                child: CircularProgressIndicator( color: widget.status.color,),
                               ),
                             ),
                             errorWidget: (ctx, url, err) => Container(
@@ -420,7 +426,7 @@ class _EnvironmentImageSliderState extends State<EnvironmentImageSlider> {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: _currentPage == index
-                              ? const Color(0xFFA5C6EA)
+                              ? widget.status.color
                               : Colors.grey.withOpacity(0.5),
                         ),
                       ),
@@ -451,9 +457,9 @@ class _EnvironmentImageSliderState extends State<EnvironmentImageSlider> {
         ),
 
         if (_isLoading)
-          const Padding(
-            padding: EdgeInsets.only(top: 8),
-            child: LinearProgressIndicator( color: Color(0xFFA5C6EA),),
+          Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: LinearProgressIndicator( color: widget.status.color,),
           ),
       ],
     );

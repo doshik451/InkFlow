@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/services.dart';
 import 'package:inkflow/modes/reader/read_book/review_screen.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -13,11 +12,11 @@ import '../../writer/book/book_file_service.dart';
 import 'package:collection/collection.dart';
 
 class ReadBookScreen extends StatefulWidget {
-  final FinishedBook? book;
+  FinishedBook? book;
   final BookCategory bookCategory;
   final String userId;
 
-  const ReadBookScreen(
+  ReadBookScreen(
       {super.key, this.book, required this.userId, required this.bookCategory});
 
   @override
@@ -38,6 +37,7 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
   List<String> _links = [];
   late BookFileService _bookFileService;
   late Future<List<BookCategory>> _categoriesFuture;
+  late FinishedBook? _finishedBook;
   bool _isDownloading = false;
   bool _isLoadingFiles = false;
   bool _hasUnsavedData = false;
@@ -56,16 +56,17 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
   void initState() {
     super.initState();
 
-    _titleController = TextEditingController(text: widget.book?.title ?? '');
-    _authorController = TextEditingController(text: widget.book?.author ?? '');
+    _finishedBook = widget.book;
+    _titleController = TextEditingController(text: _finishedBook?.title ?? '');
+    _authorController = TextEditingController(text: _finishedBook?.author ?? '');
     _descriptionController =
-        TextEditingController(text: widget.book?.description ?? '');
+        TextEditingController(text: _finishedBook?.description ?? '');
 
     _linkController = TextEditingController();
 
-    _startDate = widget.book?.startDate ?? '';
-    _endDate = widget.book?.endDate ?? '';
-    _links = widget.book?.links ?? [];
+    _startDate = _finishedBook?.startDate ?? '';
+    _endDate = _finishedBook?.endDate ?? '';
+    _links = _finishedBook?.links ?? [];
 
     _selectedCategory = widget.bookCategory;
     _categoriesFuture = _loadCategories();
@@ -81,7 +82,7 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
     if (_isEditing) {
       _bookFileService = BookFileService(
           userId: widget.userId,
-          bookId: widget.book!.id,
+          bookId: _finishedBook!.id,
           context: context,
           pathPart: 'readBooks');
       _loadBookFiles();
@@ -159,9 +160,9 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
 
     String bookId;
     try {
-      if (widget.book != null) {
+      if (_finishedBook != null) {
         await _databaseReference
-            .child('finishedBooks/${widget.userId}/${widget.book!.id}')
+            .child('finishedBooks/${widget.userId}/${_finishedBook!.id}')
             .update({
           'title': title,
           'author': authorName,
@@ -172,7 +173,7 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
           'files': _files,
           'links': _links,
         });
-        bookId = widget.book!.id;
+        bookId = _finishedBook!.id;
       } else {
         final ref =
             _databaseReference.child('finishedBooks/${widget.userId}').push();
@@ -290,9 +291,9 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(widget.book == null
+          title: Text(_finishedBook == null
               ? S.of(context).creating
-              : widget.book!.title),
+              : _finishedBook!.title),
           centerTitle: true,
         ),
         body: FutureBuilder<List<BookCategory>>(
@@ -581,14 +582,16 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
                                           builder: (_) => ReviewScreen(
                                             userId: widget.userId,
                                             category: _selectedCategory,
-                                            book: widget.book!,
+                                            book: _finishedBook!,
                                           ),
                                         ),
                                       );
 
                                       if (result is Map && result['reload'] == true) {
                                         setState(() {
-                                          _hasUnsavedData = true;
+                                          if (result['book'] != null) {
+                                            _finishedBook = result['book'];
+                                          }
                                         });
                                       }
                                     },
@@ -906,7 +909,7 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
 
     try {
       final userId = FirebaseAuth.instance.currentUser!.uid;
-      final bookId = widget.book!.id;
+      final bookId = _finishedBook!.id;
 
       final file = await _bookFileService.downloadToDownloads(
           userId: userId,

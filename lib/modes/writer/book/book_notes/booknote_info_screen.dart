@@ -5,12 +5,14 @@ import 'package:inkflow/models/booknote_model.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../generated/l10n.dart';
+import '../../../../models/book_writer_model.dart';
 
 class BooknoteInfoScreen extends StatefulWidget {
   final Booknote? note;
   final String bookId;
   final String userId;
-  const BooknoteInfoScreen({super.key, this.note, required this.bookId, required this.userId});
+  final Status status;
+  const BooknoteInfoScreen({super.key, this.note, required this.bookId, required this.userId, required this.status});
 
   @override
   State<BooknoteInfoScreen> createState() => _BooknoteInfoScreenState();
@@ -151,10 +153,10 @@ class _BooknoteInfoScreenState extends State<BooknoteInfoScreen> {
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(16),
                 child: Card(
-                  color: Color.lerp(const Color(0xFFA5C6EA), Colors.white, 0.7),
+                  color: Color.lerp(widget.status.color, Colors.white, 0.7),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
-                      side: const BorderSide(color: Color(0xFFA5C6EA))
+                      side: BorderSide(color: widget.status.color)
                   ),
                   elevation: 4,
                   child: Padding(
@@ -166,7 +168,7 @@ class _BooknoteInfoScreenState extends State<BooknoteInfoScreen> {
                         const SizedBox(height: 20),
                         TextField(
                           controller: _titleController,
-                          cursorColor: const Color(0xFFA5C6EA),
+                          cursorColor: widget.status.color,
                           onChanged: (value) => _checkForChanges(),
                           style: const TextStyle(color: Colors.black),
                           decoration: InputDecoration(
@@ -175,11 +177,11 @@ class _BooknoteInfoScreenState extends State<BooknoteInfoScreen> {
                             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide: const BorderSide(width: 0.5, color: Color(0xFFA5C6EA)),
+                              borderSide: BorderSide(width: 0.5, color: widget.status.color),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide: const BorderSide(width: 1.5, color: Color(0xFFA5C6EA)),
+                              borderSide: BorderSide(width: 1.5, color: widget.status.color),
                             ),
                           ),
                         ),
@@ -196,7 +198,7 @@ class _BooknoteInfoScreenState extends State<BooknoteInfoScreen> {
                                 minLines: 3,
                                 onChanged: (value) => _checkForChanges(),
                                 keyboardType: TextInputType.multiline,
-                                cursorColor: const Color(0xFFA5C6EA),
+                                cursorColor: widget.status.color,
                                 style: const TextStyle(color: Colors.black),
                                 decoration: InputDecoration(
                                   labelText: S.of(context).description,
@@ -204,11 +206,11 @@ class _BooknoteInfoScreenState extends State<BooknoteInfoScreen> {
                                   contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(12),
-                                    borderSide: const BorderSide(width: 0.5, color: Color(0xFFA5C6EA)),
+                                    borderSide: BorderSide(width: 0.5, color: widget.status.color),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(12),
-                                    borderSide: const BorderSide(width: 1.5, color: Color(0xFFA5C6EA)),
+                                    borderSide: BorderSide(width: 1.5, color: widget.status.color),
                                   ),
                                 ),
                               ),
@@ -218,7 +220,7 @@ class _BooknoteInfoScreenState extends State<BooknoteInfoScreen> {
                         ElevatedButton(
                           onPressed: _saveNote,
                           style: ButtonStyle(
-                            backgroundColor: WidgetStateProperty.all<Color>(const Color(0xFFA5C6EA)),
+                            backgroundColor: WidgetStateProperty.all<Color>(widget.status.color),
                             padding: WidgetStateProperty.all<EdgeInsets>(
                               const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
                             ),

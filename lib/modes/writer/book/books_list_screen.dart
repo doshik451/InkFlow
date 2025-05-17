@@ -99,13 +99,15 @@ class _BooksListWidgetState extends State<BooksListWidget> {
     return {};
   }
 
-  void _loadData() {
+  Future<void> _loadData() async{
     final user = FirebaseAuth.instance.currentUser;
     if(user == null) throw Exception(S.current.an_error_occurred);
 
     userId = user.uid;
-    _userBooksRef = FirebaseDatabase.instance.ref('books/$userId');
-    _booksStream = _userBooksRef.onValue;
+    setState(() {
+      _userBooksRef = FirebaseDatabase.instance.ref('books/$userId');
+      _booksStream = _userBooksRef.onValue;
+    });
   }
 
 
@@ -175,19 +177,22 @@ class _BooksListWidgetState extends State<BooksListWidget> {
                   );
                 }
 
-                return ListView.builder(
-                    addAutomaticKeepAlives: true,
-                    keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-                    padding: const EdgeInsets.only(top: 60, left: 16, right: 16),
-                    itemCount: filteredBooks.length,
-                    itemBuilder: (context, index) {
-                      final book = filteredBooks[index];
-                      return _BookCard(book: book, index: index, userId: userId, onUpdate: () {
-                        setState(() {
-                          _loadData();
-                        });
-                      },);
-                    }
+                return RefreshIndicator(
+                  onRefresh: _loadData,
+                  child: ListView.builder(
+                      addAutomaticKeepAlives: true,
+                      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                      padding: const EdgeInsets.only(top: 60, left: 16, right: 16),
+                      itemCount: filteredBooks.length,
+                      itemBuilder: (context, index) {
+                        final book = filteredBooks[index];
+                        return _BookCard(book: book, index: index, userId: userId, onUpdate: () {
+                          setState(() {
+                            _loadData();
+                          });
+                        },);
+                      }
+                  ),
                 );
               }
           );

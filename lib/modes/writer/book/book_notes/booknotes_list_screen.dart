@@ -1,6 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../../../../models/book_writer_model.dart';
 import '../../../../models/booknote_model.dart';
 import '../../../general/base/confirm_delete_base.dart';
 import '../../../general/base/delete_swipe_background_base.dart';
@@ -13,7 +14,8 @@ class BooknotesListScreen extends StatefulWidget {
   final String bookId;
   final String authorId;
   final String searchQuery;
-  const BooknotesListScreen({super.key, required this.searchQuery, required this.bookId, required this.authorId});
+  final Status status;
+  const BooknotesListScreen({super.key, required this.searchQuery, required this.bookId, required this.authorId, required this.status});
 
   @override
   State<BooknotesListScreen> createState() => _BooknotesListScreenState();
@@ -27,7 +29,13 @@ class _BooknotesListScreenState extends State<BooknotesListScreen> {
   void initState() {
     super.initState();
     _databaseReference = FirebaseDatabase.instance.ref('books/${widget.authorId}/${widget.bookId}/notes');
-    _notesStream = _databaseReference.onValue;
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    setState(() {
+      _notesStream = _databaseReference.onValue;
+    });
   }
 
   Future<Map<String, String>> _loadAdditionalData() async {
@@ -89,15 +97,18 @@ class _BooknotesListScreenState extends State<BooknotesListScreen> {
               );
             }
 
-            return ListView.builder(
-              addAutomaticKeepAlives: true,
-              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-              padding: const EdgeInsets.only(top: 60, left: 16, right: 16),
-              itemCount: filteredNotes.length,
-              itemBuilder: (context, index) {
-                final note = filteredNotes[index];
-                return _NoteCard(note: note, index: index, userId: widget.authorId, bookId: widget.bookId,);
-              },
+            return RefreshIndicator(
+              onRefresh: _loadData,
+              child: ListView.builder(
+                addAutomaticKeepAlives: true,
+                keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                padding: const EdgeInsets.only(top: 60, left: 16, right: 16),
+                itemCount: filteredNotes.length,
+                itemBuilder: (context, index) {
+                  final note = filteredNotes[index];
+                  return _NoteCard(note: note, index: index, userId: widget.authorId, bookId: widget.bookId, status: widget.status,);
+                },
+              ),
             );
           },
         );
@@ -111,6 +122,7 @@ class _NoteCard extends StatelessWidget {
   final int index;
   final String userId;
   final String bookId;
+  final Status status;
   static const animationDuration = Duration(milliseconds: 500);
 
   const _NoteCard({
@@ -118,6 +130,7 @@ class _NoteCard extends StatelessWidget {
     required this.index,
     required this.userId,
     required this.bookId,
+    required this.status
   });
 
   @override
@@ -134,12 +147,12 @@ class _NoteCard extends StatelessWidget {
           confirmDismiss: (direction) => confirmDelete(context),
           onDismissed: (direction) => _deleteNote(note.id, bookId, userId, context),
           child: GestureDetector(
-            onTap: () => _navigateToNoteDetail(context, note),
+            onTap: () => _navigateToNoteDetail(context, note, status),
             child: Opacity(
               opacity: value,
               child: Transform.translate(
                 offset: Offset(0, (1 - value) * 20),
-                child: noteCardContent(note, context),
+                child: noteCardContent(note, context, status),
               ),
             ),
           ),
@@ -148,10 +161,10 @@ class _NoteCard extends StatelessWidget {
     );
   }
 
-  void _navigateToNoteDetail(BuildContext context, Booknote note) {
+  void _navigateToNoteDetail(BuildContext context, Booknote note, Status status) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => BooknoteInfoScreen(note: note, bookId: bookId, userId: userId,),
+        builder: (context) => BooknoteInfoScreen(note: note, bookId: bookId, userId: userId, status: status,),
       ),
     );
   }

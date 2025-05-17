@@ -104,7 +104,9 @@ class _InputField extends StatelessWidget {
     required this.label,
     this.errorText,
     this.keyboardType,
-    this.onChanged, required this.obscureText, this.suffixIcon,
+    this.onChanged,
+    this.suffixIcon,
+    required this.obscureText,
   });
 
   @override

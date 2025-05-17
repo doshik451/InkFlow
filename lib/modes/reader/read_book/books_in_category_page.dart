@@ -82,10 +82,8 @@ class _BooksInCategoryPageState extends State<BooksInCategoryPage> {
 
   Future<List<FinishedBook>> _loadBooks() async {
     if (_userId == null) return [];
-
     try {
       final snapshot = await _db.child('finishedBooks/$_userId').get();
-
       final List<FinishedBook> books = [];
 
       if (snapshot.exists) {
@@ -98,7 +96,6 @@ class _BooksInCategoryPageState extends State<BooksInCategoryPage> {
           }
         }
       }
-
       return books;
     } catch (e) {
       debugPrint('Error loading books: $e');
@@ -121,10 +118,12 @@ class _BooksInCategoryPageState extends State<BooksInCategoryPage> {
   List<FinishedBook> _filterBooks(List<FinishedBook> books) {
     if (_searchQuery.isEmpty) return books;
     final query = _searchQuery.toLowerCase();
-    return books.where((book) =>
-    book.title.toLowerCase().contains(query) ||
-        book.author.toLowerCase().contains(query) ||
-        (book.description.toLowerCase().contains(query) ?? false)).toList();
+    return books
+        .where((book) =>
+            book.title.toLowerCase().contains(query) ||
+            book.author.toLowerCase().contains(query) ||
+            (book.description.toLowerCase().contains(query) ?? false))
+        .toList();
   }
 
   @override
@@ -144,40 +143,39 @@ class _BooksInCategoryPageState extends State<BooksInCategoryPage> {
               centerTitle: true,
             ),
             floatingActionButton: FloatingActionButton(
-              heroTag: 'add_book_in_category',
-              shape: const CircleBorder(),
-              backgroundColor: Theme.of(context).colorScheme.tertiary,
-              child: const Icon(Icons.add, color: Colors.white),
-              onPressed: () async {
-                final result = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => ReadBookScreen(
-                      userId: _userId!,
-                      bookCategory: widget.category,
-                    ),
-                  ),
-                );
-
-                if (result is Map && result['reload'] == true) {
-                  final FinishedBook book = result['book'];
-                  final BookCategory category = result['category'];
-                  Navigator.push(
+                heroTag: 'add_book_in_category',
+                shape: const CircleBorder(),
+                backgroundColor: Theme.of(context).colorScheme.tertiary,
+                child: const Icon(Icons.add, color: Colors.white),
+                onPressed: () async {
+                  final result = await Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (_) => ReadBookScreen(
                         userId: _userId!,
-                        bookCategory: category,
-                        book: book,
+                        bookCategory: widget.category,
                       ),
                     ),
                   );
-                  setState(() {
-                    _futureBooks = _loadBooks();
-                  });
-                }
-              }
-            ),
+
+                  if (result is Map && result['reload'] == true) {
+                    final FinishedBook book = result['book'];
+                    final BookCategory category = result['category'];
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => ReadBookScreen(
+                          userId: _userId!,
+                          bookCategory: category,
+                          book: book,
+                        ),
+                      ),
+                    );
+                    setState(() {
+                      _futureBooks = _loadBooks();
+                    });
+                  }
+                }),
             body: Column(
               children: [
                 SearchPoly(
@@ -193,8 +191,10 @@ class _BooksInCategoryPageState extends State<BooksInCategoryPage> {
                     child: FutureBuilder<List<FinishedBook>>(
                       future: _futureBooks,
                       builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
-                          return const Center(child: CircularProgressIndicator());
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                              child: CircularProgressIndicator());
                         }
 
                         if (snapshot.hasError) {
@@ -219,153 +219,230 @@ class _BooksInCategoryPageState extends State<BooksInCategoryPage> {
                                 Icon(
                                   Icons.search_off,
                                   size: 48,
-                                  color: Theme.of(context).colorScheme.secondary,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
                                 ),
                                 const SizedBox(height: 16),
                                 Text(
                                   s.no_books,
-                                  style: Theme.of(context).textTheme.titleMedium,
+                                  style:
+                                      Theme.of(context).textTheme.titleMedium,
                                 ),
                               ],
                             ),
                           );
                         }
 
-                        return ListView.builder(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          itemCount: books.length,
-                          itemBuilder: (context, index) {
-                            final book = books[index];
-                            return Dismissible(
-                              key: Key(book.id),
-                              direction: DismissDirection.endToStart,
-                              background: buildSwipeBackground(context),
-                              confirmDismiss: (direction) => confirmDelete(context),
-                              onDismissed: (_) async {
-                                await _deleteBook(book.id);
-                                setState(() {
-                                  _futureBooks = _loadBooks();
-                                });
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 6),
-                                child: Card(
-                                  color: Color.lerp(book.ratingColor, Colors.white, 0.5),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(16),
-                                    side: BorderSide(
-                                      color: book.ratingColor,
-                                      width: 2,
-                                    ),
-                                  ),
-                                  elevation: 3,
-                                  child: InkWell(
-                                    borderRadius: BorderRadius.circular(16),
-                                    onTap: () async {
-                                      final result = await Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (_) => ReadBookScreen(
-                                            userId: _userId!,
-                                            bookCategory: widget.category,
-                                            book: book,
-                                          ),
-                                        ),
-                                      );
-
-                                      if (result is Map && result['reload'] == true) {
+                        return RefreshIndicator(
+                          onRefresh: () async {
+                            setState(() {
+                              _futureBooks = _loadBooks();
+                            });
+                            await _futureBooks;
+                          },
+                          child: ListView.builder(
+                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            itemCount: books.length,
+                            itemBuilder: (context, index) {
+                              final book = books[index];
+                              return TweenAnimationBuilder(
+                                  tween: Tween<double>(begin: 0, end: 1),
+                                  duration: const Duration(milliseconds: 500),
+                                  curve: Curves.easeOut,
+                                  builder: (context, value, child) {
+                                    return Dismissible(
+                                      key: Key(book.id),
+                                      direction: DismissDirection.endToStart,
+                                      background: buildSwipeBackground(context),
+                                      confirmDismiss: (direction) =>
+                                          confirmDelete(context),
+                                      onDismissed: (_) async {
+                                        await _deleteBook(book.id);
                                         setState(() {
                                           _futureBooks = _loadBooks();
                                         });
-                                      }
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(16),
-                                      child: Row(
-                                        children: [
-                                          CircleAvatar(
-                                            radius: 24,
-                                            backgroundColor: Color.lerp(book.ratingColor, Colors.white, 0.8),
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                border: Border.all(
-                                                  color: book.ratingColor,
-                                                  width: 2.0,
-                                                ),
-                                              ),
-                                              child: Center(
-                                                child: Text(
-                                                  book.overallRating ?? '???',
-                                                  style: theme.textTheme.bodyLarge?.copyWith(
-                                                    color: book.ratingColor,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                              ),
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 6),
+                                        child: Card(
+                                          color: Color.lerp(book.ratingColor,
+                                              Colors.white, 0.5),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(16),
+                                            side: BorderSide(
+                                              color: book.ratingColor,
+                                              width: 2,
                                             ),
                                           ),
-                                          const SizedBox(width: 16),
-                                          Expanded(
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  book.title,
-                                                  style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 18, color: Colors.black),
-                                                  maxLines: 1,
-                                                  overflow: TextOverflow.ellipsis,
+                                          elevation: 3,
+                                          child: InkWell(
+                                            borderRadius:
+                                                BorderRadius.circular(16),
+                                            onTap: () async {
+                                              final result =
+                                                  await Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (_) =>
+                                                      ReadBookScreen(
+                                                    userId: _userId!,
+                                                    bookCategory:
+                                                        widget.category,
+                                                    book: book,
+                                                  ),
                                                 ),
-                                                const SizedBox(height: 4),
-                                                Row(
-                                                  children: [
-                                                    Text(
-                                                      '${S.of(context).author}: ',
-                                                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                                          color: Colors.grey[600],
-                                                          fontSize: 14
-                                                      ),
-                                                    ),
-                                                    Flexible(
-                                                      child: Text(
-                                                        book.author,
-                                                        maxLines: 1,
-                                                        overflow: TextOverflow.ellipsis,
-                                                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                                            fontWeight: FontWeight.w500,
-                                                            color: Colors.black,
-                                                            fontSize: 14
+                                              );
+
+                                              if (result is Map &&
+                                                  result['reload'] == true) {
+                                                setState(() {
+                                                  _futureBooks = _loadBooks();
+                                                });
+                                              }
+                                            },
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(16),
+                                              child: Row(
+                                                children: [
+                                                  CircleAvatar(
+                                                    radius: 24,
+                                                    backgroundColor: Color.lerp(
+                                                        book.ratingColor,
+                                                        Colors.white,
+                                                        0.8),
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                        shape: BoxShape.circle,
+                                                        border: Border.all(
+                                                          color:
+                                                              book.ratingColor,
+                                                          width: 2.0,
                                                         ),
                                                       ),
-                                                    )
-                                                  ],
-                                                ),
-                                                Text('${book.startDate.isNotEmpty ?? false ? book.startDate : '...'} - ${book.endDate.isNotEmpty ?? false ? book.endDate : '...'}', style: const TextStyle(color: Colors.black),),
-                                                if (book.description.isNotEmpty ?? false)
-                                                  Padding(
-                                                    padding: const EdgeInsets.only(top: 6),
-                                                    child: Text(
-                                                      book.description,
-                                                      style: const TextStyle(
-                                                        fontWeight: FontWeight.w500,
-                                                        fontSize: 14,
-                                                        color: Colors.black,
+                                                      child: Center(
+                                                        child: Text(
+                                                          book.overallRating ??
+                                                              '???',
+                                                          style: theme.textTheme
+                                                              .bodyLarge
+                                                              ?.copyWith(
+                                                            color: book
+                                                                .ratingColor,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
                                                       ),
-                                                      maxLines: 2,
-                                                      overflow: TextOverflow.ellipsis,
                                                     ),
                                                   ),
-                                              ],
+                                                  const SizedBox(width: 16),
+                                                  Expanded(
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          book.title,
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  fontSize: 18,
+                                                                  color: Colors
+                                                                      .black),
+                                                          maxLines: 1,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        ),
+                                                        const SizedBox(
+                                                            height: 4),
+                                                        Row(
+                                                          children: [
+                                                            Text(
+                                                              '${S.of(context).author}: ',
+                                                              style: Theme.of(
+                                                                      context)
+                                                                  .textTheme
+                                                                  .bodySmall
+                                                                  ?.copyWith(
+                                                                      color: Colors
+                                                                              .grey[
+                                                                          600],
+                                                                      fontSize:
+                                                                          14),
+                                                            ),
+                                                            Flexible(
+                                                              child: Text(
+                                                                book.author,
+                                                                maxLines: 1,
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                style: Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .bodyMedium
+                                                                    ?.copyWith(
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .w500,
+                                                                        color: Colors
+                                                                            .black,
+                                                                        fontSize:
+                                                                            14),
+                                                              ),
+                                                            )
+                                                          ],
+                                                        ),
+                                                        Text(
+                                                          '${book.startDate.isNotEmpty ?? false ? book.startDate : '...'} - ${book.endDate.isNotEmpty ?? false ? book.endDate : '...'}',
+                                                          style:
+                                                              const TextStyle(
+                                                                  color: Colors
+                                                                      .black),
+                                                        ),
+                                                        if (book.description
+                                                                .isNotEmpty ??
+                                                            false)
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .only(
+                                                                    top: 6),
+                                                            child: Text(
+                                                              book.description,
+                                                              style:
+                                                                  const TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                                fontSize: 14,
+                                                                color: Colors
+                                                                    .black,
+                                                              ),
+                                                              maxLines: 2,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                            ),
+                                                          ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
-                                        ],
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
+                                    );
+                                  });
+                            },
+                          ),
                         );
                       },
                     ),

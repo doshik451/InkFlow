@@ -104,9 +104,11 @@ class _PlanListState extends State<PlanList> {
 
   Future<Map<String, String>> _loadAdditionalData() async => {};
 
-  void _loadData() {
-    _databaseReference = FirebaseDatabase.instance.ref('planBooks/$userId');
-    _stream = _databaseReference.onValue;
+  Future<void> _loadData() async {
+    setState(() {
+      _databaseReference = FirebaseDatabase.instance.ref('planBooks/$userId');
+      _stream = _databaseReference.onValue;
+    });
   }
 
   @override
@@ -201,19 +203,22 @@ class _PlanListState extends State<PlanList> {
               );
             }
 
-            return ListView.builder(
-              addAutomaticKeepAlives: true,
-              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-              padding: const EdgeInsets.only(top: 60, left: 16, right: 16),
-              itemCount: filteredBooksInPlan.length,
-              itemBuilder: (context, index) {
-                final item = filteredBooksInPlan[index];
-                return BookInPlanCard(book: item, index: index, userId: userId, onUpdate: () {
-                  setState(() {
-                    _loadData();
-                  });
-                },);
-              },
+            return RefreshIndicator(
+              onRefresh: _loadData,
+              child: ListView.builder(
+                addAutomaticKeepAlives: true,
+                keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                padding: const EdgeInsets.only(top: 60, left: 16, right: 16),
+                itemCount: filteredBooksInPlan.length,
+                itemBuilder: (context, index) {
+                  final item = filteredBooksInPlan[index];
+                  return BookInPlanCard(book: item, index: index, userId: userId, onUpdate: () {
+                    setState(() {
+                      _loadData();
+                    });
+                  },);
+                },
+              ),
             );
           },
         );
