@@ -45,6 +45,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Добавить ключевой момент",
     ),
     "add_link": MessageLookupByLibrary.simpleMessage("Добавить ссылку"),
+    "add_moment": MessageLookupByLibrary.simpleMessage("Добавить момент"),
     "additionalInfoTitle": MessageLookupByLibrary.simpleMessage(
       "Дополнительная информация",
     ),
@@ -192,6 +193,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "high": MessageLookupByLibrary.simpleMessage("Высокий"),
     "ideas": MessageLookupByLibrary.simpleMessage("Идеи"),
     "imageLink": MessageLookupByLibrary.simpleMessage("Ссылка на изображение"),
+    "image_moments": MessageLookupByLibrary.simpleMessage("Моменты картинкой"),
     "inMind": MessageLookupByLibrary.simpleMessage("Задумка"),
     "inProgress": MessageLookupByLibrary.simpleMessage("В процессе"),
     "innerConflictsLabel": MessageLookupByLibrary.simpleMessage(
@@ -229,6 +231,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "mode_changed_to_writer": MessageLookupByLibrary.simpleMessage(
       "Вы в режиме писателя",
     ),
+    "moment": MessageLookupByLibrary.simpleMessage("Момент"),
     "moments": MessageLookupByLibrary.simpleMessage("Моменты"),
     "moodboard": MessageLookupByLibrary.simpleMessage("Мудборд"),
     "motivationLabel": MessageLookupByLibrary.simpleMessage("Мотивация"),
@@ -352,6 +355,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Нажмите для открытия ссылки",
     ),
     "temperamentLabel": MessageLookupByLibrary.simpleMessage("Темперамент"),
+    "text_moments": MessageLookupByLibrary.simpleMessage("Моменты текстом"),
     "theme": MessageLookupByLibrary.simpleMessage("Тема"),
     "title": MessageLookupByLibrary.simpleMessage("Заголовок"),
     "turningPointLabel": MessageLookupByLibrary.simpleMessage(

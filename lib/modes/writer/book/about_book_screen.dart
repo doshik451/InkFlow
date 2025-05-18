@@ -223,7 +223,17 @@ class _AboutBookPageState extends State<AboutBookPage> {
 
   void _showErrorSnackbar(String title, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('$title: $message')),
+      SnackBar(
+        content: Text(
+          '$title: $message',
+          style: const TextStyle(color: Colors.black),
+        ),
+        backgroundColor: Color.lerp(_status.color, Colors.white, 0.7),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
     );
   }
 
@@ -302,7 +312,17 @@ class _AboutBookPageState extends State<AboutBookPage> {
 
     if (!link.startsWith('http://') && !link.startsWith('https://')) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.of(context).an_error_occurred)),
+        SnackBar(
+          content: Text(
+            S.of(context).an_error_occurred,
+            style: const TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Color.lerp(_status.color, Colors.white, 0.7),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
       );
       return;
     }
@@ -328,7 +348,17 @@ class _AboutBookPageState extends State<AboutBookPage> {
       await launch(url);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.of(context).an_error_occurred)),
+        SnackBar(
+          content: Text(
+            S.of(context).an_error_occurred,
+            style: const TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Color.lerp(_status.color, Colors.white, 0.7),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
       );
     }
   }
@@ -369,7 +399,17 @@ class _AboutBookPageState extends State<AboutBookPage> {
 
   void _showSuccessSnackbar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
+      SnackBar(
+        content: Text(
+          message,
+          style: const TextStyle(color: Colors.black),
+        ),
+        backgroundColor: Color.lerp(_status.color, Colors.white, 0.7),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
     );
   }
 
@@ -571,17 +611,33 @@ class _AboutBookPageState extends State<AboutBookPage> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('📥 ${S.of(context).file_saved}: ${file.path}'),
+          content: Text(
+            '📥 ${S.of(context).file_saved}: ${file.path}',
+            style: const TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Color.lerp(_status.color, Colors.white, 0.7),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
           duration: const Duration(seconds: 3),
         ),
       );
     } on Exception {
       if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('❌ ${S.of(context).an_error_occurred}'),
-            duration: const Duration(seconds: 4),
-          ));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            '❌ ${S.of(context).an_error_occurred}',
+            style: const TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Color.lerp(_status.color, Colors.white, 0.7),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
     } finally {
       if (mounted) setState(() => _isDownloading = false);
     }

@@ -117,7 +117,17 @@ class _BookInPlanScreenState extends State<BookInPlanScreen> {
 
     if (!link.startsWith('http://') && !link.startsWith('https://')) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.of(context).an_error_occurred)),
+        SnackBar(
+          content: Text(
+            S.of(context).an_error_occurred,
+            style: const TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Color.lerp(_priority.color, Colors.white, 0.7),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
       );
       return;
     }
@@ -143,7 +153,17 @@ class _BookInPlanScreenState extends State<BookInPlanScreen> {
       await launch(url);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.of(context).an_error_occurred)),
+        SnackBar(
+          content: Text(
+            S.of(context).an_error_occurred,
+            style: const TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Color.lerp(_priority.color, Colors.white, 0.7),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
       );
     }
   }
@@ -210,7 +230,17 @@ class _BookInPlanScreenState extends State<BookInPlanScreen> {
 
   void _showErrorSnackbar(String title, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('$title: $message')),
+      SnackBar(
+        content: Text(
+          '$title: $message',
+          style: const TextStyle(color: Colors.black),
+        ),
+        backgroundColor: Color.lerp(_priority.color, Colors.white, 0.7),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
     );
   }
 
@@ -576,17 +606,33 @@ class _BookInPlanScreenState extends State<BookInPlanScreen> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('📥 ${S.of(context).file_saved}: ${file.path}'),
+          content: Text(
+            '📥 ${S.of(context).file_saved}: ${file.path}',
+            style: const TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Color.lerp(_priority.color, Colors.white, 0.7),
+          behavior: SnackBarBehavior.floating,
           duration: const Duration(seconds: 3),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
         ),
       );
     } on Exception {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('❌ ${S.of(context).an_error_occurred}'),
-            duration: const Duration(seconds: 4),
-          ));
+        SnackBar(
+          content: Text(
+            '❌ ${S.of(context).an_error_occurred}',
+            style: const TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Color.lerp(_priority.color, Colors.white, 0.7),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
     } finally {
       if (mounted) setState(() => _isDownloading = false);
     }

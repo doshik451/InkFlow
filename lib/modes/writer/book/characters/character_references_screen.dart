@@ -141,7 +141,17 @@ class _CharacterReferencesScreenState extends State<CharacterReferencesScreen> {
 
       if (isAnyLoading) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(S.of(context).waitForImageUpload)),
+          SnackBar(
+            content: Text(
+              S.of(context).waitForImageUpload,
+              style: const TextStyle(color: Colors.black),
+            ),
+            backgroundColor: Color.lerp(widget.status.color, Colors.white, 0.7),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
         );
         return;
       }
@@ -158,11 +168,31 @@ class _CharacterReferencesScreenState extends State<CharacterReferencesScreen> {
       await _reloadCharacter();
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.of(context).allReferencesSaved)),
+        SnackBar(
+          content: Text(
+            S.of(context).allReferencesSaved,
+            style: const TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Color.lerp(widget.status.color, Colors.white, 0.7),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('${S.of(context).an_error_occurred}: $e')),
+        SnackBar(
+          content: Text(
+            '${S.of(context).an_error_occurred}: $e',
+            style: const TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Color.lerp(widget.status.color, Colors.white, 0.7),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
       );
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -353,7 +383,17 @@ class _CharacterReferenceCardState extends State<CharacterReferenceCard> {
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('${S.of(context).an_error_occurred}: $e')),
+        SnackBar(
+          content: Text(
+            '${S.of(context).an_error_occurred}: $e',
+            style: const TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Color.lerp(widget.status.color, Colors.white, 0.7),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
       );
     }
   }
@@ -394,7 +434,17 @@ class _CharacterReferenceCardState extends State<CharacterReferenceCard> {
         });
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('${S.of(context).an_error_occurred}: $e')),
+          SnackBar(
+            content: Text(
+              '${S.of(context).an_error_occurred}: $e',
+              style: const TextStyle(color: Colors.black),
+            ),
+            backgroundColor: Color.lerp(widget.status.color, Colors.white, 0.7),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
         );
       } finally {
         if (mounted) setState(() => _isLoading = false);

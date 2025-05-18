@@ -105,7 +105,19 @@ class _IdeaInfoScreenState extends State<IdeaInfoScreen> {
     final description = _descriptionController.text.trim();
 
     if(title.isEmpty || description.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).requiredField)));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            S.of(context).requiredField,
+            style: const TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Color.lerp(_selectedStatus.color, Colors.white, 0.7),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );;
       return;
     }
 
@@ -145,7 +157,17 @@ class _IdeaInfoScreenState extends State<IdeaInfoScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('${S.current.an_error_occurred}: $e')),
+          SnackBar(
+            content: Text(
+              '${S.current.an_error_occurred}: $e',
+              style: const TextStyle(color: Colors.black),
+            ),
+            backgroundColor: Color.lerp(_selectedStatus.color, Colors.white, 0.7),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
         );
       }
     }

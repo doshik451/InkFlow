@@ -211,5 +211,9 @@
   "deleted": "Deleted",
   "criteria": "Criteria",
   "all_criteria_added": "All criteria already added",
-  "add_criteria": "Add criteria"
+  "add_criteria": "Add criteria",
+  "text_moments": "Text moments",
+  "add_moment": "Add moment",
+  "image_moments": "Image moments",
+  "moment": "Moment"
 }

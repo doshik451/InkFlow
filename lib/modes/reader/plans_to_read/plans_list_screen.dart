@@ -284,13 +284,33 @@ class BookInPlanCard extends StatelessWidget {
       await FirebaseDatabase.instance.ref('planBooks/$userId/$bookId').remove();
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(S.current.record_is_deleted)),
+          SnackBar(
+            content: Text(
+              S.current.record_is_deleted,
+              style: const TextStyle(color: Colors.black),
+            ),
+            backgroundColor: Color.lerp(Theme.of(context).colorScheme.tertiary, Colors.white, 0.7),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
         );
       }
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('${S.current.an_error_occurred}: $e')),
+          SnackBar(
+            content: Text(
+              '${S.current.an_error_occurred}: $e',
+              style: const TextStyle(color: Colors.black),
+            ),
+            backgroundColor: Color.lerp(Theme.of(context).colorScheme.tertiary, Colors.white, 0.7),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
         );
       }
     }

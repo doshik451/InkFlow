@@ -108,9 +108,18 @@ class _BooksInCategoryPageState extends State<BooksInCategoryPage> {
     try {
       await _db.child('finishedBooks/$_userId/$bookId').remove();
     } catch (e) {
-      debugPrint('Error deleting book: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.of(context).an_error_occurred)),
+        SnackBar(
+          content: Text(
+            S.of(context).an_error_occurred,
+            style: const TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Color.lerp(Color(int.parse(widget.category.colorCode)), Colors.white, 0.7),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
       );
     }
   }

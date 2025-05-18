@@ -12,7 +12,7 @@ class FinishedBook {
   final String? overallRating; // 0–100
   final String personalReview;
   final BookCategory category;
-  final List<BookMoment> moments;
+  List<BookMoment> moments;
   final Map<String, String> criteria;
   final List<String>? files;
   final List<String>? links;
@@ -208,7 +208,7 @@ class BookCategory {
 class BookMoment {
   final String id;
   final String type;
-  final String content;
+  String content;
 
   BookMoment({
     required this.id,

@@ -68,9 +68,18 @@ class _AdditionalInfoWidgetState extends State<AdditionalInfoWidget> {
         });
       }
     } catch (e) {
-      debugPrint('Error loading biography: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('${S.of(context).an_error_occurred}: $e'))
+        SnackBar(
+          content: Text(
+            '${S.of(context).an_error_occurred}: $e',
+            style: const TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Color.lerp(Theme.of(context).colorScheme.tertiary, Colors.white, 0.7),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
       );
     }
   }
@@ -111,9 +120,33 @@ class _AdditionalInfoWidgetState extends State<AdditionalInfoWidget> {
       await dbRef.update(additionalInfoData);
       await _updateBook();
 
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).create_success)));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            S.of(context).create_success,
+            style: const TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Color.lerp(Theme.of(context).colorScheme.tertiary, Colors.white, 0.7),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${S.of(context).an_error_occurred}: $e')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            '${S.of(context).an_error_occurred}: $e',
+            style: const TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Color.lerp(Theme.of(context).colorScheme.tertiary, Colors.white, 0.7),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
     } finally {
       setState(() {
         _isSaving = false;

@@ -38,14 +38,19 @@ class _LoginScreenState extends State<LoginScreen> {
         password: _passwordController.text,
       );
       Navigator.pushReplacementNamed(context, Routes.modeSelection);
-      // Navigator.pushNamedAndRemoveUntil(
-      //   context,
-      //   Routes.getMainRoute(context),
-      //   (route) => false,
-      // );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.of(context).login_failed)),
+        SnackBar(
+          content: Text(
+            S.of(context).login_failed,
+            style: const TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Color.lerp(Theme.of(context).colorScheme.tertiary, Colors.white, 0.7),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
       );
     }
   }
@@ -172,7 +177,7 @@ class _InputField extends StatelessWidget {
         onChanged: onChanged,
         decoration: InputDecoration(
           labelText: label,
-          labelStyle: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 20),
+          labelStyle: TextStyle(color: Theme.of(context).colorScheme.tertiary, fontSize: 20),
           errorText: errorText,
           border: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
           focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.tertiary, width: 2)),

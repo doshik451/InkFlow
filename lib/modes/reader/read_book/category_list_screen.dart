@@ -144,9 +144,18 @@ class _CategoryListPageState extends State<CategoryListPage> {
       }
       await _loadData();
     } catch (e) {
-      debugPrint('Error deleting category: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('${S.of(context).an_error_occurred}: $e')),
+        SnackBar(
+          content: Text(
+            '${S.of(context).an_error_occurred}: $e',
+            style: const TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Color.lerp(Theme.of(context).colorScheme.tertiary, Colors.white, 0.7),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
       );
     }
   }

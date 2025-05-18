@@ -68,7 +68,17 @@ class _AboutStoryArcScreenState extends State<AboutStoryArcScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('${S.of(context).an_error_occurred}: $e')),
+          SnackBar(
+            content: Text(
+              '${S.of(context).an_error_occurred}: $e',
+              style: const TextStyle(color: Colors.black),
+            ),
+            backgroundColor: Color.lerp(widget.status.color, Colors.white, 0.7),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
         );
       }
     }
@@ -204,13 +214,33 @@ class _AboutStoryArcScreenState extends State<AboutStoryArcScreen> {
 
   void _showErrorSnackbar(String title, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('$title: $message')),
+      SnackBar(
+        content: Text(
+          '$title: $message',
+          style: const TextStyle(color: Colors.black),
+        ),
+        backgroundColor: Color.lerp(widget.status.color, Colors.white, 0.7),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
     );
   }
 
   void _showSuccessSnackbar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
+      SnackBar(
+        content: Text(
+          message,
+          style: const TextStyle(color: Colors.black),
+        ),
+        backgroundColor: Color.lerp(widget.status.color, Colors.white, 0.7),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
     );
   }
 
@@ -405,7 +435,17 @@ class _AboutStoryArcScreenState extends State<AboutStoryArcScreen> {
                                         } catch (e) {
                                           if (mounted) {
                                             ScaffoldMessenger.of(context).showSnackBar(
-                                              SnackBar(content: Text('${S.of(context).an_error_occurred}: $e')),
+                                              SnackBar(
+                                                content: Text(
+                                                  '${S.of(context).an_error_occurred}: $e',
+                                                  style: const TextStyle(color: Colors.black),
+                                                ),
+                                                backgroundColor: Color.lerp(Theme.of(context).colorScheme.tertiary, Colors.white, 0.7),
+                                                behavior: SnackBarBehavior.floating,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(10),
+                                                ),
+                                              ),
                                             );
                                             setState(() {});
                                           }

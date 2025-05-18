@@ -219,13 +219,33 @@ class _AboutCharacterScreenState extends State<AboutCharacterScreen> {
 
   void _showSuccessSnackbar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
+      SnackBar(
+        content: Text(
+          message,
+          style: const TextStyle(color: Colors.black),
+        ),
+        backgroundColor: Color.lerp(widget.status.color, Colors.white, 0.7),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
     );
   }
 
   void _showErrorSnackbar(String title, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('$title: $message')),
+      SnackBar(
+        content: Text(
+          '$title: $message',
+          style: const TextStyle(color: Colors.black),
+        ),
+        backgroundColor: Color.lerp(widget.status.color, Colors.white, 0.7),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
     );
   }
 
@@ -552,7 +572,17 @@ class _CharacterMainPicWidgetState extends State<_CharacterMainPicWidget> {
     final status = await Permission.photos.request();
     if (!status.isGranted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.of(context).don_t_have_access)),
+        SnackBar(
+          content: Text(
+            S.of(context).don_t_have_access,
+            style: const TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Color.lerp(widget.status.color, Colors.white, 0.7),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
       );
       return;
     }
@@ -598,7 +628,17 @@ class _CharacterMainPicWidgetState extends State<_CharacterMainPicWidget> {
       });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.of(context).an_error_occurred)),
+        SnackBar(
+          content: Text(
+            S.of(context).an_error_occurred,
+            style: const TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Color.lerp(widget.status.color, Colors.white, 0.7),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
       );
     } finally {
       setState(() {

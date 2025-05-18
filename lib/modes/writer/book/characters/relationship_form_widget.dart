@@ -301,11 +301,31 @@ class _RelationshipFormWidgetState extends State<RelationshipFormWidget> {
       await _updateBook();
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.of(context).create_success)),
+        SnackBar(
+          content: Text(
+            S.of(context).create_success,
+            style: const TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Color.lerp(Theme.of(context).colorScheme.tertiary, Colors.white, 0.7),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('${S.of(context).an_error_occurred}: ${e.toString()}')),
+        SnackBar(
+          content: Text(
+            '${S.of(context).an_error_occurred}: ${e.toString()}',
+            style: const TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Color.lerp(Theme.of(context).colorScheme.tertiary, Colors.white, 0.7),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
       );
     } finally {
       setState(() => _isSaving = false);
@@ -359,12 +379,31 @@ class _RelationshipFormWidgetState extends State<RelationshipFormWidget> {
       await _updateBook();
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.of(context).create_success)),
+        SnackBar(
+          content: Text(
+            S.of(context).create_success,
+            style: const TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Color.lerp(Theme.of(context).colorScheme.tertiary, Colors.white, 0.7),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-            content: Text('${S.of(context).an_error_occurred}: ${e.toString()}')),
+          content: Text(
+            '${S.of(context).an_error_occurred}: ${e.toString()}',
+            style: const TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Color.lerp(Theme.of(context).colorScheme.tertiary, Colors.white, 0.7),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
       );
     } finally {
       setState(() => _isSaving = false);
@@ -447,12 +486,31 @@ class _RelationshipFormWidgetState extends State<RelationshipFormWidget> {
       await _updateBook();
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.of(context).update_success)),
+        SnackBar(
+          content: Text(
+            S.of(context).update_success,
+            style: const TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Color.lerp(Theme.of(context).colorScheme.tertiary, Colors.white, 0.7),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-            content: Text('${S.of(context).an_error_occurred}: ${e.toString()}')),
+          content: Text(
+            '${S.of(context).an_error_occurred}: ${e.toString()}',
+            style: const TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Color.lerp(Theme.of(context).colorScheme.tertiary, Colors.white, 0.7),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
       );
     } finally {
       setState(() => _isSaving = false);
@@ -508,12 +566,31 @@ class _RelationshipFormWidgetState extends State<RelationshipFormWidget> {
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.of(context).delete)),
+        SnackBar(
+          content: Text(
+            S.of(context).delete,
+            style: const TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Color.lerp(Theme.of(context).colorScheme.tertiary, Colors.white, 0.7),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-            content: Text('${S.of(context).an_error_occurred}: ${e.toString()}')),
+          content: Text(
+            '${S.of(context).an_error_occurred}: ${e.toString()}',
+            style: const TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Color.lerp(Theme.of(context).colorScheme.tertiary, Colors.white, 0.7),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
       );
     } finally {
       setState(() => _isSaving = false);

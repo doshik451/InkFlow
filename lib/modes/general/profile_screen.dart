@@ -95,13 +95,19 @@ class ProfileScreen extends StatelessWidget {
                       context,
                       Routes.getMainRoute(context),
                     );
-
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(newMode == AppMode.writerMode
                             ? S.of(context).mode_changed_to_writer
-                            : S.of(context).mode_changed_to_reader),
+                            : S.of(context).mode_changed_to_reader,
+                          style: const TextStyle(color: Colors.black),
+                        ),
                         duration: const Duration(seconds: 1),
+                        backgroundColor: Color.lerp(Theme.of(context).colorScheme.tertiary, Colors.white, 0.7),
+                        behavior: SnackBarBehavior.floating,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
                     );
                   } catch (e) {
@@ -206,7 +212,17 @@ class _UserDataWidgetState extends State<_UserDataWidget> {
     final status = await Permission.photos.request();
     if (!status.isGranted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.of(context).don_t_have_access)),
+        SnackBar(
+          content: Text(
+            S.of(context).don_t_have_access,
+            style: const TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Color.lerp(Theme.of(context).colorScheme.tertiary, Colors.white, 0.7),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
       );
       return;
     }
@@ -237,7 +253,17 @@ class _UserDataWidgetState extends State<_UserDataWidget> {
       _loadUserImage();
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.of(context).an_error_occurred)),
+        SnackBar(
+          content: Text(
+            '${S.of(context).an_error_occurred}: $e',
+            style: const TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Color.lerp(Theme.of(context).colorScheme.tertiary, Colors.white, 0.7),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
       );
     }
   }

@@ -263,11 +263,31 @@ class _EnvironmentItemCard extends StatelessWidget {
       await FirebaseDatabase.instance.ref('books/$userId/$bookId/environment/$environmentId').remove();
       await _updateBook();
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.current.record_is_deleted)),
+        SnackBar(
+          content: Text(
+            S.current.record_is_deleted,
+            style: const TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Color.lerp(status.color, Colors.white, 0.7),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('${S.current.an_error_occurred}: $e')),
+        SnackBar(
+          content: Text(
+            '${S.current.an_error_occurred}: $e',
+            style: const TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Color.lerp(status.color, Colors.white, 0.7),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
       );
     }
   }

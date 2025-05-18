@@ -43,6 +43,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "add_key_moment": MessageLookupByLibrary.simpleMessage("Add key moment"),
     "add_link": MessageLookupByLibrary.simpleMessage("Add link"),
+    "add_moment": MessageLookupByLibrary.simpleMessage("Add moment"),
     "additionalInfoTitle": MessageLookupByLibrary.simpleMessage(
       "Additional Info",
     ),
@@ -194,6 +195,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "high": MessageLookupByLibrary.simpleMessage("High"),
     "ideas": MessageLookupByLibrary.simpleMessage("Ideas"),
     "imageLink": MessageLookupByLibrary.simpleMessage("Image link"),
+    "image_moments": MessageLookupByLibrary.simpleMessage("Image moments"),
     "inMind": MessageLookupByLibrary.simpleMessage("In mind"),
     "inProgress": MessageLookupByLibrary.simpleMessage("In progress"),
     "innerConflictsLabel": MessageLookupByLibrary.simpleMessage(
@@ -231,6 +233,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "mode_changed_to_writer": MessageLookupByLibrary.simpleMessage(
       "You are in writer mode",
     ),
+    "moment": MessageLookupByLibrary.simpleMessage("Moment"),
     "moments": MessageLookupByLibrary.simpleMessage("Moments"),
     "moodboard": MessageLookupByLibrary.simpleMessage("Moodboard"),
     "motivationLabel": MessageLookupByLibrary.simpleMessage("Motivation"),
@@ -344,6 +347,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "tapToOpenLink": MessageLookupByLibrary.simpleMessage("Tap to open link"),
     "temperamentLabel": MessageLookupByLibrary.simpleMessage("Temperament"),
+    "text_moments": MessageLookupByLibrary.simpleMessage("Text moments"),
     "theme": MessageLookupByLibrary.simpleMessage("Theme"),
     "title": MessageLookupByLibrary.simpleMessage("Title"),
     "turningPointLabel": MessageLookupByLibrary.simpleMessage("Turning Point"),

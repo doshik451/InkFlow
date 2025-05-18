@@ -1,10 +1,12 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../../models/book_writer_model.dart';
 import 'package:intl/intl.dart';
 import '../../../../generated/l10n.dart';
@@ -92,7 +94,17 @@ class _AboutEnvironmentScreenState extends State<AboutEnvironmentScreen> {
 
     if(title.isEmpty || description.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.of(context).requiredField)),
+        SnackBar(
+          content: Text(
+            S.of(context).requiredField,
+            style: const TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Color.lerp(widget.status.color, Colors.white, 0.7),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
       );
       return;
     }
@@ -139,7 +151,17 @@ class _AboutEnvironmentScreenState extends State<AboutEnvironmentScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('${S.current.an_error_occurred}: $e')),
+          SnackBar(
+            content: Text(
+              '${S.current.an_error_occurred}: $e',
+              style: const TextStyle(color: Colors.black),
+            ),
+            backgroundColor: Color.lerp(widget.status.color, Colors.white, 0.7),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
         );
       }
     } finally {
@@ -240,7 +262,7 @@ class _AboutEnvironmentScreenState extends State<AboutEnvironmentScreen> {
                           ),
                         ),
 
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 16),
 
                         TextField(
                           controller: _descriptionController,
@@ -265,7 +287,7 @@ class _AboutEnvironmentScreenState extends State<AboutEnvironmentScreen> {
                           ),
                         ),
 
-                        const SizedBox(height: 10,),
+                        const SizedBox(height: 16,),
 
                         TextField(
                           controller: _featuresController,
@@ -347,21 +369,81 @@ class EnvironmentImageSlider extends StatefulWidget {
 class _EnvironmentImageSliderState extends State<EnvironmentImageSlider> {
   final List<String> _imageUrls = [];
   final List<File> _newImages = [];
+  final List<String> _linkUrls = [];
   final PageController _pageController = PageController();
+  final TextEditingController _linkUrlController = TextEditingController();
+  final TextEditingController _linkLabelController = TextEditingController();
   int _currentPage = 0;
   bool _isLoading = false;
+  bool _showLinkInput = false;
+  final _linkFormKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
-    _imageUrls.addAll(widget.initialImages);
+    for (final url in widget.initialImages) {
+      if (url.startsWith('http') && !url.contains('firebasestorage')) {
+        _linkUrls.add(url);
+      } else {
+        _imageUrls.add(url);
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    _linkUrlController.dispose();
+    _linkLabelController.dispose();
+    super.dispose();
+  }
+
+  List<String> get allItems => [..._imageUrls, ..._newImages.map((_) => 'local'), ..._linkUrls];
+  bool get canAddMore => allItems.length < 5;
+
+  bool _validateLink(String? value) {
+    if (value == null || value.isEmpty) return false;
+    final uri = Uri.tryParse(value);
+    return uri != null && (uri.scheme == 'http' || uri.scheme == 'https');
+  }
+
+  Future<void> _openLink(String url) async {
+    try {
+      if (await canLaunchUrl(Uri.parse(url))) {
+        await launchUrl(
+          Uri.parse(url),
+          mode: LaunchMode.externalApplication,
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            '${S.of(context).an_error_occurred}: $e',
+            style: const TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Color.lerp(widget.status.color, Colors.white, 0.7),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+    }
+  }
+
+  void _toggleLinkInput() {
+    setState(() {
+      _showLinkInput = !_showLinkInput;
+      if (!_showLinkInput) {
+        _linkUrlController.clear();
+        _linkLabelController.clear();
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final allImages = [..._imageUrls, ..._newImages.map((_) => 'local')];
-    final canAddMore = allImages.length < 5;
-
     return Column(
       children: [
         Container(
@@ -372,37 +454,27 @@ class _EnvironmentImageSliderState extends State<EnvironmentImageSlider> {
           ),
           child: Stack(
             children: [
-              if (allImages.isEmpty)
+              if (allItems.isEmpty)
                 const Center(child: Icon(Icons.image, size: 50, color: Colors.white))
               else
                 PageView.builder(
                   controller: _pageController,
-                  itemCount: allImages.length,
+                  itemCount: allItems.length,
                   onPageChanged: (index) => setState(() => _currentPage = index),
                   itemBuilder: (ctx, index) {
-                    final item = allImages[index];
-                    return Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Center(
-                          child: item == 'local'
-                              ? Image.file(
-                            _newImages[index - _imageUrls.length],
-                            fit: BoxFit.cover,
-                          ) : CachedNetworkImage(
-                            imageUrl: item,
-                            fit: BoxFit.cover,
-                            placeholder: (ctx, url) => Container(
-                              color: Colors.grey[300],
-                              child: Center(
-                                child: CircularProgressIndicator( color: widget.status.color,),
-                              ),
-                            ),
-                            errorWidget: (ctx, url, err) => Container(
-                              color: Colors.grey[300],
-                              child: const Icon(Icons.error),
-                            ),
+                    final item = allItems[index];
+                    return GestureDetector(
+                      onTap: () {
+                        if (item.startsWith('http') && !item.contains('firebasestorage')) {
+                          _openLink(item);
+                        }
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Center(
+                            child: _buildItemContent(item, index),
                           ),
                         ),
                       ),
@@ -410,7 +482,7 @@ class _EnvironmentImageSliderState extends State<EnvironmentImageSlider> {
                   },
                 ),
 
-              if (allImages.length > 1)
+              if (allItems.length > 1)
                 Positioned(
                   bottom: 10,
                   left: 0,
@@ -418,7 +490,7 @@ class _EnvironmentImageSliderState extends State<EnvironmentImageSlider> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: List.generate(
-                      allImages.length,
+                      allItems.length,
                           (index) => Container(
                         margin: const EdgeInsets.symmetric(horizontal: 4),
                         width: 8,
@@ -439,19 +511,25 @@ class _EnvironmentImageSliderState extends State<EnvironmentImageSlider> {
 
         const SizedBox(height: 10),
 
+        if (_showLinkInput) _buildLinkInputField(),
+
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (canAddMore)
+            if (canAddMore) ...[
               IconButton(
                 icon: const Icon(Icons.add_photo_alternate, color: Colors.black),
                 onPressed: _addImage,
               ),
-
-            if (allImages.isNotEmpty)
+              IconButton(
+                icon: const Icon(Icons.link, color: Colors.black),
+                onPressed: _toggleLinkInput,
+              ),
+            ],
+            if (allItems.isNotEmpty)
               IconButton(
                 icon: const Icon(Icons.delete, color: Colors.black),
-                onPressed: _deleteCurrentImage,
+                onPressed: _deleteCurrentItem,
               ),
           ],
         ),
@@ -459,9 +537,129 @@ class _EnvironmentImageSliderState extends State<EnvironmentImageSlider> {
         if (_isLoading)
           Padding(
             padding: const EdgeInsets.only(top: 8),
-            child: LinearProgressIndicator( color: widget.status.color,),
+            child: LinearProgressIndicator(color: widget.status.color),
           ),
       ],
+    );
+  }
+
+  Widget _buildItemContent(String item, int index) {
+    if (item == 'local') {
+      return Image.file(
+        _newImages[index - _imageUrls.length],
+        fit: BoxFit.cover,
+      );
+    } else if (item.startsWith('http') && !item.contains('firebasestorage')) {
+      return Stack(
+        fit: StackFit.expand,
+        children: [
+          Container(
+            color: Colors.grey[200],
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.link, size: 40, color: Colors.black),
+                const SizedBox(height: 8),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Text(
+                    item,
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              color: Colors.black54,
+              padding: const EdgeInsets.all(4),
+              child: Text(
+                S.of(context).tapToOpenLink,
+                textAlign: TextAlign.center,
+                style: const TextStyle(color: Colors.white),
+              ),
+            ),
+          ),
+        ],
+      );
+    } else {
+      return CachedNetworkImage(
+        imageUrl: item,
+        fit: BoxFit.cover,
+        placeholder: (ctx, url) => Container(
+          color: Colors.grey[300],
+          child: Center(
+            child: CircularProgressIndicator(color: widget.status.color),
+          ),
+        ),
+        errorWidget: (ctx, url, err) => Container(
+          color: Colors.grey[300],
+          child: const Icon(Icons.error),
+        ),
+      );
+    }
+  }
+
+  Widget _buildLinkInputField() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Form(
+        key: _linkFormKey,
+        child: Column(
+          children: [
+            TextFormField(
+              controller: _linkUrlController,
+              cursorColor: widget.status.color,
+              style: const TextStyle(color: Colors.black),
+              decoration: InputDecoration(
+                labelText: S.of(context).imageLink,
+                labelStyle: const TextStyle(color: Colors.black),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(width: 0.5, color: widget.status.color),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(width: 1.5, color: widget.status.color),
+                ),
+              ),
+              validator: (value) =>
+              _validateLink(value) ? null : S.of(context).enterValidUrl,
+            ),
+            const SizedBox(height: 8),
+            ElevatedButton.icon(
+              onPressed: () {
+                if (_linkFormKey.currentState!.validate() &&
+                    _linkUrls.length < 5) {
+                  setState(() {
+                    _linkUrls.add(_linkUrlController.text.trim());
+                    _linkUrlController.clear();
+                    _showLinkInput = false;
+                    _currentPage = allItems.length;
+                  });
+                  _pageController.jumpToPage(_currentPage);
+                }
+              },
+              icon: const Icon(Icons.check),
+              label: Text(S.of(context).addLink),
+              style: ButtonStyle(
+                backgroundColor: WidgetStateProperty.all<Color>(widget.status.color),
+                padding: WidgetStateProperty.all<EdgeInsets>(
+                  const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -473,13 +671,16 @@ class _EnvironmentImageSliderState extends State<EnvironmentImageSlider> {
       setState(() {
         _newImages.add(File(pickedFile.path));
         _currentPage = _imageUrls.length + _newImages.length - 1;
-        _pageController.jumpToPage(_currentPage);
       });
+      _pageController.jumpToPage(_currentPage);
     }
   }
 
-  Future<void> _deleteCurrentImage() async {
-    if (_currentPage < _imageUrls.length) {
+  Future<void> _deleteCurrentItem() async {
+    final isLink = _currentPage >= _imageUrls.length + _newImages.length;
+    final isExistingImage = _currentPage < _imageUrls.length;
+
+    if (isExistingImage) {
       setState(() => _isLoading = true);
       try {
         final url = _imageUrls[_currentPage];
@@ -487,21 +688,39 @@ class _EnvironmentImageSliderState extends State<EnvironmentImageSlider> {
         setState(() => _imageUrls.removeAt(_currentPage));
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('${S.of(context).an_error_occurred}: $e')),
+          SnackBar(
+            content: Text(
+              '${S.of(context).an_error_occurred}: $e',
+              style: const TextStyle(color: Colors.black),
+            ),
+            backgroundColor: Color.lerp(widget.status.color, Colors.white, 0.7),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
         );
       } finally {
         if (mounted) setState(() => _isLoading = false);
       }
+    } else if (isLink) {
+      setState(() {
+        _linkUrls.removeAt(_currentPage - (_imageUrls.length + _newImages.length));
+      });
     } else {
       setState(() {
         _newImages.removeAt(_currentPage - _imageUrls.length);
       });
     }
 
-    if (_currentPage > 0 && _currentPage >= _imageUrls.length + _newImages.length) {
-      _currentPage = _imageUrls.length + _newImages.length - 1;
+    if (mounted) {
+      final newPage = (_currentPage > 0 && _currentPage >= allItems.length)
+          ? allItems.length - 1
+          : max(0, _currentPage - 1);
+
+      setState(() => _currentPage = newPage);
+      _pageController.jumpToPage(_currentPage);
     }
-    _pageController.jumpToPage(_currentPage);
   }
 
   Future<List<String>> uploadAllImages() async {
@@ -519,6 +738,8 @@ class _EnvironmentImageSliderState extends State<EnvironmentImageSlider> {
         final url = await ref.getDownloadURL();
         resultUrls.add(url);
       }
+
+      resultUrls.addAll(_linkUrls);
 
       return resultUrls;
     } catch (e) {

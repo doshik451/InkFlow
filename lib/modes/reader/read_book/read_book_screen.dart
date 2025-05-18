@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:inkflow/modes/reader/read_book/moments_screen.dart';
 import 'package:inkflow/modes/reader/read_book/review_screen.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -153,7 +154,17 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
 
     if (title.isEmpty || authorName.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.of(context).requiredField)),
+        SnackBar(
+          content: Text(
+            S.of(context).requiredField,
+            style: const TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Color.lerp(Color(int.parse(widget.bookCategory.colorCode)), Colors.white, 0.7),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
       );
       return;
     }
@@ -229,7 +240,17 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('${S.current.an_error_occurred}: $e')),
+          SnackBar(
+            content: Text(
+              '${S.current.an_error_occurred}: $e',
+              style: const TextStyle(color: Colors.black),
+            ),
+            backgroundColor: Color.lerp(Color(int.parse(widget.bookCategory.colorCode)), Colors.white, 0.7),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
         );
       }
     }
@@ -243,7 +264,17 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
 
   void _showSuccessSnackbar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
+      SnackBar(
+        content: Text(
+          message,
+          style: const TextStyle(color: Colors.black),
+        ),
+        backgroundColor: Color.lerp(Color(int.parse(widget.bookCategory.colorCode)), Colors.white, 0.7),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
     );
   }
 
@@ -416,11 +447,19 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
                                       GestureDetector(
                                         onTap: () async {
                                           if (_startDate.isEmpty) {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(SnackBar(
-                                                    content: Text(S
-                                                        .of(context)
-                                                        .select_start_date)));
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                  S.of(context).select_start_date,
+                                                  style: const TextStyle(color: Colors.black),
+                                                ),
+                                                backgroundColor: Color.lerp(Color(int.parse(widget.bookCategory.colorCode)), Colors.white, 0.7),
+                                                behavior: SnackBarBehavior.floating,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(10),
+                                                ),
+                                              ),
+                                            );
                                             return;
                                           }
 
@@ -631,8 +670,25 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
                                           fontWeight: FontWeight.w500,
                                           color: Colors.black),
                                     ),
-                                    onTap: () {
-                                      //todo
+                                    onTap: () async {
+                                      final result = await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => MomentsScreen(
+                                            userId: widget.userId,
+                                            category: _selectedCategory,
+                                            book: _finishedBook!,
+                                          ),
+                                        ),
+                                      );
+
+                                      if (result is Map && result['reload'] == true) {
+                                        setState(() {
+                                          if (result['book'] != null) {
+                                            _finishedBook = result['book'];
+                                          }
+                                        });
+                                      }
                                     },
                                     trailing: const Icon(
                                       Icons.chevron_right,
@@ -857,7 +913,17 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
 
     if (!link.startsWith('http://') && !link.startsWith('https://')) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.of(context).an_error_occurred)),
+        SnackBar(
+          content: Text(
+            S.of(context).an_error_occurred,
+            style: const TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Color.lerp(Color(int.parse(widget.bookCategory.colorCode)), Colors.white, 0.7),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
       );
       return;
     }
@@ -883,7 +949,17 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
       await launch(url);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.of(context).an_error_occurred)),
+        SnackBar(
+          content: Text(
+            S.of(context).an_error_occurred,
+            style: const TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Color.lerp(Color(int.parse(widget.bookCategory.colorCode)), Colors.white, 0.7),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
       );
     }
   }
@@ -921,16 +997,34 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('📥 ${S.of(context).file_saved}: ${file.path}'),
+          content: Text(
+            '📥 ${S.of(context).file_saved}: ${file.path}',
+            style: const TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Color.lerp(Color(int.parse(widget.bookCategory.colorCode)), Colors.white, 0.7),
+          behavior: SnackBarBehavior.floating,
           duration: const Duration(seconds: 3),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
         ),
       );
     } on Exception {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('❌ ${S.of(context).an_error_occurred}'),
-        duration: const Duration(seconds: 4),
-      ));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            '❌ ${S.of(context).an_error_occurred}',
+            style: const TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Color.lerp(Color(int.parse(widget.bookCategory.colorCode)), Colors.white, 0.7),
+          behavior: SnackBarBehavior.floating,
+          duration: const Duration(seconds: 4),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
     } finally {
       if (mounted) setState(() => _isDownloading = false);
     }

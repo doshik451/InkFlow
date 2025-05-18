@@ -213,5 +213,9 @@
   "review": "Отзыв",
   "criteria": "Критерии",
   "all_criteria_added": "Все критерии уже добавлены",
-  "add_criteria": "Добавить критерий"
+  "add_criteria": "Добавить критерий",
+  "text_moments": "Моменты текстом",
+  "add_moment": "Добавить момент",
+  "image_moments": "Моменты картинкой",
+  "moment": "Момент"
 }

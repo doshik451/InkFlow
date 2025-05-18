@@ -142,7 +142,17 @@ class _ReviewScreenState extends State<ReviewScreen> {
 
     if (available.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.of(context).all_criteria_added)),
+        SnackBar(
+          content: Text(
+            S.of(context).all_criteria_added,
+            style: const TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Color.lerp(Theme.of(context).colorScheme.tertiary, Colors.white, 0.7),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
       );
       return;
     }

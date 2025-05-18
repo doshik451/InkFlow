@@ -94,7 +94,17 @@ class _AboutChapterScreenState extends State<AboutChapterScreen> {
 
     if (title.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.of(context).requiredField)),
+        SnackBar(
+          content: Text(
+            S.of(context).requiredField,
+            style: const TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Color.lerp(widget.status.color, Colors.white, 0.7),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
       );
       return;
     }
@@ -135,7 +145,17 @@ class _AboutChapterScreenState extends State<AboutChapterScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('${S.current.an_error_occurred}: $e')),
+          SnackBar(
+            content: Text(
+              '${S.current.an_error_occurred}: $e',
+              style: const TextStyle(color: Colors.black),
+            ),
+            backgroundColor: Color.lerp(widget.status.color, Colors.white, 0.7),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
         );
       }
     } finally {

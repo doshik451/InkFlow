@@ -1634,6 +1634,36 @@ class S {
       args: [],
     );
   }
+
+  /// `Text moments`
+  String get text_moments {
+    return Intl.message(
+      'Text moments',
+      name: 'text_moments',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add moment`
+  String get add_moment {
+    return Intl.message('Add moment', name: 'add_moment', desc: '', args: []);
+  }
+
+  /// `Image moments`
+  String get image_moments {
+    return Intl.message(
+      'Image moments',
+      name: 'image_moments',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Moment`
+  String get moment {
+    return Intl.message('Moment', name: 'moment', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
