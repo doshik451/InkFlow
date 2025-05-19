@@ -43,6 +43,8 @@ class _AboutEnvironmentScreenState extends State<AboutEnvironmentScreen> {
   late String _initialFeatures;
   bool _hasUnsavedData = false;
   bool _isSaving = false;
+  bool _showTitleError = false;
+  bool _showDescriptionError = false;
 
   @override
   void initState() {
@@ -93,19 +95,10 @@ class _AboutEnvironmentScreenState extends State<AboutEnvironmentScreen> {
     final features = _featuresController.text.trim();
 
     if(title.isEmpty || description.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            S.of(context).requiredField,
-            style: const TextStyle(color: Colors.black),
-          ),
-          backgroundColor: Color.lerp(widget.status.color, Colors.white, 0.7),
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-        ),
-      );
+      setState(() {
+        _showDescriptionError = description.isEmpty;
+        _showTitleError = title.isEmpty;
+      });
       return;
     }
 
@@ -250,6 +243,7 @@ class _AboutEnvironmentScreenState extends State<AboutEnvironmentScreen> {
                           decoration: InputDecoration(
                             labelText: S.of(context).title,
                             labelStyle: const TextStyle(color: Colors.black),
+                            errorText: _showTitleError ? S.of(context).requiredField : null,
                             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
@@ -258,6 +252,16 @@ class _AboutEnvironmentScreenState extends State<AboutEnvironmentScreen> {
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                               borderSide: BorderSide(width: 1.5, color: widget.status.color),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                  width: 1.5, color: Colors.red),
+                            ),
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                  width: 1.5, color: Colors.red),
                             ),
                           ),
                         ),
@@ -275,6 +279,7 @@ class _AboutEnvironmentScreenState extends State<AboutEnvironmentScreen> {
                           decoration: InputDecoration(
                             labelText: S.of(context).description,
                             labelStyle: const TextStyle(color: Colors.black),
+                            errorText: _showDescriptionError ? S.of(context).requiredField : null,
                             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
@@ -283,6 +288,16 @@ class _AboutEnvironmentScreenState extends State<AboutEnvironmentScreen> {
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                               borderSide: BorderSide(width: 1.5, color: widget.status.color),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                  width: 1.5, color: Colors.red),
+                            ),
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                  width: 1.5, color: Colors.red),
                             ),
                           ),
                         ),

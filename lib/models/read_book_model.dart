@@ -226,9 +226,20 @@ class BookMoment {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
       'type': type,
       'content': content,
     };
+  }
+
+  BookMoment copyWith({
+    String? id,
+    String? type,
+    String? content,
+  }) {
+    return BookMoment(
+      id: id ?? this.id,
+      type: type ?? this.type,
+      content: content ?? this.content,
+    );
   }
 }

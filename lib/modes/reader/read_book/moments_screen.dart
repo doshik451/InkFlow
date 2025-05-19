@@ -9,6 +9,7 @@ import 'package:path/path.dart' as path;
 
 import '../../../generated/l10n.dart';
 import '../../../models/read_book_model.dart';
+import '../../general/base/confirm_delete_base.dart';
 
 class MomentsScreen extends StatefulWidget {
   final FinishedBook book;
@@ -38,7 +39,42 @@ class _MomentsScreenState extends State<MomentsScreen> {
   @override
   void initState() {
     super.initState();
-    _moments.addAll(widget.book.moments);
+    _loadMoments();
+  }
+
+  void _loadMoments() async {
+    _moments.clear();
+    _controllers.forEach((_, c) => c.dispose());
+    _controllers.clear();
+
+    final momentsRef = _databaseReference
+        .child('finishedBooks/${widget.userId}/${widget.book.id}/moments');
+
+    final snapshot = await momentsRef.get();
+
+    if (snapshot.exists) {
+      final data = Map<String, dynamic>.from(snapshot.value as Map);
+
+      data.forEach((id, value) {
+        final moment = BookMoment.fromMap(id, Map<String, dynamic>.from(value));
+        _moments.add(moment);
+
+        if (moment.type == 'text') {
+          _controllers[moment.id] = TextEditingController(text: moment.content);
+        }
+      });
+      _moments.sort((a, b) => a.id.compareTo(b.id));
+    }
+
+    setState(() {});
+  }
+
+  String _generateMomentId() => DateTime.now().microsecondsSinceEpoch.toString();
+
+  @override
+  void dispose() {
+    _controllers.forEach((_, controller) => controller.dispose());
+    super.dispose();
   }
 
   void _saveMoments() async {
@@ -49,26 +85,40 @@ class _MomentsScreenState extends State<MomentsScreen> {
       }
     }
 
-    setState(() {
-      widget.book.moments = List.from(_moments);
-      _hasUnsavedData = false;
-    });
-
     final bookData = widget.book.toMap();
 
-    final dataToSave = {
+    final updatedBook = {
       ...bookData,
-      'moments': widget.book.moments.map((e) => e.toMap()).toList(),
+      'moments': _moments.map((m) => m.toMap()).toList(),
     };
 
     try {
-      await _databaseReference
-          .child('finishedBooks/${widget.book.userId}/${widget.book.id}')
-          .update(dataToSave);
-      if(mounted) {
+      final momentsRef = _databaseReference
+          .child('finishedBooks/${widget.userId}/${widget.book.id}/moments');
+
+      final snapshot = await momentsRef.get();
+      final existingIds = <String>{};
+      if (snapshot.exists) {
+        final data = Map<String, dynamic>.from(snapshot.value as Map);
+        existingIds.addAll(data.keys);
+      }
+
+      final currentIds = _moments.map((m) => m.id).toSet();
+      final batchUpdate = <String, dynamic>{};
+      for (var moment in _moments) {
+        batchUpdate[moment.id] = moment.toMap();
+      }
+
+      for (var id in existingIds.difference(currentIds)) {
+        batchUpdate[id] = null;
+      }
+
+      await momentsRef.update(batchUpdate);
+
+      if (mounted) {
         Navigator.pop(context, {
           'reload': true,
-          'book': dataToSave
+          'book': FinishedBook.fromMap(widget.book.id, updatedBook),
         });
       }
     } catch (e) {
@@ -79,17 +129,20 @@ class _MomentsScreenState extends State<MomentsScreen> {
   void _removeMoment(BookMoment moment) {
     setState(() {
       _moments.remove(moment);
+      _controllers.remove(moment.id)?.dispose();
       _hasUnsavedData = true;
     });
   }
 
   void _addTextMoment() {
+    final newId = _generateMomentId();
     setState(() {
       _moments.add(BookMoment(
-        id: UniqueKey().toString(),
+        id: newId,
         type: 'text',
         content: '',
       ));
+      _controllers[newId] = TextEditingController();
       _hasUnsavedData = true;
     });
   }
@@ -131,7 +184,10 @@ class _MomentsScreenState extends State<MomentsScreen> {
   }
 
   Widget _buildTextMomentCard(BookMoment moment) {
-    _controllers[moment.id] ??= TextEditingController(text: moment.content);
+    final controller = _controllers[moment.id];
+    if (controller == null) {
+      return const SizedBox();
+    }
 
     return Card(
       color: Color.lerp(
@@ -145,7 +201,7 @@ class _MomentsScreenState extends State<MomentsScreen> {
           children: [
             Expanded(
               child: TextFormField(
-                controller: _controllers[moment.id],
+                controller: controller,
                 cursorColor: Color(int.parse(widget.category.colorCode)),
                 style: const TextStyle(color: Colors.black),
                 maxLines: null,
@@ -182,9 +238,12 @@ class _MomentsScreenState extends State<MomentsScreen> {
             IconButton(
               alignment: Alignment.center,
               icon: const Icon(Icons.delete, color: Colors.redAccent),
-              onPressed: () {
-                _controllers.remove(moment.id);
-                _removeMoment(moment);
+              onPressed: () async {
+                final shouldDelete = await confirmDelete(context);
+                if (shouldDelete ?? false) {
+                  _controllers.remove(moment.id);
+                  _removeMoment(moment);
+                }
               },
             ),
           ],
@@ -205,12 +264,13 @@ class _MomentsScreenState extends State<MomentsScreen> {
         children: [
           GestureDetector(
             onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => FullScreenImageViewer(imageUrl: moment.content),
-                  ),
-                );
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) =>
+                      FullScreenImageViewer(imageUrl: moment.content),
+                ),
+              );
             },
             child: Container(
               height: 200,
@@ -220,10 +280,9 @@ class _MomentsScreenState extends State<MomentsScreen> {
                     Colors.white, 0.5),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                    color: Color.lerp(
-                        Color(int.parse(widget.category.colorCode)),
-                        Colors.black,
-                        0.2)!),
+                  color: Color.lerp(Color(int.parse(widget.category.colorCode)),
+                      Colors.black, 0.2)!,
+                ),
               ),
               clipBehavior: Clip.hardEdge,
               child: hasImage
@@ -232,6 +291,13 @@ class _MomentsScreenState extends State<MomentsScreen> {
                 fit: BoxFit.contain,
                 width: double.infinity,
                 height: 200,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Center(
+                    child: CircularProgressIndicator(color: Color.lerp(Color(int.parse(widget.category.colorCode)),
+                        Colors.black, 0.2)!,),
+                  );
+                },
                 errorBuilder: (context, error, stackTrace) =>
                 const Center(child: Icon(Icons.broken_image)),
               )
@@ -246,7 +312,12 @@ class _MomentsScreenState extends State<MomentsScreen> {
               right: 4,
               child: IconButton(
                 icon: const Icon(Icons.delete, color: Colors.redAccent),
-                onPressed: () => _removeMoment(moment),
+                onPressed: () async {
+                  final shouldDelete = await confirmDelete(context);
+                  if (shouldDelete ?? false) {
+                    _removeMoment(moment);
+                  }
+                },
               ),
             ),
         ],

@@ -38,6 +38,8 @@ class _BookInPlanScreenState extends State<BookInPlanScreen> {
   bool _isSaving = false;
   bool _isDownloading = false;
   bool _hasUnsavedData = false;
+  bool _showTitleError = false;
+  bool _showAuthorError = false;
 
   late String _initialTitle;
   late String _initialDescription;
@@ -191,7 +193,10 @@ class _BookInPlanScreenState extends State<BookInPlanScreen> {
     final author = _authorNameController.text.trim();
 
     if (title.isEmpty || author.isEmpty) {
-      _showErrorSnackbar(s.an_error_occurred, s.requiredField);
+      setState(() {
+        _showAuthorError = author.isEmpty;
+        _showTitleError = title.isEmpty;
+      });
       return;
     }
 
@@ -348,9 +353,9 @@ class _BookInPlanScreenState extends State<BookInPlanScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     const SizedBox(height: 16),
-                    _buildTextField(s.workName, _titleController),
+                    _buildTextField(s.workName, _titleController, showError: _showTitleError),
                     const SizedBox(height: 16),
-                    _buildTextField(s.author, _authorNameController),
+                    _buildTextField(s.author, _authorNameController, showError: _showAuthorError),
                     const SizedBox(height: 16),
                     _buildTextField(s.genreNTags, _genreController, maxLines: 2),
                     const SizedBox(height: 16),
@@ -639,7 +644,8 @@ class _BookInPlanScreenState extends State<BookInPlanScreen> {
   }
 
   Widget _buildTextField(String label, TextEditingController controller,
-      {int maxLines = 1}) {
+      {int maxLines = 1, bool showError = false,
+        String? errorText,}) {
     return TextField(
       controller: controller,
       cursorColor: _priority.color,
@@ -648,6 +654,7 @@ class _BookInPlanScreenState extends State<BookInPlanScreen> {
       decoration: InputDecoration(
         labelText: label,
         labelStyle: const TextStyle(color: Colors.black),
+        errorText: showError ? errorText ?? S.of(context).requiredField : null,
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -656,6 +663,16 @@ class _BookInPlanScreenState extends State<BookInPlanScreen> {
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(width: 1.5, color: _priority.color),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(
+              width: 1.5, color: Colors.red),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(
+              width: 1.5, color: Colors.red),
         ),
       ),
       maxLines: maxLines,

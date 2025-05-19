@@ -433,7 +433,6 @@ class _RelationshipFormWidgetState extends State<RelationshipFormWidget> {
     setState(() => _isSaving = true);
 
     try {
-      // Получаем текущую связь, чтобы сохранить relationId
       final currentRelation = _getRelationsList(groupType)[_editingIndex];
 
       final updatedRelation = {
@@ -443,7 +442,7 @@ class _RelationshipFormWidgetState extends State<RelationshipFormWidget> {
         'characterRelation': _getCharacterRelationController(groupType).text,
         'selectedCharacterRelation':
         _getSelectedCharacterRelationController(groupType).text,
-        'relationId': currentRelation['relationId'], // Сохраняем существующий ID
+        'relationId': currentRelation['relationId'],
       };
 
       final groupRef = FirebaseDatabase.instance.ref(
@@ -535,10 +534,8 @@ class _RelationshipFormWidgetState extends State<RelationshipFormWidget> {
       final relationToDelete = relationsMap[relationKey];
       final relationId = relationToDelete['relationId'];
 
-      // Удаляем связь у текущего персонажа
       await relationsRef.child(relationKey).remove();
 
-      // Удаляем соответствующую связь у целевого персонажа
       final targetCharacterId = relationToDelete['characterId'];
       if (targetCharacterId != null) {
         final targetRef = FirebaseDatabase.instance.ref(
@@ -549,7 +546,6 @@ class _RelationshipFormWidgetState extends State<RelationshipFormWidget> {
           final targetRelations = Map<String, dynamic>.from(
               targetSnapshot.value as Map<dynamic, dynamic>);
 
-          // Ищем связь с таким же relationId
           for (final entry in targetRelations.entries) {
             if (entry.value['relationId'] == relationId) {
               await targetRef.child(entry.key).remove();

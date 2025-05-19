@@ -42,6 +42,8 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
   bool _isDownloading = false;
   bool _isLoadingFiles = false;
   bool _hasUnsavedData = false;
+  bool _showTitleError = false;
+  bool _showAuthorError = false;
 
   late String _initialTitle;
   late String _initialAuthorName;
@@ -59,7 +61,8 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
 
     _finishedBook = widget.book;
     _titleController = TextEditingController(text: _finishedBook?.title ?? '');
-    _authorController = TextEditingController(text: _finishedBook?.author ?? '');
+    _authorController =
+        TextEditingController(text: _finishedBook?.author ?? '');
     _descriptionController =
         TextEditingController(text: _finishedBook?.description ?? '');
 
@@ -153,19 +156,10 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
     final authorName = _authorController.text.trim();
 
     if (title.isEmpty || authorName.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            S.of(context).requiredField,
-            style: const TextStyle(color: Colors.black),
-          ),
-          backgroundColor: Color.lerp(Color(int.parse(widget.bookCategory.colorCode)), Colors.white, 0.7),
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-        ),
-      );
+      setState(() {
+        _showAuthorError = authorName.isEmpty;
+        _showTitleError = title.isEmpty;
+      });
       return;
     }
 
@@ -245,7 +239,10 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
               '${S.current.an_error_occurred}: $e',
               style: const TextStyle(color: Colors.black),
             ),
-            backgroundColor: Color.lerp(Color(int.parse(widget.bookCategory.colorCode)), Colors.white, 0.7),
+            backgroundColor: Color.lerp(
+                Color(int.parse(widget.bookCategory.colorCode)),
+                Colors.white,
+                0.7),
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
@@ -269,7 +266,8 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
           message,
           style: const TextStyle(color: Colors.black),
         ),
-        backgroundColor: Color.lerp(Color(int.parse(widget.bookCategory.colorCode)), Colors.white, 0.7),
+        backgroundColor: Color.lerp(
+            Color(int.parse(widget.bookCategory.colorCode)), Colors.white, 0.7),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
@@ -315,9 +313,7 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
           );
           if (shouldLeave == true && mounted) await _saveBook();
         } else {
-          Navigator.pop(context, {
-            'reload': true
-          });
+          Navigator.pop(context, {'reload': true});
         }
       },
       child: Scaffold(
@@ -371,10 +367,10 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
                             children: [
                               const SizedBox(height: 16),
                               _buildTextField(
-                                  S.of(context).workName, _titleController),
+                                  S.of(context).workName, _titleController, showError: _showTitleError),
                               const SizedBox(height: 16),
                               _buildTextField(
-                                  S.of(context).author, _authorController),
+                                  S.of(context).author, _authorController, showError: _showAuthorError),
                               const SizedBox(height: 16),
                               _buildTextField(S.of(context).description,
                                   _descriptionController,
@@ -447,16 +443,27 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
                                       GestureDetector(
                                         onTap: () async {
                                           if (_startDate.isEmpty) {
-                                            ScaffoldMessenger.of(context).showSnackBar(
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
                                               SnackBar(
                                                 content: Text(
-                                                  S.of(context).select_start_date,
-                                                  style: const TextStyle(color: Colors.black),
+                                                  S
+                                                      .of(context)
+                                                      .select_start_date,
+                                                  style: const TextStyle(
+                                                      color: Colors.black),
                                                 ),
-                                                backgroundColor: Color.lerp(Color(int.parse(widget.bookCategory.colorCode)), Colors.white, 0.7),
-                                                behavior: SnackBarBehavior.floating,
+                                                backgroundColor: Color.lerp(
+                                                    Color(int.parse(widget
+                                                        .bookCategory
+                                                        .colorCode)),
+                                                    Colors.white,
+                                                    0.7),
+                                                behavior:
+                                                    SnackBarBehavior.floating,
                                                 shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(10),
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
                                                 ),
                                               ),
                                             );
@@ -626,7 +633,8 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
                                         ),
                                       );
 
-                                      if (result is Map && result['reload'] == true) {
+                                      if (result is Map &&
+                                          result['reload'] == true) {
                                         setState(() {
                                           if (result['book'] != null) {
                                             _finishedBook = result['book'];
@@ -682,7 +690,8 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
                                         ),
                                       );
 
-                                      if (result is Map && result['reload'] == true) {
+                                      if (result is Map &&
+                                          result['reload'] == true) {
                                         setState(() {
                                           if (result['book'] != null) {
                                             _finishedBook = result['book'];
@@ -918,7 +927,10 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
             S.of(context).an_error_occurred,
             style: const TextStyle(color: Colors.black),
           ),
-          backgroundColor: Color.lerp(Color(int.parse(widget.bookCategory.colorCode)), Colors.white, 0.7),
+          backgroundColor: Color.lerp(
+              Color(int.parse(widget.bookCategory.colorCode)),
+              Colors.white,
+              0.7),
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
@@ -954,7 +966,10 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
             S.of(context).an_error_occurred,
             style: const TextStyle(color: Colors.black),
           ),
-          backgroundColor: Color.lerp(Color(int.parse(widget.bookCategory.colorCode)), Colors.white, 0.7),
+          backgroundColor: Color.lerp(
+              Color(int.parse(widget.bookCategory.colorCode)),
+              Colors.white,
+              0.7),
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
@@ -1001,7 +1016,10 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
             '📥 ${S.of(context).file_saved}: ${file.path}',
             style: const TextStyle(color: Colors.black),
           ),
-          backgroundColor: Color.lerp(Color(int.parse(widget.bookCategory.colorCode)), Colors.white, 0.7),
+          backgroundColor: Color.lerp(
+              Color(int.parse(widget.bookCategory.colorCode)),
+              Colors.white,
+              0.7),
           behavior: SnackBarBehavior.floating,
           duration: const Duration(seconds: 3),
           shape: RoundedRectangleBorder(
@@ -1017,7 +1035,10 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
             '❌ ${S.of(context).an_error_occurred}',
             style: const TextStyle(color: Colors.black),
           ),
-          backgroundColor: Color.lerp(Color(int.parse(widget.bookCategory.colorCode)), Colors.white, 0.7),
+          backgroundColor: Color.lerp(
+              Color(int.parse(widget.bookCategory.colorCode)),
+              Colors.white,
+              0.7),
           behavior: SnackBarBehavior.floating,
           duration: const Duration(seconds: 4),
           shape: RoundedRectangleBorder(
@@ -1072,7 +1093,7 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
                   ),
               textButtonTheme: TextButtonThemeData(
                 style: TextButton.styleFrom(
-                  foregroundColor: categoryColor,
+                  foregroundColor: Colors.black,
                 ),
               ),
             ),
@@ -1093,26 +1114,43 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
     }
   }
 
-  Widget _buildTextField(String label, TextEditingController controller,
-      {int maxLines = 1}) {
+  Widget _buildTextField(
+    String label,
+    TextEditingController controller, {
+    int maxLines = 1,
+    bool showError = false,
+    String? errorText,
+  }) {
+    final borderColor = showError
+        ? Colors.red
+        : Color(int.parse(_selectedCategory.colorCode));
     return TextField(
       controller: controller,
-      cursorColor: Color(int.parse(_selectedCategory.colorCode)),
+      cursorColor: borderColor,
       style: const TextStyle(color: Colors.black),
       onChanged: (value) => _checkForChanges(),
       decoration: InputDecoration(
         labelText: label,
         labelStyle: const TextStyle(color: Colors.black),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        errorText: showError ? errorText ?? S.of(context).requiredField : null,
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(
-              width: 0.5, color: Color(int.parse(_selectedCategory.colorCode))),
+          borderSide: BorderSide(width: 0.5, color: borderColor),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(
-              width: 1.5, color: Color(int.parse(_selectedCategory.colorCode))),
+          borderSide: BorderSide(width: 1.5, color: borderColor),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(
+              width: 1.5, color: Colors.red),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(
+              width: 1.5, color: Colors.red),
         ),
       ),
       maxLines: maxLines,

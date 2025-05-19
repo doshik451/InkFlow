@@ -31,6 +31,8 @@ class _AboutStoryArcScreenState extends State<AboutStoryArcScreen> {
   late String _initialDescription;
   bool _hasUnsavedData = false;
   bool _isSaving = false;
+  bool _showTitleError = false;
+  bool _showDescriptionError = false;
 
   @override
   void initState() {
@@ -122,7 +124,10 @@ class _AboutStoryArcScreenState extends State<AboutStoryArcScreen> {
     final description = _descriptionController.text.trim();
 
     if (title.isEmpty || description.isEmpty) {
-      _showErrorSnackbar(s.an_error_occurred, s.requiredField);
+      setState(() {
+        _showDescriptionError = description.isEmpty;
+        _showTitleError = title.isEmpty;
+      });
       return;
     }
 
@@ -302,6 +307,7 @@ class _AboutStoryArcScreenState extends State<AboutStoryArcScreen> {
                           decoration: InputDecoration(
                             labelText: S.of(context).title,
                             labelStyle: const TextStyle(color: Colors.black),
+                            errorText: _showTitleError ? S.of(context).requiredField : null,
                             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
@@ -310,6 +316,16 @@ class _AboutStoryArcScreenState extends State<AboutStoryArcScreen> {
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                               borderSide: BorderSide(width: 1.5, color: widget.status.color),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                  width: 1.5, color: Colors.red),
+                            ),
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                  width: 1.5, color: Colors.red),
                             ),
                           ),
                         ),
@@ -325,6 +341,7 @@ class _AboutStoryArcScreenState extends State<AboutStoryArcScreen> {
                           decoration: InputDecoration(
                             labelText: S.of(context).description,
                             labelStyle: const TextStyle(color: Colors.black),
+                            errorText: _showDescriptionError ? S.of(context).requiredField : null,
                             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
@@ -333,6 +350,16 @@ class _AboutStoryArcScreenState extends State<AboutStoryArcScreen> {
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                               borderSide: BorderSide(width: 1.5, color: widget.status.color),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                  width: 1.5, color: Colors.red),
+                            ),
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                  width: 1.5, color: Colors.red),
                             ),
                           ),
                         ),

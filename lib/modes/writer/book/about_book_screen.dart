@@ -61,6 +61,9 @@ class _AboutBookPageState extends State<AboutBookPage> {
   late String _initialMessage;
   late String _initialAuthorName;
   late List<String> _initialLinks;
+  bool _showTitleError = false;
+  bool _showAuthorError = false;
+  bool _showDescriptionError = false;
 
   bool get _isEditing => widget.book != null;
 
@@ -245,7 +248,11 @@ class _AboutBookPageState extends State<AboutBookPage> {
     final desc = _descriptionController.text.trim();
 
     if (title.isEmpty || author.isEmpty || desc.isEmpty) {
-      _showErrorSnackbar(s.an_error_occurred, s.requiredField);
+      setState(() {
+        _showAuthorError = author.isEmpty;
+        _showTitleError = title.isEmpty;
+        _showDescriptionError = desc.isEmpty;
+      });
       return;
     }
 
@@ -541,9 +548,9 @@ class _AboutBookPageState extends State<AboutBookPage> {
                 children: [
                   _buildCoverSection(),
                   const SizedBox(height: 24),
-                  _buildTextField(s.workName, _titleController),
+                  _buildTextField(s.workName, _titleController, showError: _showTitleError),
                   const SizedBox(height: 16),
-                  _buildTextField(s.author, _authorNameController),
+                  _buildTextField(s.author, _authorNameController, showError: _showAuthorError),
                   const SizedBox(height: 16),
                   _buildTextField(s.setting, _settingController),
                   const SizedBox(height: 16),
@@ -556,7 +563,7 @@ class _AboutBookPageState extends State<AboutBookPage> {
                   _buildStatusDropdown(context),
                   const SizedBox(height: 16),
                   _buildTextField(s.description, _descriptionController,
-                      maxLines: 5),
+                      maxLines: 5, showError: _showDescriptionError),
                   const SizedBox(height: 16,),
                   _buildLinksSection(),
                   if(_isEditing)...[
@@ -762,7 +769,9 @@ class _AboutBookPageState extends State<AboutBookPage> {
   }
 
   Widget _buildTextField(String label, TextEditingController controller,
-      {int maxLines = 1}) {
+      {int maxLines = 1,
+        bool showError = false,
+        String? errorText,}) {
     return TextField(
       controller: controller,
       cursorColor: _status.color,
@@ -771,6 +780,7 @@ class _AboutBookPageState extends State<AboutBookPage> {
       decoration: InputDecoration(
         labelText: label,
         labelStyle: const TextStyle(color: Colors.black),
+        errorText: showError ? errorText ?? S.of(context).requiredField : null,
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -779,6 +789,16 @@ class _AboutBookPageState extends State<AboutBookPage> {
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(width: 1.5, color: _status.color),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(
+              width: 1.5, color: Colors.red),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(
+              width: 1.5, color: Colors.red),
         ),
       ),
       maxLines: maxLines,

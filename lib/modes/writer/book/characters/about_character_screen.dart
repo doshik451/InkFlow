@@ -42,6 +42,8 @@ class _AboutCharacterScreenState extends State<AboutCharacterScreen> {
   late String _initialOccupation;
   late String _initialAppearanceDescription;
   String? _mainPicUrl;
+  bool _showNameError = false;
+  bool _showRoleError = false;
 
   bool _hasUnsavedData = false;
   bool _isSaving = false;
@@ -113,7 +115,10 @@ class _AboutCharacterScreenState extends State<AboutCharacterScreen> {
     final role = _roleController.text.trim();
 
     if (name.isEmpty || role.isEmpty) {
-      _showErrorSnackbar(s.an_error_occurred, s.requiredField);
+      setState(() {
+        _showNameError = name.isEmpty;
+        _showRoleError = role.isEmpty;
+      });
       return;
     }
 
@@ -250,7 +255,9 @@ class _AboutCharacterScreenState extends State<AboutCharacterScreen> {
   }
 
   Widget _buildTextField(String label, TextEditingController controller, Status status,
-      {int maxLines = 1}) {
+      {int maxLines = 1,
+        bool showError = false,
+        String? errorText,}) {
     return TextField(
       controller: controller,
       cursorColor: status.color,
@@ -259,6 +266,7 @@ class _AboutCharacterScreenState extends State<AboutCharacterScreen> {
       decoration: InputDecoration(
         labelText: label,
         labelStyle: const TextStyle(color: Colors.black),
+        errorText: showError ? errorText ?? S.of(context).requiredField : null,
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -273,6 +281,16 @@ class _AboutCharacterScreenState extends State<AboutCharacterScreen> {
             width: 1.5,
             color: status.color,
           ),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(
+              width: 1.5, color: Colors.red),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(
+              width: 1.5, color: Colors.red),
         ),
       ),
       maxLines: maxLines,
@@ -374,7 +392,7 @@ class _AboutCharacterScreenState extends State<AboutCharacterScreen> {
                           children: [
                             const SizedBox(height: 24),
                             _buildTextField(
-                                S.of(context).name, _nameController, widget.status),
+                                S.of(context).name, _nameController, widget.status, showError: _showNameError),
                             const SizedBox(height: 16),
                             _buildTextField(S.of(context).age, _ageController, widget.status),
                             const SizedBox(height: 16),
@@ -390,7 +408,7 @@ class _AboutCharacterScreenState extends State<AboutCharacterScreen> {
                   const SizedBox(
                     height: 24,
                   ),
-                  _buildTextField(S.of(context).role, _roleController, widget.status),
+                  _buildTextField(S.of(context).role, _roleController, widget.status, showError: _showRoleError),
                   const SizedBox(height: 16),
                   _buildTextField(S.of(context).race, _raceController, widget.status),
                   const SizedBox(height: 16),
