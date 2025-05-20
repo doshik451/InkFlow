@@ -220,8 +220,8 @@ class _ReviewScreenState extends State<ReviewScreen> {
                   children: [
                     Divider(height: 1, color: Color(int.parse(widget.category.colorCode)), thickness: 2,),
                     ListTile(
-                      leading: const Icon(Icons.add),
-                      title: Text(S.of(context).add_criteria),
+                      leading: const Icon(Icons.add, color: Colors.black,),
+                      title: Text(S.of(context).add_criteria, style: const TextStyle(color: Colors.black),),
                       onTap: () async {
                         final newCriterionTitle =
                             await _showCreateCriterionDialog(context);

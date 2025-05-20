@@ -50,11 +50,11 @@ class _CharacterReferencesScreenState extends State<CharacterReferencesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.character.name),
+        title: Text('${widget.character.name}: ${S.of(context).references}'),
         centerTitle: true,
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? Center(child: CircularProgressIndicator(color: Theme.of(context).colorScheme.tertiary))
           : Center(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),

@@ -1664,6 +1664,41 @@ class S {
   String get moment {
     return Intl.message('Moment', name: 'moment', desc: '', args: []);
   }
+
+  /// `Move to`
+  String get move_to {
+    return Intl.message('Move to', name: 'move_to', desc: '', args: []);
+  }
+
+  /// `Select category`
+  String get select_category {
+    return Intl.message(
+      'Select category',
+      name: 'select_category',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm choice`
+  String get confirm_choice {
+    return Intl.message(
+      'Confirm choice',
+      name: 'confirm_choice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure of moving to category`
+  String get move_to_category {
+    return Intl.message(
+      'Are you sure of moving to category',
+      name: 'move_to_category',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -29,6 +29,7 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
   late TextEditingController _titleController;
   late TextEditingController _authorController;
   late TextEditingController _descriptionController;
+  late TextEditingController _genreNTagsController;
   late TextEditingController _linkController;
   final DatabaseReference _databaseReference = FirebaseDatabase.instance.ref();
   late String _startDate;
@@ -48,6 +49,7 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
   late String _initialTitle;
   late String _initialAuthorName;
   late String _initialDescription;
+  late String _initialGenreNTags;
   late String _initialStartDate;
   late String _initialEndDate;
   late String _initialCategoryId;
@@ -65,6 +67,7 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
         TextEditingController(text: _finishedBook?.author ?? '');
     _descriptionController =
         TextEditingController(text: _finishedBook?.description ?? '');
+    _genreNTagsController = TextEditingController(text: _finishedBook?.genreNTags ?? '');
 
     _linkController = TextEditingController();
 
@@ -78,6 +81,7 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
     _initialTitle = _titleController.text;
     _initialAuthorName = _authorController.text;
     _initialDescription = _descriptionController.text;
+    _initialGenreNTags = _genreNTagsController.text;
     _initialStartDate = _startDate;
     _initialEndDate = _endDate;
     _initialCategoryId = _selectedCategory.id;
@@ -98,6 +102,7 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
     _titleController.dispose();
     _authorController.dispose();
     _descriptionController.dispose();
+    _genreNTagsController.dispose();
     _linkController.dispose();
     super.dispose();
   }
@@ -112,6 +117,7 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
     final hasCategoryChanged = _selectedCategory.id != _initialCategoryId;
     final hasLinksChanged =
         !const DeepCollectionEquality().equals(_links, _initialLinks);
+    final hasGenreChanged = _genreNTagsController != _initialGenreNTags;
 
     setState(() {
       _hasUnsavedData = hasTitleChanged ||
@@ -120,7 +126,8 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
           hasStartDateChanged ||
           hasEndDateChanged ||
           hasCategoryChanged ||
-          hasLinksChanged;
+          hasLinksChanged ||
+          hasGenreChanged;
     });
   }
 
@@ -172,6 +179,7 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
           'title': title,
           'author': authorName,
           'description': _descriptionController.text.trim(),
+          'genreNTags': _genreNTagsController.text.trim(),
           'startDate': _startDate,
           'endDate': _endDate,
           'categoryId': _selectedCategory.id,
@@ -187,6 +195,7 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
           'title': title,
           'author': authorName,
           'description': _descriptionController.text.trim(),
+          'genreNTags': _genreNTagsController.text.trim(),
           'startDate': _startDate,
           'endDate': _endDate,
           'categoryId': _selectedCategory.id,
@@ -205,6 +214,7 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
           _initialEndDate = _endDate;
           _initialCategoryId = _selectedCategory.id;
           _initialLinks = List.from(_links);
+          _initialGenreNTags = _genreNTagsController.text.trim();
           _checkForChanges();
         });
 
@@ -218,6 +228,7 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
           'title': title,
           'author': authorName,
           'description': _descriptionController.text.trim(),
+          'genreNTags': _genreNTagsController.text.trim(),
           'startDate': _startDate,
           'endDate': _endDate,
           'categoryId': _selectedCategory.id,
@@ -327,7 +338,7 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
           future: _categoriesFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
+              return Center(child: CircularProgressIndicator(color: Theme.of(context).colorScheme.tertiary));
             }
 
             if (snapshot.hasError) {
@@ -371,6 +382,10 @@ class _ReadBookScreenState extends State<ReadBookScreen> {
                               const SizedBox(height: 16),
                               _buildTextField(
                                   S.of(context).author, _authorController, showError: _showAuthorError),
+                              const SizedBox(height: 16),
+                              _buildTextField(S.of(context).genreNTags,
+                                  _genreNTagsController,
+                                  maxLines: 2),
                               const SizedBox(height: 16),
                               _buildTextField(S.of(context).description,
                                   _descriptionController,

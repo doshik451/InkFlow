@@ -107,6 +107,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "clothing": MessageLookupByLibrary.simpleMessage("Clothing"),
     "collection": MessageLookupByLibrary.simpleMessage("Collection"),
     "color": MessageLookupByLibrary.simpleMessage("Color"),
+    "confirm_choice": MessageLookupByLibrary.simpleMessage("Confirm choice"),
     "confirm_password": MessageLookupByLibrary.simpleMessage(
       "Confirm password",
     ),
@@ -237,6 +238,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "moments": MessageLookupByLibrary.simpleMessage("Moments"),
     "moodboard": MessageLookupByLibrary.simpleMessage("Moodboard"),
     "motivationLabel": MessageLookupByLibrary.simpleMessage("Motivation"),
+    "move_to": MessageLookupByLibrary.simpleMessage("Move to"),
+    "move_to_category": MessageLookupByLibrary.simpleMessage(
+      "Are you sure of moving to category",
+    ),
     "name": MessageLookupByLibrary.simpleMessage("Name"),
     "neutral": MessageLookupByLibrary.simpleMessage("Neutral"),
     "no": MessageLookupByLibrary.simpleMessage("No"),
@@ -322,6 +327,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Select a Character",
     ),
     "selectColor": MessageLookupByLibrary.simpleMessage("Select color"),
+    "select_category": MessageLookupByLibrary.simpleMessage("Select category"),
     "select_start_date": MessageLookupByLibrary.simpleMessage(
       "First select the start date",
     ),

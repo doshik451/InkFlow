@@ -70,6 +70,7 @@ class _BooksInCategoryPageState extends State<BooksInCategoryPage> {
           'category_abandoned': s.category_abandoned,
           'category_reRead': s.category_reRead,
           'category_disliked': s.category_disliked,
+          'category_in_process': s.category_in_process,
         };
 
         return map[titleKey] ?? titleKey;
@@ -202,8 +203,8 @@ class _BooksInCategoryPageState extends State<BooksInCategoryPage> {
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return const Center(
-                              child: CircularProgressIndicator());
+                          return Center(
+                              child: CircularProgressIndicator(color: Theme.of(context).colorScheme.tertiary));
                         }
 
                         if (snapshot.hasError) {

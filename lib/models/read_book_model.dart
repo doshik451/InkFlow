@@ -7,6 +7,7 @@ class FinishedBook {
   final String title;
   final String author;
   final String description;
+  final String genreNTags;
   final String startDate;
   final String endDate;
   final String? overallRating; // 0–100
@@ -31,7 +32,8 @@ class FinishedBook {
     required this.criteria,
     required this.category,
     required this.files,
-    required this.links
+    required this.links,
+    required this.genreNTags,
   });
 
   Color get ratingColor {
@@ -71,6 +73,7 @@ class FinishedBook {
       title: map['title'] ?? '',
       author: map['author'] ?? '',
       description: map['description'] ?? '',
+      genreNTags: map['genreNTags'] ?? '',
       startDate: map['startDate'] ?? '',
       endDate: map['endDate'] ?? '',
       overallRating: map['overallRating'] ?? '???',
@@ -96,6 +99,7 @@ class FinishedBook {
       'title': title,
       'author': author,
       'description': description,
+      'genreNTags': genreNTags,
       'startDate': startDate,
       'endDate': endDate,
       'overallRating': overallRating,

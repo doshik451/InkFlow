@@ -205,7 +205,7 @@ class _AdditionalInfoWidgetState extends State<AdditionalInfoWidget> {
                           ),
                         ),
                         child: _isSaving
-                            ? const CircularProgressIndicator(color: Color(0xFFD3D3D3))
+                            ? CircularProgressIndicator(color: Theme.of(context).colorScheme.tertiary)
                             : Text(
                           S.of(context).save,
                           style: const TextStyle(

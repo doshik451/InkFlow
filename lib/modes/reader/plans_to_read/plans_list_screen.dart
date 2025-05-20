@@ -122,9 +122,9 @@ class _PlanListState extends State<PlanList> {
           );
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
+          return Center(
             child: CircularProgressIndicator(
-              color: Color(0xFF89B0D9),
+                color: Theme.of(context).colorScheme.tertiary
             ),
           );
         }
@@ -159,8 +159,8 @@ class _PlanListState extends State<PlanList> {
               );
             }
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
+              return Center(
+                child: CircularProgressIndicator(color: Theme.of(context).colorScheme.tertiary),
               );
             }
 

@@ -84,7 +84,7 @@ class ProfileScreen extends StatelessWidget {
                   showDialog(
                     context: context,
                     barrierDismissible: false,
-                    builder: (context) => const Center(child: CircularProgressIndicator()),
+                    builder: (context) => Center(child: CircularProgressIndicator(color: Theme.of(context).colorScheme.tertiary)),
                   );
 
                   try {

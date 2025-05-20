@@ -109,6 +109,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "clothing": MessageLookupByLibrary.simpleMessage("Одежда"),
     "collection": MessageLookupByLibrary.simpleMessage("Коллекции"),
     "color": MessageLookupByLibrary.simpleMessage("Цвет"),
+    "confirm_choice": MessageLookupByLibrary.simpleMessage("Подтвердите выбор"),
     "confirm_password": MessageLookupByLibrary.simpleMessage(
       "Подтвердите пароль",
     ),
@@ -235,6 +236,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "moments": MessageLookupByLibrary.simpleMessage("Моменты"),
     "moodboard": MessageLookupByLibrary.simpleMessage("Мудборд"),
     "motivationLabel": MessageLookupByLibrary.simpleMessage("Мотивация"),
+    "move_to": MessageLookupByLibrary.simpleMessage("Переместить в"),
+    "move_to_category": MessageLookupByLibrary.simpleMessage(
+      "Вы уверены в перенесении в категорию",
+    ),
     "name": MessageLookupByLibrary.simpleMessage("Имя"),
     "neutral": MessageLookupByLibrary.simpleMessage("Нейтральные"),
     "no": MessageLookupByLibrary.simpleMessage("Нет"),
@@ -326,6 +331,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Выберите персонажа",
     ),
     "selectColor": MessageLookupByLibrary.simpleMessage("Выберите цвет"),
+    "select_category": MessageLookupByLibrary.simpleMessage(
+      "Выберите категорию",
+    ),
     "select_start_date": MessageLookupByLibrary.simpleMessage(
       "Сначала выберите дату начала",
     ),

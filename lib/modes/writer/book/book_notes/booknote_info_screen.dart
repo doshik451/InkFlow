@@ -12,7 +12,8 @@ class BooknoteInfoScreen extends StatefulWidget {
   final String bookId;
   final String userId;
   final Status status;
-  const BooknoteInfoScreen({super.key, this.note, required this.bookId, required this.userId, required this.status});
+  final String bookName;
+  const BooknoteInfoScreen({super.key, this.note, required this.bookId, required this.userId, required this.status, required this.bookName});
 
   @override
   State<BooknoteInfoScreen> createState() => _BooknoteInfoScreenState();
@@ -154,7 +155,7 @@ class _BooknoteInfoScreenState extends State<BooknoteInfoScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(widget.note != null ? widget.note!.title : S.of(context).creating),
+          title: Text(widget.note != null ? '${widget.bookName}: ${widget.note!.title}' : S.of(context).creating),
           centerTitle: true,
         ),
         body: Center(

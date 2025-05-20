@@ -195,7 +195,7 @@ class _CategoryListPageState extends State<CategoryListPage> {
                   future: _categoriesFuture,
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
+                      return Center(child: CircularProgressIndicator(color: Theme.of(context).colorScheme.tertiary));
                     }
 
                     if (snapshot.hasError || !snapshot.hasData) {

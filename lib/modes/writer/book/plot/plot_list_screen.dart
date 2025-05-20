@@ -14,9 +14,10 @@ class PlotListScreen extends StatefulWidget {
   final String bookId;
   final String authorId;
   final Status status;
+  final String bookName;
 
   const PlotListScreen(
-      {super.key, required this.bookId, required this.authorId, required this.status});
+      {super.key, required this.bookId, required this.authorId, required this.status, required this.bookName});
 
   @override
   State<PlotListScreen> createState() => _PlotListScreenState();
@@ -31,7 +32,7 @@ class _PlotListScreenState extends State<PlotListScreen> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         appBar: AppBar(
-          title: Text(S.of(context).plot),
+          title: Text('${widget.bookName}: ${S.of(context).plot}'),
           centerTitle: true,
           automaticallyImplyLeading: false,
         ),
@@ -44,12 +45,12 @@ class _PlotListScreenState extends State<PlotListScreen> {
             Icons.add,
             color: Colors.white,
           ),
-          onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => AboutStoryArcScreen(bookId: widget.bookId, userId: widget.authorId, status: widget.status,))); },
+          onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => AboutStoryArcScreen(bookId: widget.bookId, userId: widget.authorId, status: widget.status, bookName: widget.bookName,))); },
         ),
         body: Center(
           child: Stack(
             children: [
-              StoryArcsList(bookId: widget.bookId, userId: widget.authorId, searchQuery: _searchQuery, status: widget.status,),
+              StoryArcsList(bookId: widget.bookId, userId: widget.authorId, searchQuery: _searchQuery, status: widget.status, bookName: widget.bookName,),
               SearchPoly(onChanged: (value) {
                 setState(() {
                   _searchQuery = value.toLowerCase();
@@ -68,13 +69,14 @@ class StoryArcsList extends StatefulWidget {
   final String bookId;
   final String searchQuery;
   final Status status;
+  final String bookName;
 
   const StoryArcsList({
     super.key,
     required this.bookId,
     required this.userId,
     required this.searchQuery,
-    required this.status
+    required this.status, required this.bookName
   });
 
   @override
@@ -112,8 +114,8 @@ class _StoryArcsListState extends State<StoryArcsList> {
           );
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(),
+          return Center(
+            child: CircularProgressIndicator(color: Theme.of(context).colorScheme.tertiary),
           );
         }
 
@@ -196,7 +198,7 @@ class _StoryArcsListState extends State<StoryArcsList> {
                 itemCount: filteredStoryArcs.length,
                 itemBuilder: (context, index) {
                   final item = filteredStoryArcs[index];
-                  return _StoryArcCard(storyArc: item, index: index, userId: widget.userId, bookId: widget.bookId, status: widget.status,);
+                  return _StoryArcCard(storyArc: item, index: index, userId: widget.userId, bookId: widget.bookId, status: widget.status, bookName: widget.bookName,);
                 },
               ),
             );
@@ -213,8 +215,9 @@ class _StoryArcCard extends StatelessWidget {
   final String userId;
   final String bookId;
   final Status status;
+  final String bookName;
   static const duration = Duration(milliseconds: 500);
-  const _StoryArcCard({required this.storyArc, required this.index, required this.userId, required this.bookId, required this.status});
+  const _StoryArcCard({required this.storyArc, required this.index, required this.userId, required this.bookId, required this.status, required this.bookName});
 
   @override
   Widget build(BuildContext context) {
@@ -247,7 +250,7 @@ class _StoryArcCard extends StatelessWidget {
   void _navigateToStoryArcDetail(BuildContext context, StoryArc storyArc) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => AboutStoryArcScreen(storyArc: storyArc, bookId: bookId, userId: userId, status: status,),
+        builder: (context) => AboutStoryArcScreen(storyArc: storyArc, bookId: bookId, userId: userId, status: status, bookName: bookName,),
       ),
     );
   }

@@ -11,6 +11,7 @@ class AboutChapterScreen extends StatefulWidget {
   final String bookId;
   final String arcId;
   final Status status;
+  final String arcName;
 
   const AboutChapterScreen({
     super.key,
@@ -18,7 +19,8 @@ class AboutChapterScreen extends StatefulWidget {
     required this.userId,
     required this.bookId,
     required this.arcId,
-    required this.status
+    required this.status,
+    required this.arcName
   });
 
   @override
@@ -210,7 +212,7 @@ class _AboutChapterScreenState extends State<AboutChapterScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(widget.chapter != null ? widget.chapter!.title : S.of(context).creating),
+          title: Text(widget.chapter != null ? '${widget.arcName}: ${widget.chapter!.title}' : S.of(context).creating),
           centerTitle: true,
         ),
         body: Center(

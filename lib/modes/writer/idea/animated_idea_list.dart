@@ -42,7 +42,7 @@ class _AnimatedIdeaListState extends State<AnimatedIdeaList> {
       stream: _ideaStream,
       builder: (context, snapshot) {
         if(snapshot.hasError) return Center(child: Text('${S.current.an_error_occurred} ${snapshot.error}'),);
-        if(snapshot.connectionState == ConnectionState.waiting) return const Center(child: CircularProgressIndicator(),);
+        if(snapshot.connectionState == ConnectionState.waiting) return Center(child: CircularProgressIndicator(color: Theme.of(context).colorScheme.tertiary),);
 
         final data = snapshot.data?.snapshot.value;
 
@@ -67,7 +67,7 @@ class _AnimatedIdeaListState extends State<AnimatedIdeaList> {
           future: _loadBookTitles(ideas, context),
           builder: (context, bookTitlesSnapshot) {
             if(bookTitlesSnapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
+              return Center(child: CircularProgressIndicator(color: Theme.of(context).colorScheme.tertiary));
             }
 
             final bookTitles = bookTitlesSnapshot.data ?? {};

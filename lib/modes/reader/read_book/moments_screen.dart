@@ -4,7 +4,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
 
 import '../../../generated/l10n.dart';
@@ -406,7 +405,8 @@ class _MomentsScreenState extends State<MomentsScreen> {
                         highlightColor: Colors.transparent,
                       ),
                       child: ExpansionTile(
-                        title: Text(S.of(context).text_moments),
+                        title: Text(S.of(context).text_moments,
+                          style: const TextStyle(color: Colors.black),),
                         trailing: Icon(
                           _isTextExpanded
                               ? Icons.expand_less
@@ -471,7 +471,8 @@ class _MomentsScreenState extends State<MomentsScreen> {
                         highlightColor: Colors.transparent,
                       ),
                       child: ExpansionTile(
-                        title: Text(S.of(context).image_moments),
+                        title: Text(S.of(context).image_moments,
+                          style: const TextStyle(color: Colors.black),),
                         trailing: Icon(
                           _isImageExpanded
                               ? Icons.expand_less

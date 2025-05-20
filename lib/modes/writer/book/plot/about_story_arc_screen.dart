@@ -13,9 +13,10 @@ class AboutStoryArcScreen extends StatefulWidget {
   final String bookId;
   final String userId;
   final Status status;
+  final String bookName;
 
   const AboutStoryArcScreen(
-      {super.key, this.storyArc, required this.bookId, required this.userId, required this.status});
+      {super.key, this.storyArc, required this.bookId, required this.userId, required this.status, required this.bookName});
 
   @override
   State<AboutStoryArcScreen> createState() => _AboutStoryArcScreenState();
@@ -96,6 +97,7 @@ class _AboutStoryArcScreenState extends State<AboutStoryArcScreen> {
           bookId: widget.bookId,
           arcId: widget.storyArc!.id,
           status: widget.status,
+          arcName: widget.storyArc!.title,
         ),
       ),
     ).then((_) => _loadChapters());
@@ -154,6 +156,7 @@ class _AboutStoryArcScreenState extends State<AboutStoryArcScreen> {
               storyArc: result,
               bookId: widget.bookId,
               userId: widget.userId,
+              bookName: widget.bookName,
             ),
           ),
         );
@@ -272,7 +275,7 @@ class _AboutStoryArcScreenState extends State<AboutStoryArcScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(widget.storyArc != null ? widget.storyArc!.title : S.of(context).creating),
+          title: Text(widget.storyArc != null ? '${widget.bookName}: ${widget.storyArc!.title}' : S.of(context).creating),
           centerTitle: true,
         ),
         body: Center(

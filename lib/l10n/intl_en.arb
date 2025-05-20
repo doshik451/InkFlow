@@ -215,5 +215,9 @@
   "text_moments": "Text moments",
   "add_moment": "Add moment",
   "image_moments": "Image moments",
-  "moment": "Moment"
+  "moment": "Moment",
+  "move_to": "Move to",
+  "select_category": "Select category",
+  "confirm_choice": "Confirm choice",
+  "move_to_category": "Are you sure of moving to category"
 }

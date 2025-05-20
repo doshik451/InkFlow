@@ -117,7 +117,7 @@ class _BooksListWidgetState extends State<BooksListWidget> {
         stream: _booksStream,
         builder: (context, snapshot) {
           if(snapshot.hasError) return Center(child: Text('${S.current.an_error_occurred} ${snapshot.error}'),);
-          if(snapshot.connectionState == ConnectionState.waiting) return const Center(child: CircularProgressIndicator(),);
+          if(snapshot.connectionState == ConnectionState.waiting) return Center(child: CircularProgressIndicator(color: Theme.of(context).colorScheme.tertiary),);
           final data = snapshot.data?.snapshot.value;
 
           if (data == null || data is! Map) {
@@ -140,7 +140,7 @@ class _BooksListWidgetState extends State<BooksListWidget> {
               future: _loadAdditionalData(),
               builder: (context, futureSnapshot) {
                 if (futureSnapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
+                  return Center(child: CircularProgressIndicator(color: Theme.of(context).colorScheme.tertiary));
                 }
                 if (futureSnapshot.hasError) {
                   return Center(child: Text('${S.current.an_error_occurred} ${futureSnapshot.error}'));

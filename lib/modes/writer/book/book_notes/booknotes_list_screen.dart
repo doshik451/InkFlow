@@ -15,7 +15,8 @@ class BooknotesListScreen extends StatefulWidget {
   final String authorId;
   final String searchQuery;
   final Status status;
-  const BooknotesListScreen({super.key, required this.searchQuery, required this.bookId, required this.authorId, required this.status});
+  final String bookName;
+  const BooknotesListScreen({super.key, required this.searchQuery, required this.bookId, required this.authorId, required this.status, required this.bookName});
 
   @override
   State<BooknotesListScreen> createState() => _BooknotesListScreenState();
@@ -48,7 +49,7 @@ class _BooknotesListScreenState extends State<BooknotesListScreen> {
       stream: _notesStream,
       builder: (context, snapshot) {
         if(snapshot.hasError) return Center(child: Text('${S.current.an_error_occurred} ${snapshot.error}'),);
-        if(snapshot.connectionState == ConnectionState.waiting) return const Center(child: CircularProgressIndicator(),);
+        if(snapshot.connectionState == ConnectionState.waiting) return Center(child: CircularProgressIndicator(color: Theme.of(context).colorScheme.tertiary),);
 
         final data = snapshot.data?.snapshot.value;
         if(data == null || data is! Map) {
@@ -70,7 +71,7 @@ class _BooknotesListScreenState extends State<BooknotesListScreen> {
           future: _loadAdditionalData(),
           builder: (context, snapshot) {
             if(snapshot.hasError) return Center(child: Text('${S.current.an_error_occurred} ${snapshot.error}'),);
-            if(snapshot.connectionState == ConnectionState.waiting) return const Center(child: CircularProgressIndicator(),);
+            if(snapshot.connectionState == ConnectionState.waiting) return Center(child: CircularProgressIndicator(color: Theme.of(context).colorScheme.tertiary),);
 
             List<Booknote> filteredNotes = widget.searchQuery.isEmpty ? notes : notes.where((note) {
               final query = widget.searchQuery.toLowerCase();
@@ -106,7 +107,7 @@ class _BooknotesListScreenState extends State<BooknotesListScreen> {
                 itemCount: filteredNotes.length,
                 itemBuilder: (context, index) {
                   final note = filteredNotes[index];
-                  return _NoteCard(note: note, index: index, userId: widget.authorId, bookId: widget.bookId, status: widget.status,);
+                  return _NoteCard(note: note, index: index, userId: widget.authorId, bookId: widget.bookId, status: widget.status, bookName: widget.bookName,);
                 },
               ),
             );
@@ -123,6 +124,7 @@ class _NoteCard extends StatelessWidget {
   final String userId;
   final String bookId;
   final Status status;
+  final String bookName;
   static const animationDuration = Duration(milliseconds: 500);
 
   const _NoteCard({
@@ -130,7 +132,7 @@ class _NoteCard extends StatelessWidget {
     required this.index,
     required this.userId,
     required this.bookId,
-    required this.status
+    required this.status, required this.bookName
   });
 
   @override
@@ -164,7 +166,7 @@ class _NoteCard extends StatelessWidget {
   void _navigateToNoteDetail(BuildContext context, Booknote note, Status status) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => BooknoteInfoScreen(note: note, bookId: bookId, userId: userId, status: status,),
+        builder: (context) => BooknoteInfoScreen(note: note, bookId: bookId, userId: userId, status: status, bookName: bookName,),
       ),
     );
   }

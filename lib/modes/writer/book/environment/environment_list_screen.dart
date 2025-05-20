@@ -14,9 +14,10 @@ class EnvironmentListScreen extends StatefulWidget {
   final String bookId;
   final String authorId;
   final Status status;
+  final String bookName;
 
   const EnvironmentListScreen(
-      {super.key, required this.bookId, required this.authorId, required this.status});
+      {super.key, required this.bookId, required this.authorId, required this.status, required this.bookName});
 
   @override
   State<EnvironmentListScreen> createState() => _EnvironmentListScreenState();
@@ -31,7 +32,7 @@ class _EnvironmentListScreenState extends State<EnvironmentListScreen> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         appBar: AppBar(
-          title: Text(S.of(context).environment),
+          title: Text('${widget.bookName}: ${S.of(context).environment}'),
           centerTitle: true,
           automaticallyImplyLeading: false,
         ),
@@ -44,12 +45,12 @@ class _EnvironmentListScreenState extends State<EnvironmentListScreen> {
             Icons.add,
             color: Colors.white,
           ),
-          onPressed: () { Navigator.push(context, MaterialPageRoute(builder: (context) => AboutEnvironmentScreen(bookId: widget.bookId, userId: widget.authorId, status: widget.status,))); },
+          onPressed: () { Navigator.push(context, MaterialPageRoute(builder: (context) => AboutEnvironmentScreen(bookId: widget.bookId, userId: widget.authorId, status: widget.status, bookName: widget.bookName,))); },
         ),
         body: Center(
           child: Stack(
             children: [
-              EnvironmentsList(userId: widget.authorId, bookId: widget.bookId, searchQuery: _searchQuery, status: widget.status,),
+              EnvironmentsList(userId: widget.authorId, bookId: widget.bookId, searchQuery: _searchQuery, status: widget.status, bookName: widget.bookName,),
               SearchPoly(onChanged: (value) {
                 setState(() {
                   _searchQuery = value.toLowerCase();
@@ -67,6 +68,7 @@ class EnvironmentsList extends StatefulWidget {
   final String userId;
   final String bookId;
   final String searchQuery;
+  final String bookName;
   final Status status;
 
   const EnvironmentsList({
@@ -74,7 +76,7 @@ class EnvironmentsList extends StatefulWidget {
     required this.bookId,
     required this.userId,
     required this.searchQuery,
-    required this.status
+    required this.status, required this.bookName
   });
 
   @override
@@ -142,7 +144,7 @@ class _EnvironmentsListState extends State<EnvironmentsList> {
           future: _loadAdditionalData(),
           builder: (context, snapshot) {
             if(snapshot.hasError) return Center(child: Text('${S.current.an_error_occurred} ${snapshot.error}'),);
-            if(snapshot.connectionState == ConnectionState.waiting) return const Center(child: CircularProgressIndicator(),);
+            if(snapshot.connectionState == ConnectionState.waiting) return Center(child: CircularProgressIndicator(color: Theme.of(context).colorScheme.tertiary),);
 
             List<BookEnvironmentModel> filteredEnvironmentItems =
                 widget.searchQuery.isEmpty
@@ -189,7 +191,7 @@ class _EnvironmentsListState extends State<EnvironmentsList> {
                 itemCount: filteredEnvironmentItems.length,
                 itemBuilder: (context, index) {
                   final item = filteredEnvironmentItems[index];
-                  return _EnvironmentItemCard(environment: item, index: index, userId: widget.userId, bookId: widget.bookId, status: widget.status,);
+                  return _EnvironmentItemCard(environment: item, index: index, userId: widget.userId, bookId: widget.bookId, status: widget.status, bookName: widget.bookName,);
                 },
               ),
             );
@@ -206,8 +208,9 @@ class _EnvironmentItemCard extends StatelessWidget {
   final String userId;
   final String bookId;
   final Status status;
+  final String bookName;
   static const duration = Duration(milliseconds: 500);
-  const _EnvironmentItemCard({required this.environment, required this.status, required this.index, required this.userId, required this.bookId});
+  const _EnvironmentItemCard({required this.environment, required this.status, required this.index, required this.userId, required this.bookId, required this.bookName});
 
   @override
   Widget build(BuildContext context) {
@@ -240,7 +243,7 @@ class _EnvironmentItemCard extends StatelessWidget {
   void _navigateToEnItemDetail(BuildContext context, BookEnvironmentModel enItem) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => AboutEnvironmentScreen(environment: enItem, bookId: bookId, userId: userId, status: status,),
+        builder: (context) => AboutEnvironmentScreen(environment: enItem, bookId: bookId, userId: userId, status: status, bookName: bookName,),
       ),
     );
   }

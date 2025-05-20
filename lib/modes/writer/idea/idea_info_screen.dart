@@ -341,10 +341,10 @@ class _IdeaInfoScreenState extends State<IdeaInfoScreen> {
                                 padding: const EdgeInsets.symmetric(vertical: 12),
                                 child: Row(
                                   children: [
-                                    const SizedBox(
+                                    SizedBox(
                                       width: 24,
                                       height: 24,
-                                      child: CircularProgressIndicator(strokeWidth: 2),
+                                      child: CircularProgressIndicator(strokeWidth: 2, color: Theme.of(context).colorScheme.tertiary),
                                     ),
                                     const SizedBox(width: 12),
                                     Text(

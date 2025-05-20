@@ -880,7 +880,7 @@ class _AboutBookPageState extends State<AboutBookPage> {
                   });
                 }
               },
-              icon: _isDownloading ? const CircularProgressIndicator(color: Color(0xFF89B0D9),) : const Icon(Icons.add),
+              icon: _isDownloading ? CircularProgressIndicator(color: Theme.of(context).colorScheme.tertiary) : const Icon(Icons.add),
               style: IconButton.styleFrom(
                 backgroundColor: _status.color,
                 foregroundColor: Colors.white,
@@ -908,7 +908,7 @@ class _AboutBookPageState extends State<AboutBookPage> {
                     IconButton(
                       icon: const Icon(Icons.download, color: Colors.black),
                       onPressed:
-                          _isDownloading ? () => const CircularProgressIndicator(color: Color(0xFF89B0D9),) : () => _downloadFile(file),
+                          _isDownloading ? () => CircularProgressIndicator(color: Theme.of(context).colorScheme.tertiary) : () => _downloadFile(file),
                     ),
                     IconButton(
                       icon: const Icon(Icons.delete, color: Colors.black),

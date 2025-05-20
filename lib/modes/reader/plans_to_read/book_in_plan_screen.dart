@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../generated/l10n.dart';
 import '../../../models/book_in_plan_model.dart';
+import '../../../models/read_book_model.dart';
 import '../../general/base/confirm_delete_base.dart';
 import '../../writer/book/book_file_service.dart';
 import 'package:collection/collection.dart';
@@ -183,6 +184,131 @@ class _BookInPlanScreenState extends State<BookInPlanScreen> {
       setState(() {
         _isLoadingFiles = false;
       });
+    }
+  }
+
+  Future<List<BookCategory>> _fetchCategories() async {
+    final defaultSnap =
+    await FirebaseDatabase.instance.ref('defaultCategories').get();
+    final customSnap = await FirebaseDatabase.instance
+        .ref('customCategories/${widget.userId}')
+        .get();
+
+    final defaultCategories = <BookCategory>[];
+    final customCategories = <BookCategory>[];
+
+    if (defaultSnap.exists) {
+      for (var child in defaultSnap.children) {
+        defaultCategories.add(BookCategory.fromMap(
+            child.key!, Map<String, dynamic>.from(child.value as Map)));
+      }
+    }
+
+    if (customSnap.exists) {
+      for (var child in customSnap.children) {
+        customCategories.add(BookCategory.fromMap(
+            child.key!, Map<String, dynamic>.from(child.value as Map)));
+      }
+    }
+
+    return [...defaultCategories, ...customCategories];
+  }
+
+  Future<void> _moveToCategory() async {
+    final s = S.of(context);
+
+    final categories = await _fetchCategories();
+
+    final selectedCategory = await showDialog<BookCategory>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(s.select_category),
+          content: SizedBox(
+            width: double.maxFinite,
+            height: 250,
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: categories.length,
+              itemBuilder: (context, index) {
+                final category = categories[index];
+                return ListTile(
+                  title: Text(category.getLocalizedTitle(context)),
+                  onTap: () {
+                    Navigator.pop(context, category);
+                  },
+                );
+              },
+            ),
+          ),
+        );
+      },
+    );
+
+    if (selectedCategory == null) return;
+
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(s.confirm_choice),
+          content: Text('${s.move_to_category} ${selectedCategory.getLocalizedTitle(context)}?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: Text(s.cancel, style: TextStyle(color: Theme.of(context).colorScheme.tertiary.withAlpha(150)),),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: Text(s.ok, style: TextStyle(color: Theme.of(context).colorScheme.tertiary),),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirm != true) return;
+
+    try {
+      setState(() => _isSaving = true);
+
+      final bookData = {
+        'userId': widget.userId,
+        'title': _titleController.text.trim(),
+        'author': _authorNameController.text.trim(),
+        'description': _descriptionController.text.trim(),
+        'genreNTags': _genreController.text.trim(),
+        'startDate': '',
+        'endDate': '',
+        'categoryId': selectedCategory.id,
+        'files': _files,
+        'links': _links,
+      };
+
+      await FirebaseDatabase.instance
+          .ref('finishedBooks/${widget.userId}')
+          .push()
+          .set(bookData);
+
+      if (_isEditing) {
+        await FirebaseDatabase.instance
+            .ref('planBooks/${widget.userId}/${widget.bookInPlan!.id}')
+            .remove();
+      }
+
+      if (mounted) {
+        Navigator.pop(context, {
+          'reload': true,
+          'moved': true,
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        _showErrorSnackbar(s.an_error_occurred, e.toString());
+      }
+      debugPrint('Move book error: $e');
+    } finally {
+      if (mounted) setState(() => _isSaving = false);
     }
   }
 
@@ -372,6 +498,45 @@ class _BookInPlanScreenState extends State<BookInPlanScreen> {
                         height: 16,
                       ),
                       _buildFilesSection(),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      Card(
+                        elevation: 0,
+                        color: Color.lerp(
+                            _priority.color,
+                            Colors.white,
+                            0.3),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          side: BorderSide(
+                            color: _priority.color,
+                            width: 1,
+                          ),
+                        ),
+                        child: ListTile(
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                          ),
+                          title: Text(
+                            'Переместить в',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black),
+                          ),
+                          onTap: () {
+                            if (!_isSaving) {
+                              _moveToCategory();
+                            }
+                          },
+                          trailing: const Icon(
+                            Icons.chevron_right,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
                     ],
                     const SizedBox(height: 24),
                     ElevatedButton(
@@ -546,7 +711,7 @@ class _BookInPlanScreenState extends State<BookInPlanScreen> {
                   });
                 }
               },
-              icon: _isDownloading ? const CircularProgressIndicator(color: Color(0xFF89B0D9),) : const Icon(Icons.add),
+              icon: _isDownloading ? CircularProgressIndicator(color: Theme.of(context).colorScheme.tertiary,) : const Icon(Icons.add),
               style: IconButton.styleFrom(
                 backgroundColor: _priority.color,
                 foregroundColor: Colors.white,
@@ -574,7 +739,7 @@ class _BookInPlanScreenState extends State<BookInPlanScreen> {
                 IconButton(
                   icon: const Icon(Icons.download, color: Colors.black),
                   onPressed:
-                  _isDownloading ? () => const CircularProgressIndicator(color: Color(0xFF89B0D9),) : () => _downloadFile(file),
+                  _isDownloading ? () => CircularProgressIndicator(color: Theme.of(context).colorScheme.tertiary) : () => _downloadFile(file),
                 ),
                 IconButton(
                   icon: const Icon(Icons.delete, color: Colors.black),

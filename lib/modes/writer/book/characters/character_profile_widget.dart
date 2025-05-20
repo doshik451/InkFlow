@@ -281,7 +281,7 @@ class _CharacterProfileWidgetState extends State<CharacterProfileWidget> {
                           ),
                         ),
                         child: _isSaving
-                            ? const CircularProgressIndicator(color: Color(0xFFA5C6EA))
+                            ? CircularProgressIndicator(color: Theme.of(context).colorScheme.tertiary)
                             : Text(
                           S.of(context).save,
                           style: const TextStyle(

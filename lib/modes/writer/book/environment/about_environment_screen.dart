@@ -17,13 +17,14 @@ class AboutEnvironmentScreen extends StatefulWidget {
   final String bookId;
   final Status status;
   final String userId;
+  final String bookName;
 
   const AboutEnvironmentScreen({
     super.key,
     this.environment,
     required this.bookId,
     required this.status,
-    required this.userId
+    required this.userId, required this.bookName
   });
 
   @override
@@ -198,7 +199,7 @@ class _AboutEnvironmentScreenState extends State<AboutEnvironmentScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(widget.environment != null ? widget.environment!.title : S.of(context).creating),
+          title: Text(widget.environment != null ? '${widget.bookName}: ${widget.environment!.title}' : S.of(context).creating),
           centerTitle: true,
         ),
         body: Center(

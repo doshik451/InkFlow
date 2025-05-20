@@ -19,9 +19,10 @@ class AboutCharacterScreen extends StatefulWidget {
   final String bookId;
   final String userId;
   final Status status;
+  final String bookName;
 
   const AboutCharacterScreen(
-      {super.key, this.character, required this.bookId, required this.userId, required this.status,});
+      {super.key, this.character, required this.bookId, required this.userId, required this.status, required this.bookName,});
 
   @override
   State<AboutCharacterScreen> createState() => _AboutCharacterScreenState();
@@ -149,6 +150,7 @@ class _AboutCharacterScreenState extends State<AboutCharacterScreen> {
               bookId: widget.bookId,
               userId: widget.userId,
               status: widget.status,
+              bookName: widget.bookName,
             ),
           ),
         );
@@ -334,7 +336,7 @@ class _AboutCharacterScreenState extends State<AboutCharacterScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(_isEditing ? character!.name : S.of(context).creating),
+          title: Text(_isEditing ? '${widget.bookName}: ${character!.name}' : S.of(context).creating),
           centerTitle: true,
         ),
         body: SingleChildScrollView(

@@ -13,8 +13,9 @@ import 'about_character_screen.dart';
 class CharactersListScreen extends StatefulWidget {
   final String bookId;
   final String authorId;
+  final String bookName;
   final Status status;
-  const CharactersListScreen({super.key, required this.bookId, required this.authorId, required this.status});
+  const CharactersListScreen({super.key, required this.bookId, required this.authorId, required this.status, required this.bookName});
 
   @override
   State<CharactersListScreen> createState() => _CharactersListScreenState();
@@ -29,7 +30,7 @@ class _CharactersListScreenState extends State<CharactersListScreen> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         appBar: AppBar(
-          title: Text(S.of(context).characters),
+          title: Text('${widget.bookName}: ${S.of(context).characters}'),
           centerTitle: true,
           automaticallyImplyLeading: false,
         ),
@@ -42,12 +43,12 @@ class _CharactersListScreenState extends State<CharactersListScreen> {
             Icons.add,
             color: Colors.white,
           ),
-          onPressed: () { Navigator.push(context, MaterialPageRoute(builder: (context) => AboutCharacterScreen(bookId: widget.bookId, userId: widget.authorId, status: widget.status,))); },
+          onPressed: () { Navigator.push(context, MaterialPageRoute(builder: (context) => AboutCharacterScreen(bookId: widget.bookId, userId: widget.authorId, status: widget.status, bookName: widget.bookName,))); },
         ),
         body: Center(
           child: Stack(
             children: [
-              CharactersList(userId: widget.authorId, bookId: widget.bookId, searchQuery: _searchQuery, status: widget.status,),
+              CharactersList(userId: widget.authorId, bookId: widget.bookId, searchQuery: _searchQuery, status: widget.status, bookName: widget.bookName,),
               SearchPoly(onChanged: (value) {
                 setState(() {
                   _searchQuery = value.toLowerCase();
@@ -66,13 +67,14 @@ class CharactersList extends StatefulWidget {
   final String bookId;
   final String searchQuery;
   final Status status;
+  final String bookName;
 
   const CharactersList({
     super.key,
     required this.bookId,
     required this.userId,
     required this.searchQuery,
-    required this.status
+    required this.status, required this.bookName
   });
 
   @override
@@ -188,7 +190,7 @@ class _CharactersListState extends State<CharactersList> {
                 itemCount: filteredCharacters.length,
                 itemBuilder: (context, index) {
                   final item = filteredCharacters[index];
-                  return _CharacterItemCard(character: item, index: index, userId: widget.userId, bookId: widget.bookId, status: widget.status,);
+                  return _CharacterItemCard(character: item, index: index, userId: widget.userId, bookId: widget.bookId, status: widget.status, bookName: widget.bookName,);
                 },
               ),
             );
@@ -205,8 +207,9 @@ class _CharacterItemCard extends StatelessWidget {
   final String userId;
   final String bookId;
   final Status status;
+  final String bookName;
   static const duration = Duration(milliseconds: 500);
-  const _CharacterItemCard({required this.character, required this.index, required this.userId, required this.bookId, required this.status});
+  const _CharacterItemCard({required this.character, required this.index, required this.userId, required this.bookId, required this.status, required this.bookName});
 
   @override
   Widget build(BuildContext context) {
@@ -239,7 +242,7 @@ class _CharacterItemCard extends StatelessWidget {
   void _navigateToCharacterDetail(BuildContext context, Character character) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => AboutCharacterScreen(character: character, bookId: bookId, userId: userId, status: status,),
+        builder: (context) => AboutCharacterScreen(character: character, bookId: bookId, userId: userId, status: status, bookName: bookName,),
       ),
     );
   }

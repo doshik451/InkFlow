@@ -617,7 +617,7 @@ class _RelationshipFormWidgetState extends State<RelationshipFormWidget> {
     final s = S.of(context);
 
     return _isLoading
-        ? const Center(child: CircularProgressIndicator())
+        ? Center(child: CircularProgressIndicator(color: Theme.of(context).colorScheme.tertiary))
         : SingleChildScrollView(
       child: Card(
         color: Color.lerp(const Color(0xFFFED1BD), Colors.white, 0.7),
@@ -726,7 +726,7 @@ class _RelationshipFormWidgetState extends State<RelationshipFormWidget> {
                                       ),
                                     ),
                                     child: _isSaving
-                                        ? const CircularProgressIndicator()
+                                        ? CircularProgressIndicator(color: Theme.of(context).colorScheme.tertiary)
                                         : Text(
                                       s.saveButton,
                                       style: const TextStyle(
@@ -911,7 +911,7 @@ class _RelationshipFormWidgetState extends State<RelationshipFormWidget> {
                           ),
                         ),
                         child: _isSaving
-                            ? const CircularProgressIndicator()
+                            ? CircularProgressIndicator(color: Theme.of(context).colorScheme.tertiary)
                             : Text(
                           _isEditing ? s.saveButton : s.addButton,
                           style: const TextStyle(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../generated/l10n.dart';
 import 'additional_info_widget.dart';
 import 'biography_widget.dart';
 import 'character_profile_widget.dart';
@@ -22,7 +23,7 @@ class _CharacterQuestionnaireScreenState extends State<CharacterQuestionnaireScr
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.character.name),
+        title: Text('${widget.character.name}: ${S.of(context).questionnaire}'),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
