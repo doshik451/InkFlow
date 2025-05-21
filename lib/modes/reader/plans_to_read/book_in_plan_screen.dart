@@ -519,7 +519,7 @@ class _BookInPlanScreenState extends State<BookInPlanScreen> {
                             horizontal: 16,
                           ),
                           title: Text(
-                            'Переместить в',
+                            S.of(context).move_to,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
