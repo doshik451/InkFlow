@@ -352,14 +352,14 @@ class _MomentsScreenState extends State<MomentsScreen> {
               actions: [
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(true),
-                  child: Text(S.of(context).no),
+                  child: Text(S.of(context).no, style: TextStyle(color: Theme.of(context).colorScheme.tertiary),),
                 ),
                 TextButton(
                   onPressed: () {
-                    Navigator.of(context).pop(true);
-                    // _saveMoments();
+                    Navigator.of(context).pop(false);
+                    _saveMoments();
                   },
-                  child: Text(S.of(context).save),
+                  child: Text(S.of(context).save, style: TextStyle(color: Theme.of(context).colorScheme.tertiary),),
                 ),
               ],
             ),
