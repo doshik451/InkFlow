@@ -62,6 +62,11 @@ class ProfileScreen extends StatelessWidget {
                             title: 'English',
                             isSelected: currentLocale == 'en',
                           ),
+                          _LanguageOption(
+                            languageCode: 'be',
+                            title: 'Беларуская',
+                            isSelected: currentLocale == 'be',
+                          ),
                         ],
                       );
                     },
