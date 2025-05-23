@@ -189,6 +189,7 @@ class _AboutBookPageState extends State<AboutBookPage> {
 
       final bookId = widget.book?.id ??
           FirebaseDatabase.instance.ref('books/${widget.authorId}').push().key!;
+
       final storageRef = FirebaseStorage.instance.ref('bookCovers/$bookId.jpg');
 
       await storageRef.putFile(fileToUpload);
@@ -376,31 +377,29 @@ class _AboutBookPageState extends State<AboutBookPage> {
 
     if (_isEditing) {
       bookId = widget.book!.id;
-      bookRef =
-          FirebaseDatabase.instance.ref('books/${widget.authorId}/$bookId');
+      bookRef = FirebaseDatabase.instance.ref('books/${widget.authorId}/$bookId');
       await bookRef.update(bookData);
     } else {
-      bookRef =
-          FirebaseDatabase.instance.ref('books/${widget.authorId}').push();
+      bookRef = FirebaseDatabase.instance.ref('books/${widget.authorId}').push();
       bookId = bookRef.key!;
       await bookRef.set(bookData);
     }
 
     return Book(
-      id: bookId,
-      authorId: widget.authorId,
-      authorName: bookData['authorName'],
-      title: bookData['title'],
-      setting: bookData['setting'],
-      genre: bookData['genre'],
-      description: bookData['description'],
-      status: _status,
-      lastUpdate: bookData['lastUpdate'],
-      message: bookData['message'],
-      theme: bookData['theme'],
-      coverUrl: _coverUrl,
-      files: _files,
-      links: _links
+        id: bookId,
+        authorId: widget.authorId,
+        authorName: bookData['authorName'],
+        title: bookData['title'],
+        setting: bookData['setting'],
+        genre: bookData['genre'],
+        description: bookData['description'],
+        status: _status,
+        lastUpdate: bookData['lastUpdate'],
+        message: bookData['message'],
+        theme: bookData['theme'],
+        coverUrl: _coverUrl,
+        files: _files,
+        links: _links
     );
   }
 
@@ -546,8 +545,10 @@ class _AboutBookPageState extends State<AboutBookPage> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  _buildCoverSection(),
-                  const SizedBox(height: 24),
+                  if(_isEditing)...[
+                    _buildCoverSection(),
+                    const SizedBox(height: 24),
+                  ],
                   _buildTextField(s.workName, _titleController, showError: _showTitleError),
                   const SizedBox(height: 16),
                   _buildTextField(s.author, _authorNameController, showError: _showAuthorError),

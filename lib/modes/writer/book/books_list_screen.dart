@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import '../../../models/book_writer_model.dart';
 import '../../general/base/book_card_base.dart';
@@ -258,6 +259,7 @@ class _BookCard extends StatelessWidget {
 
   static Future<void> _deleteBook(String bookId, String userId, BuildContext context) async {
     try {
+      await _deleteBookCover(bookId);
       await FirebaseDatabase.instance.ref('books/$userId/$bookId').remove();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -286,6 +288,18 @@ class _BookCard extends StatelessWidget {
           ),
         ),
       );
+    }
+  }
+
+  static Future<void> _deleteBookCover(String bookId) async {
+    try {
+      final storageRef = FirebaseStorage.instance.ref('bookCovers/$bookId.jpg');
+      await storageRef.delete();
+    } catch (e) {
+      if (e.toString().contains('No such object')) {
+        return;
+      }
+      rethrow;
     }
   }
 }

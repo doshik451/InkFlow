@@ -30,6 +30,8 @@ class ProfileScreen extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const _UserDataWidget(),
               const SizedBox(height: 120,),
@@ -134,6 +136,7 @@ class ProfileScreen extends StatelessWidget {
                       (Route<dynamic> route) => false,
                 );
               }, icon: Icons.logout_rounded,),
+              const SizedBox(height: 24,),
             ],
           ),
         ),
@@ -214,10 +217,15 @@ class _UserDataWidgetState extends State<_UserDataWidget> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            S.of(context).don_t_have_access,
+            S
+                .of(context)
+                .don_t_have_access,
             style: const TextStyle(color: Colors.black),
           ),
-          backgroundColor: Color.lerp(Theme.of(context).colorScheme.tertiary, Colors.white, 0.7),
+          backgroundColor: Color.lerp(Theme
+              .of(context)
+              .colorScheme
+              .tertiary, Colors.white, 0.7),
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
@@ -255,10 +263,15 @@ class _UserDataWidgetState extends State<_UserDataWidget> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            '${S.of(context).an_error_occurred}: $e',
+            '${S
+                .of(context)
+                .an_error_occurred}: $e',
             style: const TextStyle(color: Colors.black),
           ),
-          backgroundColor: Color.lerp(Theme.of(context).colorScheme.tertiary, Colors.white, 0.7),
+          backgroundColor: Color.lerp(Theme
+              .of(context)
+              .colorScheme
+              .tertiary, Colors.white, 0.7),
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
@@ -271,37 +284,63 @@ class _UserDataWidgetState extends State<_UserDataWidget> {
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
-    return Row(
-      children: [
-        GestureDetector(
-          onTap: _pickAndUploadImage,
-          child: Container(
-            width: 150,
-            height: 150,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: Theme.of(context).colorScheme.tertiary, width: 3),
-            ),
-            child: ClipOval(
-              child: imageUrl != null
-                  ? Image.network(imageUrl!, fit: BoxFit.cover)
-                  : Icon(Icons.person, size: 80, color: Theme.of(context).colorScheme.tertiary,),
+    return Center(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          GestureDetector(
+            onTap: _pickAndUploadImage,
+            child: Container(
+              width: 150,
+              height: 150,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: Theme.of(context).colorScheme.tertiary, width: 3),
+              ),
+              child: ClipOval(
+                child: imageUrl != null
+                    ? Image.network(imageUrl!, fit: BoxFit.cover)
+                    : Icon(Icons.person, size: 80, color: Theme.of(context).colorScheme.tertiary,),
+              ),
             ),
           ),
-        ),
-        const Spacer(flex: 5,),
-        Expanded(
-          flex: 50,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ShortDataField(label: S.of(context).username, value: user?.displayName ?? S.of(context).unknown, readOnly: true,),
-              const SizedBox(height: 10,),
-              ShortDataField(label: S.of(context).email, value: user?.email ?? S.of(context).unknown, readOnly: true,),
-            ],
+          Expanded(
+            flex: 50,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextField(
+                    readOnly: true,
+                    decoration: InputDecoration(
+                      labelText: S.of(context).username,
+                      contentPadding: EdgeInsets.zero,
+                      labelStyle: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 20),
+                      border: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface, width: 2)),
+                      focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface, width: 1)),
+                    ),
+                    controller: TextEditingController(text: user?.displayName ?? S.of(context).unknown),
+                  ),
+                  const SizedBox(height: 10,),
+                  TextField(
+                    readOnly: true,
+                    decoration: InputDecoration(
+                      labelText: S.of(context).email,
+                      contentPadding: EdgeInsets.zero,
+                      labelStyle: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 20),
+                      border: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface, width: 2)),
+                      focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface, width: 1)),
+                    ),
+                    controller: TextEditingController(text: user?.email ?? S.of(context).unknown),
+                  ),
+                ],
+              ),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

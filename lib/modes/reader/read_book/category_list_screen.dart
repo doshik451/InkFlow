@@ -150,7 +150,8 @@ class _CategoryListPageState extends State<CategoryListPage> {
             '${S.of(context).an_error_occurred}: $e',
             style: const TextStyle(color: Colors.black),
           ),
-          backgroundColor: Color.lerp(Theme.of(context).colorScheme.tertiary, Colors.white, 0.7),
+          backgroundColor: Color.lerp(
+              Theme.of(context).colorScheme.tertiary, Colors.white, 0.7),
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
@@ -195,7 +196,9 @@ class _CategoryListPageState extends State<CategoryListPage> {
                   future: _categoriesFuture,
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(child: CircularProgressIndicator(color: Theme.of(context).colorScheme.tertiary));
+                      return Center(
+                          child: CircularProgressIndicator(
+                              color: Theme.of(context).colorScheme.tertiary));
                     }
 
                     if (snapshot.hasError || !snapshot.hasData) {
@@ -432,7 +435,9 @@ class _CategoryListPageState extends State<CategoryListPage> {
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: Text(s.cancel),
+                child: Text(s.cancel,
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.tertiary)),
               ),
               ElevatedButton(
                 onPressed: isSaving
@@ -479,10 +484,14 @@ class _CategoryListPageState extends State<CategoryListPage> {
     return TextField(
       controller: controller,
       cursorColor: Theme.of(context).colorScheme.tertiary,
-      style: const TextStyle(color: Colors.black),
+      style: TextStyle(color: Theme.of(context)
+          .colorScheme
+          .tertiary),
       decoration: InputDecoration(
         labelText: label,
-        labelStyle: const TextStyle(color: Colors.black),
+        labelStyle: TextStyle(color: Theme.of(context)
+            .colorScheme
+            .tertiary),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),

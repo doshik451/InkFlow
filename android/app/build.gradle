@@ -25,11 +25,13 @@ android {
         targetSdk = 34
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        archivesBaseName = "InkFlow"
     }
 
     buildTypes {
         release {
             signingConfig = signingConfigs.debug
+            archivesBaseName = "InkFlow"
         }
     }
     dependencies { implementation 'com.google.firebase:firebase-appcheck-safetynet:16.1.2' }
