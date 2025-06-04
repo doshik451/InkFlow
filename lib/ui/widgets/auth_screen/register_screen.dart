@@ -25,7 +25,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   void _validateInputs() {
     final emailRegExp = RegExp(r'^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+');
-    final passwordRegExp = RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$');
+    final passwordRegExp = RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[!-~]{8,}$');
 
     setState(() {
       emailError = emailRegExp.hasMatch(emailController.text.trim()) ? null : S.of(context).enter_correct_email;
@@ -263,11 +263,7 @@ class _RegisterButton extends StatelessWidget {
 
       await userCredential.user?.updateDisplayName(usernameController.text.trim());
       await userCredential.user?.reload();
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        Routes.getMainRoute(context),
-        (route) => false,
-      );
+      Navigator.pushReplacementNamed(context, Routes.modeSelection);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

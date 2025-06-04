@@ -22,7 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _validateInputs() {
     final emailValid = RegExp(r'^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+').hasMatch(_emailController.text);
-    final passwordValid = RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$').hasMatch(_passwordController.text);
+    final passwordValid = RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[!-~]{8,}$').hasMatch(_passwordController.text);
 
     setState(() {
       _emailError = emailValid ? null : S.of(context).enter_correct_email;

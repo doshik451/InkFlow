@@ -21,7 +21,6 @@ class Routes {
   static const String profile = '/profile';
   static const String modeSelection = '/modeSelection';
 
-  // Маршруты режима писателя
   static const String mainScreenWriter = '/mainScreenWriter';
   static const String ideasList = '/idea';
 

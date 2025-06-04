@@ -434,17 +434,20 @@ class _AboutBookPageState extends State<AboutBookPage> {
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(13),
-          child: _coverUrl != null
-              ? Image.network(
-                  _coverUrl!,
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => const ErrorPlaceholderWidget(),
-                )
-              : Image.file(
-                  _localCoverImage!,
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => const ErrorPlaceholderWidget(),
-                ),
+          child: AspectRatio(
+            aspectRatio: 4 / 3,
+            child: _coverUrl != null
+                ? Image.network(
+              _coverUrl!,
+              fit: BoxFit.contain,
+              errorBuilder: (_, __, ___) => const ErrorPlaceholderWidget(),
+            )
+                : Image.file(
+              _localCoverImage!,
+              fit: BoxFit.contain,
+              errorBuilder: (_, __, ___) => const ErrorPlaceholderWidget(),
+            ),
+          ),
         ),
       );
     }

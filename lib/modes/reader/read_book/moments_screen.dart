@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
+import 'package:uuid/uuid.dart';
 
 import '../../../generated/l10n.dart';
 import '../../../models/read_book_model.dart';
@@ -148,7 +149,7 @@ class _MomentsScreenState extends State<MomentsScreen> {
 
   void _addImageMoment() async {
     final newMoment = BookMoment(
-      id: UniqueKey().toString(),
+      id: const Uuid().v4(),
       type: 'image',
       content: '',
     );
@@ -262,14 +263,17 @@ class _MomentsScreenState extends State<MomentsScreen> {
       child: Stack(
         children: [
           GestureDetector(
-            onTap: () {
+            onTap: hasImage
+                ? () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) =>
-                      FullScreenImageViewer(imageUrl: moment.content),
+                  builder: (_) => FullScreenImageViewer(imageUrl: moment.content),
                 ),
               );
+            }
+                : () async {
+              await _pickAndUploadImage(moment);
             },
             child: Container(
               height: 200,
